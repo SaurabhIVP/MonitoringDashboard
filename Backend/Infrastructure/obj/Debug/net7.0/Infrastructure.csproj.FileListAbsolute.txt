@@ -1,0 +1,15 @@
+C:\Users\srborawake\Desktop\IVPDashboard\IVPDashboard\MonitoringDashboard\Backend2\Infrastructure\obj\Debug\net7.0\Infrastructure.csproj.AssemblyReference.cache
+C:\Users\srborawake\Desktop\IVPDashboard\IVPDashboard\MonitoringDashboard\Backend2\Infrastructure\obj\Debug\net7.0\Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\srborawake\Desktop\IVPDashboard\IVPDashboard\MonitoringDashboard\Backend2\Infrastructure\obj\Debug\net7.0\Infrastructure.AssemblyInfoInputs.cache
+C:\Users\srborawake\Desktop\IVPDashboard\IVPDashboard\MonitoringDashboard\Backend2\Infrastructure\obj\Debug\net7.0\Infrastructure.AssemblyInfo.cs
+C:\Users\srborawake\Desktop\IVPDashboard\IVPDashboard\MonitoringDashboard\Backend2\Infrastructure\obj\Debug\net7.0\Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\srborawake\Desktop\IVPDashboard\IVPDashboard\MonitoringDashboard\Backend2\Infrastructure\bin\Debug\net7.0\Infrastructure.deps.json
+C:\Users\srborawake\Desktop\IVPDashboard\IVPDashboard\MonitoringDashboard\Backend2\Infrastructure\bin\Debug\net7.0\Infrastructure.dll
+C:\Users\srborawake\Desktop\IVPDashboard\IVPDashboard\MonitoringDashboard\Backend2\Infrastructure\bin\Debug\net7.0\Infrastructure.pdb
+C:\Users\srborawake\Desktop\IVPDashboard\IVPDashboard\MonitoringDashboard\Backend2\Infrastructure\bin\Debug\net7.0\Domain.dll
+C:\Users\srborawake\Desktop\IVPDashboard\IVPDashboard\MonitoringDashboard\Backend2\Infrastructure\bin\Debug\net7.0\Domain.pdb
+C:\Users\srborawake\Desktop\IVPDashboard\IVPDashboard\MonitoringDashboard\Backend2\Infrastructure\obj\Debug\net7.0\Infrastructure.csproj.CopyComplete
+C:\Users\srborawake\Desktop\IVPDashboard\IVPDashboard\MonitoringDashboard\Backend2\Infrastructure\obj\Debug\net7.0\Infrastructure.dll
+C:\Users\srborawake\Desktop\IVPDashboard\IVPDashboard\MonitoringDashboard\Backend2\Infrastructure\obj\Debug\net7.0\refint\Infrastructure.dll
+C:\Users\srborawake\Desktop\IVPDashboard\IVPDashboard\MonitoringDashboard\Backend2\Infrastructure\obj\Debug\net7.0\Infrastructure.pdb
+C:\Users\srborawake\Desktop\IVPDashboard\IVPDashboard\MonitoringDashboard\Backend2\Infrastructure\obj\Debug\net7.0\ref\Infrastructure.dll
