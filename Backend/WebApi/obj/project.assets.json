@@ -1023,11 +1023,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\Backend2\\WebApi\\WebApi.csproj",
+      "projectUniqueName": "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\Backend\\WebApi\\WebApi.csproj",
       "projectName": "WebApi",
-      "projectPath": "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\Backend2\\WebApi\\WebApi.csproj",
+      "projectPath": "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\Backend\\WebApi\\WebApi.csproj",
       "packagesPath": "C:\\Users\\srborawake\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\Backend2\\WebApi\\obj\\",
+      "outputPath": "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\Backend\\WebApi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\srborawake\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -1042,14 +1042,14 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\Backend2\\Application\\Application.csproj": {
-              "projectPath": "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\Backend2\\Application\\Application.csproj"
+            "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\Backend\\Application\\Application.csproj": {
+              "projectPath": "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\Backend\\Application\\Application.csproj"
             },
-            "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\Backend2\\Domain\\Domain.csproj": {
-              "projectPath": "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\Backend2\\Domain\\Domain.csproj"
+            "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\Backend\\Domain\\Domain.csproj": {
+              "projectPath": "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\Backend\\Domain\\Domain.csproj"
             },
-            "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\Backend2\\Infrastructure\\Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\Backend2\\Infrastructure\\Infrastructure.csproj"
+            "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\Backend\\Infrastructure\\Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\Backend\\Infrastructure\\Infrastructure.csproj"
             }
           }
         }

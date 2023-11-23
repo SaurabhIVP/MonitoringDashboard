@@ -8,4 +8,7 @@ namespace infrastructure;
 public interface IDBAccess
 {
     Task<IEnumerable<Tasks>> GetAllChainDetailsAsync();   
+    Task<IEnumerable<Tasks>> GetAllChainNamesAsync();
+    Task<IEnumerable<Tasks>> GetAllTaskNamesAsync(string chainname);
+    
 }

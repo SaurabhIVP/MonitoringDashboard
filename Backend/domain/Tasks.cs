@@ -11,6 +11,7 @@ public class Tasks
     public string Chain_Time { get; set; }
     public string Task_Time { get; set; }
     public string BenchMark_Time { get; set; }
+    public int chain_id { get; set; }
     public double PerformanceDeviation { get; set; }
 
 }

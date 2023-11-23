@@ -27,7 +27,27 @@
 .App-link {
   color: #61dafb;
 }
-
+.searchbar{
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 75px;
+  padding-right: 75px;
+  
+}
+.timepicker{
+  display:flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  padding-left: 75px;
+  padding-right: 75px;
+}
+.Gantt{
+  display: flex;
+}
+.Gantt-container{
+  padding-top: 100px;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

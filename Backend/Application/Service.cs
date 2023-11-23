@@ -16,4 +16,13 @@ public class Service : IService
     {
         return await _dbAccess.GetAllChainDetailsAsync();
     }
+    public async Task<IEnumerable<Tasks>> GetAllChainNamesAsync()
+    {
+        return await _dbAccess.GetAllChainNamesAsync();
+    }
+    public async Task<IEnumerable<Tasks>> GetAllTaskNamesAsync(string chainname)
+    {
+        return await _dbAccess.GetAllTaskNamesAsync(chainname);
+    }
+    
 }

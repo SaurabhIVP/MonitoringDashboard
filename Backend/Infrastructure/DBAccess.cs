@@ -18,4 +18,14 @@ public class DBAccess : IDBAccess
     {
         return await _dbConnection.QueryAsync<Tasks>("SELECT * FROM newdata1");
     }
+    public async Task<IEnumerable<Tasks>> GetAllChainNamesAsync()
+    {
+        return await _dbConnection.QueryAsync<Tasks>("select distinct Chain_Name from newdata1");
+    }
+    public async Task<IEnumerable<Tasks>> GetAllTaskNamesAsync(string chainname)
+    {
+        string query = $"select distinct Task_Name from newdata1 where Chain_Name = @ChainName";
+        return await _dbConnection.QueryAsync<Tasks>(query, new { ChainName = chainname });
+    }
+
 }

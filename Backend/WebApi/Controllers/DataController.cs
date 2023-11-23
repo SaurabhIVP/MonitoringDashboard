@@ -21,4 +21,21 @@ public class DataController : ControllerBase
         var chainDetails = await _chainService.GetAllChainDetailsAsync();
         return Ok(chainDetails);
     }
+    [HttpGet]
+    [Route("chains")]
+    public async Task<IActionResult> GetAllChainNames()
+    {
+        var chainDetails = await _chainService.GetAllChainNamesAsync();
+        return Ok(chainDetails);
+    }
+
+    [HttpGet]
+    [Route("tasks/{chain}")]
+    public async Task<IActionResult> GetAllTaskNames(string chain)
+    {
+        var chainDetails = await _chainService.GetAllTaskNamesAsync(chain);
+        return Ok(chainDetails);
+    }
+
+    
 }
