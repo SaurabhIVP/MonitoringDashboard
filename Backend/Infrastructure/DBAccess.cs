@@ -16,16 +16,18 @@ public class DBAccess : IDBAccess
 
     public async Task<IEnumerable<Tasks>> GetAllChainDetailsAsync()
     {
-        return await _dbConnection.QueryAsync<Tasks>("SELECT * FROM newdata1");
+        return await _dbConnection.QueryAsync<Tasks>("GetAllChainDetails", commandType: CommandType.StoredProcedure);
     }
     public async Task<IEnumerable<Tasks>> GetAllChainNamesAsync()
     {
-        return await _dbConnection.QueryAsync<Tasks>("select distinct Chain_Name from newdata1");
+        var parameters = new DynamicParameters();  
+        return await _dbConnection.QueryAsync<Tasks>("GetDistinctChainNames", parameters, commandType: CommandType.StoredProcedure);
     }
     public async Task<IEnumerable<Tasks>> GetAllTaskNamesAsync(string chainname)
     {
-        string query = $"select distinct Task_Name from newdata1 where Chain_Name = @ChainName";
-        return await _dbConnection.QueryAsync<Tasks>(query, new { ChainName = chainname });
+        var parameters = new { ChainName = chainname };
+        return await _dbConnection.QueryAsync<Tasks>("GetTaskNamesByChain", parameters, commandType: CommandType.StoredProcedure);
     }
+
 
 }

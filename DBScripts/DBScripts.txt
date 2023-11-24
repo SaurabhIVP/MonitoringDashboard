@@ -1,0 +1,21 @@
+CREATE PROCEDURE GetDistinctChainNames
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT DISTINCT Chain_Name FROM newdata1;
+END;
+
+
+
+CREATE PROCEDURE GetAllChainDetails
+AS
+BEGIN
+    SELECT * FROM newdata1;
+END;
+
+CREATE PROCEDURE GetTaskNamesByChain
+    @ChainName NVARCHAR(MAX)
+AS
+BEGIN
+    SELECT DISTINCT Task_Name FROM newdata1 WHERE Chain_Name = @ChainName;
+END;
