@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchBar from "../Components/SearchBar";
 import AllData from "../Api/AllData";
 import '../App.css';
@@ -8,11 +8,14 @@ import Dropdown from "../Components/Dropdown";
 import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material";
 import TimePicker from "../Components/TimePickerC";
 import TimePickerC from "../Components/TimePickerC";
-import Ganttt from "../Components/Ganttt";
+import GanttChart from "../Components/GanttChart";
+
+
 
 
 
 function Dashboard() {
+ 
   const [selectedChainValue, setSelectedChainValue] = useState<string | ''>('');
   const [selectedTaskValue, setSelectedTaskValue] = useState<string | ''>('');
   const [startDate, setStartDate] = useState<Date | null>(new Date());
@@ -85,9 +88,12 @@ function Dashboard() {
           <TimePickerC name="Start Time"></TimePickerC>
           <TimePickerC name="End Time"></TimePickerC>
         </div>
-        <div className="Gantt">
-          <Ganttt></Ganttt>
+        
+        <div >
+          <GanttChart></GanttChart>
         </div>
+        
+        
       </div>
 
     </>

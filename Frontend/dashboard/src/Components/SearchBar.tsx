@@ -15,7 +15,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ fetchDataFunction, NameParam, Lab
         const fetchData = async () => {
             try {
                     const response = await fetchDataFunction();
-                    console.log(response)
+                    // console.log(response)
                     setData(response.data);
             } catch (error) {
                 console.error("Error fetching data:", error);
