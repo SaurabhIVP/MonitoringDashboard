@@ -1,3 +1,23 @@
+
+CREATE TABLE [dbo].[newdata1](
+	[Task_Name] [nvarchar](100) NOT NULL,
+	[Start_Time] [datetime2](7) NOT NULL,
+	[End_Time] [datetime2](7) NOT NULL,
+	[Chain_Name] [nvarchar](100) NOT NULL,
+	[Minutes] [int] NOT NULL,
+	[Seconds] [int] NOT NULL,
+	[chain_id] [int] NOT NULL,
+	[flow_id] [int] NOT NULL,
+	[Task_Time]  AS (CONVERT([varchar](8),dateadd(second,[minutes]*(60)+[seconds],(0)),(108))),
+	[Chain_Time] [varchar](8) NULL,
+	[BenchMark_Time] [varchar](8) NULL,
+	[PerformanceDeviation] [decimal](18, 2) NULL
+) ON [PRIMARY]
+GO
+
+
+
+
 CREATE PROCEDURE GetDistinctChainNames
 AS
 BEGIN
@@ -18,4 +38,22 @@ CREATE PROCEDURE GetTaskNamesByChain
 AS
 BEGIN
     SELECT DISTINCT Task_Name FROM newdata1 WHERE Chain_Name = @ChainName;
+END;
+
+Alter PROCEDURE [dbo].[GetGanttDetails]
+    @StartTime DATETIME,
+    @EndTime DATETIME
+AS
+BEGIN
+    SELECT DISTINCT
+        Chain_Name,
+        Task_Name,
+        Start_Time,
+        End_Time  
+    FROM
+        newdata1
+    WHERE
+        CAST(Start_Time AS date) = '2023-09-26' and CAST(Start_Time AS TIME) >= CAST(@StartTime AS TIME) AND CAST(End_Time AS TIME) <= CAST(@EndTime AS TIME)
+    ORDER BY
+        Start_Time;
 END;

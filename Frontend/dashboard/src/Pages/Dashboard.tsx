@@ -9,6 +9,7 @@ import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material";
 import TimePicker from "../Components/TimePickerC";
 import TimePickerC from "../Components/TimePickerC";
 import GanttChart from "../Components/GanttChart";
+import GanttData2 from "../Api/GanttData2";
 
 
 
@@ -23,6 +24,19 @@ function Dashboard() {
   const [BenchstartDate, setBenchStartDate] = useState<Date | null>(new Date());
   const [BenchendDate, SetBenchendDate] = useState<Date | null>(new Date());
   const [value, onChange] = useState('10:00');
+  const [ganttstartTime, setGanttStartTime] =  useState<any>('12:00');
+  const [ganttendTime, setGanttEndTime] =  useState<any>('12:00');
+
+  const handleGanttStartTimeChange = (time: any) => {
+    // Handle the time change here
+    setGanttStartTime(time);
+  };
+  const handleGanttEndTimeChange = (time: any) => {
+    // Handle the time change here
+    setGanttEndTime(time);
+  };
+
+
 
   const handleStartDateChange = (newDate: Date | null) => {
     setStartDate(newDate);
@@ -44,7 +58,11 @@ function Dashboard() {
     console.log(BenchstartDate);
     console.log(BenchendDate);
   }
-
+  const GanttButtonHandler=()=>{
+    console.log(ganttstartTime);
+    console.log(ganttendTime);
+    
+  }
 
   const ChainhandleSearch = async (value: string) => {
     setSelectedChainValue(value);
@@ -85,8 +103,10 @@ function Dashboard() {
       <div className="Gantt-container">
         <h2>Gantt Chart</h2>
         <div className="timepicker">
-          <TimePickerC name="Start Time"></TimePickerC>
-          <TimePickerC name="End Time"></TimePickerC>
+          <TimePickerC label="Start Time" value={ganttstartTime} onChange={handleGanttStartTimeChange}></TimePickerC>
+          <TimePickerC label="End Time" value={ganttendTime} onChange={handleGanttEndTimeChange}></TimePickerC>
+          <Button variant="contained" onClick={GanttButtonHandler} size="medium" style={{ borderRadius: "100px" }}>Filter Gantt</Button>
+          
         </div>
         
         <div >

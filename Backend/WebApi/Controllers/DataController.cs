@@ -37,5 +37,13 @@ public class DataController : ControllerBase
         return Ok(chainDetails);
     }
 
+    [HttpGet]
+    [Route("tasks/{start_time}/{end_time}")]
+    public async Task<IActionResult> GetGanttDetails(DateTime start_time,DateTime end_time)
+    {
+        var chainDetails = await _chainService.GetGanttDetailsAsync(start_time, end_time);
+        return Ok(chainDetails);
+    }
+
     
 }

@@ -24,5 +24,9 @@ public class Service : IService
     {
         return await _dbAccess.GetAllTaskNamesAsync(chainname);
     }
+    public async Task<IEnumerable<Tasks>> GetGanttDetailsAsync(DateTime start_time,DateTime end_time)
+    {
+        return await _dbAccess.GetGanttDetailsAsync(start_time,end_time);
+    }
     
 }
