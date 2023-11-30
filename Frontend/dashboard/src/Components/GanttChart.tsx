@@ -32,7 +32,8 @@ const GanttChart: React.FC = () => {
                     //   data: [{x:['2023-09-25T08:00:00','2023-09-25T15:30:00'],y:'task-1'}] as any,
                     data: newdata.map((item) => ({
                         x: [item.start_Time, item.end_Time],
-                        y: item.chain_Name
+                        y: item.chain_Name,
+                        task_Name:item.task_Name
                     })) as any,
                     backgroundColor: [
                         'rgba(255, 26, 104, 0.2)',
@@ -93,7 +94,7 @@ const GanttChart: React.FC = () => {
                                 const dataItem = context.chart.data.datasets[datasetIndex].data[dataIndex];
                                 const startTime = new Date(dataItem.x[0]).toLocaleTimeString();
                                 const endTime = new Date(dataItem.x[1]).toLocaleTimeString();
-                                return `Chain: ${dataItem.y}, Start Time: ${startTime}, End Time: ${endTime}`;
+                                return `Chain: ${dataItem.y},Task:${dataItem.task_Name}, Start Time: ${startTime}, End Time: ${endTime}`;
                             }, // Display the y value in the tooltip label
                         }
                     }
