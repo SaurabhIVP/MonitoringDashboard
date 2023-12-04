@@ -1,59 +1,86 @@
 
-CREATE TABLE [dbo].[newdata1](
-	[Task_Name] [nvarchar](100) NOT NULL,
-	[Start_Time] [datetime2](7) NOT NULL,
-	[End_Time] [datetime2](7) NOT NULL,
-	[Chain_Name] [nvarchar](100) NOT NULL,
-	[Minutes] [int] NOT NULL,
-	[Seconds] [int] NOT NULL,
-	[chain_id] [int] NOT NULL,
-	[flow_id] [int] NOT NULL,
-	[Task_Time]  AS (CONVERT([varchar](8),dateadd(second,[minutes]*(60)+[seconds],(0)),(108))),
-	[Chain_Time] [varchar](8) NULL,
-	[BenchMark_Time] [varchar](8) NULL,
-	[PerformanceDeviation] [decimal](18, 2) NULL
+CREATE TABLE [dbo].[ivp_rad_chained_tasks](
+	[chain_id] [numeric](18, 0) NULL,
+	[is_active] [numeric](18, 0) NULL,
+	[created_by] [varchar](50) NULL,
+	[created_on] [datetime] NULL,
+	[last_modified_by] [varchar](50) NULL,
+	[calendar_name] [varchar](50) NULL,
+	[chain_name] [varchar](100) NULL,
+	[last_modified_on] [datetime] NULL
+) ON [PRIMARY]
+GO
+
+
+CREATE TABLE [dbo].[ivp_rad_task_status](
+	[task_status_id] [varchar](50) NULL,
+	[flow_id] [numeric](18, 0) NULL,
+	[start_time] [datetime] NULL,
+	[end_time] [datetime] NULL,
+	[status] [varchar](50) NULL,
+	[environment_variables] [varchar](50) NULL,
+	[chain_guid] [varchar](50) NULL,
+	[client_task_status_id] [varchar](50) NULL,
+	[process_id] [varchar](50) NULL,
+	[is_processed] [varchar](50) NULL,
+	[task_time_out] [varchar](50) NULL
+) ON [PRIMARY]
+GO
+
+
+
+CREATE TABLE [dbo].[ivp_rad_flow](
+	[flow_id] [numeric](18, 0) NULL,
+	[is_active] [varchar](50) NULL,
+	[chain_id] [numeric](18, 0) NULL,
+	[subscribe_id] [varchar](50) NULL,
+	[is_muted] [varchar](50) NULL,
+	[module_id] [varchar](50) NULL,
+	[task_name] [varchar](100) NULL,
+	[task_type_name] [varchar](50) NULL,
+	[module_name] [varchar](50) NULL,
+	[task_summary_id] [varchar](50) NULL,
+	[registered_module_id] [varchar](50) NULL,
+	[task_wait_subscription_id] [varchar](50) NULL,
+	[last_modified_by] [varchar](50) NULL,
+	[last_modified_on] [datetime] NULL
 ) ON [PRIMARY]
 GO
 
 
 
 
-CREATE PROCEDURE GetDistinctChainNames
+alter proc GetAllChainDetails
+as
+begin 
+		select a.chain_id,b.flow_id,a.chain_name,b.task_name,c.start_time,c.end_time
+		from ivp_rad_task_status c
+		inner join ivp_rad_flow b
+		on b.flow_id=c.flow_id
+		inner join ivp_rad_chained_tasks a
+		on a.chain_id=b.chain_id
+		where b.is_active=1
+end
+
+
+Create proc GetDistinctChainNames
+as
+begin 
+	select distinct chain_name,chain_id
+	from ivp_rad_chained_tasks
+	where chain_name !='NULL' and is_active=1
+end
+
+
+alter PROCEDURE GetTaskNamesByChain
+    @Chainname varchar(max)
 AS
 BEGIN
-    SET NOCOUNT ON;
-    SELECT DISTINCT Chain_Name FROM newdata1;
+    select distinct task_name
+	from ivp_rad_flow_sample
+	where  is_active=1 and chain_id=(select chain_id
+									from ivp_rad_chained_tasks
+									where chain_name=@Chainname)
 END;
 
 
-
-CREATE PROCEDURE GetAllChainDetails
-AS
-BEGIN
-    SELECT * FROM newdata1;
-END;
-
-CREATE PROCEDURE GetTaskNamesByChain
-    @ChainName NVARCHAR(MAX)
-AS
-BEGIN
-    SELECT DISTINCT Task_Name FROM newdata1 WHERE Chain_Name = @ChainName;
-END;
-
-Alter PROCEDURE [dbo].[GetGanttDetails]
-    @StartTime DATETIME,
-    @EndTime DATETIME
-AS
-BEGIN
-    SELECT DISTINCT
-        Chain_Name,
-        Task_Name,
-        Start_Time,
-        End_Time  
-    FROM
-        newdata1
-    WHERE
-        CAST(Start_Time AS date) = '2023-09-26' and CAST(Start_Time AS TIME) >= CAST(@StartTime AS TIME) AND CAST(End_Time AS TIME) <= CAST(@EndTime AS TIME)
-    ORDER BY
-        Start_Time;
-END;

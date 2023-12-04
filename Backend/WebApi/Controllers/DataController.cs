@@ -30,10 +30,10 @@ public class DataController : ControllerBase
     }
 
     [HttpGet]
-    [Route("tasks/{chain}")]
-    public async Task<IActionResult> GetAllTaskNames(string chain)
+    [Route("tasks/{chainname}")]
+    public async Task<IActionResult> GetAllTaskNames(string chainname)
     {
-        var chainDetails = await _chainService.GetAllTaskNamesAsync(chain);
+        var chainDetails = await _chainService.GetAllTaskNamesAsync(chainname);
         return Ok(chainDetails);
     }
 

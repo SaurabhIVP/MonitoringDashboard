@@ -31,9 +31,9 @@ const GanttChart: React.FC = () => {
                     label: 'Daily TimeFrame',
                     //   data: [{x:['2023-09-25T08:00:00','2023-09-25T15:30:00'],y:'task-1'}] as any,
                     data: newdata.map((item) => ({
-                        x: [item.start_Time, item.end_Time],
-                        y: item.chain_Name,
-                        task_Name:item.task_Name
+                        x: [item.start_time, item.end_time],
+                        y: item.chain_name,
+                        task_Name:item.task_name
                     })) as any,
                     backgroundColor: [
                         'rgba(255, 26, 104, 0.2)',
@@ -79,8 +79,8 @@ const GanttChart: React.FC = () => {
                             stepSize: 3600000,
                             tooltipFormat: 'HH:mm:ss'
                         },
-                        min: '2023-09-25T00:00:00' as any,
-                        max: '2023-09-25T23:59:59' as any,
+                        min: '2023-11-16T00:00:00' as any,
+                        max: '2023-11-16T23:59:59' as any,
 
                     },
 
