@@ -128,7 +128,7 @@ const GanttChart: React.FC = () => {
             </div>
             <div className="chartCard">
                 <div className="chartBox">
-                    <canvas id="myChart"></canvas>
+                    <canvas id="myChart" style={{height:'750px'}}></canvas>
                 </div>
             </div>
         </div>

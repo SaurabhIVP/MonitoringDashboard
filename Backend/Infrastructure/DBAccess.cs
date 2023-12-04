@@ -30,7 +30,7 @@ public class DBAccess : IDBAccess
     }
     public async Task<IEnumerable<Tasks>> GetGanttDetailsAsync(DateTime start_time,DateTime end_time)
     {
-        var parameters = new {StartTime = start_time, EndTime = end_time};
+        var parameters = new {starttime = start_time, endtime = end_time};
         return await _dbConnection.QueryAsync<Tasks>("GetGanttDetails", parameters, commandType: CommandType.StoredProcedure);
     }
 

@@ -10,13 +10,19 @@ import TimePicker from "../Components/TimePickerC";
 import TimePickerC from "../Components/TimePickerC";
 import GanttChart from "../Components/GanttChart";
 import GanttData2 from "../Api/GanttData2";
+import { DatePicker, DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import AdapterDateFns from '@mui/lab/AdapterDateFns'; // Use AdapterDateFns for date 
+import dayjs from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { format } from 'date-fns-tz';
 
 
 
 
 
 function Dashboard() {
- 
+  
+  const initialStartTime = new Date('2023-11-16T00:06:00.000');
   const [selectedChainValue, setSelectedChainValue] = useState<string | ''>('');
   const [selectedTaskValue, setSelectedTaskValue] = useState<string | ''>('');
   const [startDate, setStartDate] = useState<Date | null>(new Date());
@@ -24,20 +30,23 @@ function Dashboard() {
   const [BenchstartDate, setBenchStartDate] = useState<Date | null>(new Date());
   const [BenchendDate, SetBenchendDate] = useState<Date | null>(new Date());
   const [value, onChange] = useState('10:00');
-  const [ganttstartTime, setGanttStartTime] =  useState<any>('12:00');
-  const [ganttendTime, setGanttEndTime] =  useState<any>('12:00');
+  const [ganttdate, setganttdate] = useState<Date | null>(new Date());
+  const [ganttstartTime, setGanttStartTime] =useState<Date|null>(null)
+  const [ganttendTime, setGanttEndTime] = useState<Date|null>(null)
 
-  const handleGanttStartTimeChange = (time: any) => {
-    // Handle the time change here
-    setGanttStartTime(time);
+  const handleGanttStartTimeChange = (time: Date | null) => {
+    
+      setGanttStartTime(time);
+    
   };
-  const handleGanttEndTimeChange = (time: any) => {
+  const handleGanttEndTimeChange = (time: Date | null) => {
     // Handle the time change here
     setGanttEndTime(time);
   };
 
-
-
+  const formatDateForAPI = (date: Date | null): string | null => {
+    return date ? format(date, 'yyyy-MM-dd HH:mm:ssXXX', { timeZone: 'Asia/Kolkata' }) : null;
+  };
   const handleStartDateChange = (newDate: Date | null) => {
     setStartDate(newDate);
   };
@@ -58,10 +67,24 @@ function Dashboard() {
     console.log(BenchstartDate);
     console.log(BenchendDate);
   }
-  const GanttButtonHandler=()=>{
-    console.log(ganttstartTime);
-    console.log(ganttendTime);
+  const fetchData = async () => {
+    try {
+      
+      console.log('in fetch');
+      const response = await GanttData2({ starttime: ganttstartTime, endtime: ganttendTime });
+      console.log(response)
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  const GanttButtonHandler = () => {
+    // const start=ganttstartTime?.getTime();
+    // console.log(start);
     
+    console.log(ganttstartTime);
+   console.log(ganttendTime);
+   fetchData();
   }
 
   const ChainhandleSearch = async (value: string) => {
@@ -102,18 +125,19 @@ function Dashboard() {
     </div>
       <div className="Gantt-container">
         <h2>Gantt Chart</h2>
-        <div className="timepicker">
-          <TimePickerC label="Start Time" value={ganttstartTime} onChange={handleGanttStartTimeChange}></TimePickerC>
-          <TimePickerC label="End Time" value={ganttendTime} onChange={handleGanttEndTimeChange}></TimePickerC>
-          <Button variant="contained" onClick={GanttButtonHandler} size="medium" style={{ borderRadius: "100px" }}>Filter Gantt</Button>
-          
+        <div>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateTimePicker label="Gantt Start time" value={ganttstartTime} onChange={handleGanttStartTimeChange}/>
+            <DateTimePicker label="Gantt End time" value={ganttendTime} onChange={handleGanttEndTimeChange}/>
+            
+          </LocalizationProvider>
         </div>
-        
+        <Button variant="contained" onClick={GanttButtonHandler} size="medium" style={{ borderRadius: "100px" }}>Submit</Button>
         <div >
           <GanttChart></GanttChart>
         </div>
-        
-        
+
+
       </div>
 
     </>
