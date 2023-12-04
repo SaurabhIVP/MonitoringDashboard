@@ -25,7 +25,7 @@ public class DBAccess : IDBAccess
     }
     public async Task<IEnumerable<Tasks>> GetAllTaskNamesAsync(string chainname)
     {
-        var parameters = new { ChainName = chainname };
+        var parameters = new { Chainname = chainname };
         return await _dbConnection.QueryAsync<Tasks>("GetTaskNamesByChain", parameters, commandType: CommandType.StoredProcedure);
     }
     public async Task<IEnumerable<Tasks>> GetGanttDetailsAsync(DateTime start_time,DateTime end_time)
