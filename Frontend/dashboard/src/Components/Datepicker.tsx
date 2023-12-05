@@ -1,8 +1,5 @@
-import { DatePicker } from '@mui/x-date-pickers';
-import { LocalizationProvider } from '@mui/lab';
 import dayjs from 'dayjs';
 import { useState } from 'react';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { TextField } from '@mui/material';
 import '../App.css';
 
@@ -13,8 +10,6 @@ interface dateProps {
 }
 
 function Datepicker({ name, selectedDate, onDateChange }: dateProps) {
-    const [startDate, setStartDate] = useState<Date | null>(new Date());
-    const today = new Date();
     return (
         <form noValidate style={{ width: '300px', margin: 'auto', marginTop: '20px' }}>
         <TextField

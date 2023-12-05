@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import Chart from 'chart.js/auto';
-import { Bar } from 'recharts';
 import { ChartConfiguration } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import GanttData from '../Api/GanttData';
 
-const GanttChart: React.FC = () => {
+interface ganttProps{
+    fetchDataFunction: () => Promise<any>;
+}
+const GanttChart: React.FC<ganttProps> = ({fetchDataFunction}) => {
     const [newdata, setnewData] = useState<any[]>([]);
-
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await GanttData();
+                const response = await fetchDataFunction();
                 setnewData(response.data);
                 console.log(response.data);
             } catch (error) {
@@ -19,7 +20,7 @@ const GanttChart: React.FC = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [fetchDataFunction]);
 
     useEffect(() => {
         console.log(newdata);
@@ -57,7 +58,6 @@ const GanttChart: React.FC = () => {
                 },
             ],
         };
-
         // config
         const config: ChartConfiguration<'bar'> = {
             type: 'bar',
@@ -79,11 +79,9 @@ const GanttChart: React.FC = () => {
                             stepSize: 3600000,
                             tooltipFormat: 'HH:mm:ss'
                         },
-                        min: '2023-11-16T00:00:00' as any,
-                        max: '2023-11-16T23:59:59' as any,
-
+                        min: '2023-11-17T00:00:00' as any,
+                        max: '2023-11-17T23:59:59' as any,
                     },
-
                 }, plugins: {
                     tooltip: {
                         callbacks: {
@@ -99,20 +97,16 @@ const GanttChart: React.FC = () => {
                         }
                     }
                 },
-
-
             },
         };
 
         // render init block
         const myChart = new Chart(document.getElementById('myChart') as HTMLCanvasElement, config);
-
         // Instantly assign Chart.js version
         const chartVersion = document.getElementById('chartVersion') as HTMLSpanElement;
         if (chartVersion) {
             chartVersion.innerText = Chart.version;
         }
-
         // Cleanup when the component unmounts
         return () => {
             myChart.destroy();

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Stack, TextField, Autocomplete } from "@mui/material";
-import Button from '@mui/material/Button';
-import PropTypes from 'prop-types';
+
 interface SearchBarProps {
     fetchDataFunction: () => Promise<any>;
     NameParam: string;
@@ -21,7 +20,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ fetchDataFunction, NameParam, Lab
                 console.error("Error fetching data:", error);
             }
         };
-
         fetchData();
     }, [fetchDataFunction]);
     const handleOnChange = (event: React.ChangeEvent<{}>, value: string | "") => {
@@ -41,7 +39,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ fetchDataFunction, NameParam, Lab
                 />
             )}
             </Stack>
-
         </>
     );
 };
