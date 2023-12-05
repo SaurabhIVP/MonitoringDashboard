@@ -10,7 +10,7 @@ public class Tasks
     public DateTime Current_Time { get; set; }
     public string Chain_Time { get; set; }
     public string Task_Time { get; set; }
-    public string BenchMark_Time { get; set; }
+    public DateTime benchmark_time { get; set; }
     public int chain_id { get; set; }
     public int flow_id { get; set; }
     public double PerformanceDeviation { get; set; }
