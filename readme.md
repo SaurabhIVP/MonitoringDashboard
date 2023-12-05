@@ -3,34 +3,50 @@
 ### Installation
 
   git clone https://github.com/SaurabhIVP/MonitoringDashboard.git
+  
   Navigate to the backend Web API directory:
-        cd Backend/WebApi
-    Run the Web API using:
-        dotnet run
+  
+  cd Backend/WebApi
+  
+  Run the Web API using:
+  
+  dotnet run
 
 After cloning the repository, navigate to the frontend dashboard directory:
-    bashCopy code
-    cd Frontend/dashboard
+
+cd Frontend/dashboard
+
 Install dependencies, including react-scripts:
-    bashCopy code
-    npm install react-scripts --save
-    # Use --force if --save doesn't work
+   
+npm install react-scripts --save
+#### Use --force if --save doesn't work
+
 Usage
+
 Run the frontend dashboard using:
+
 npm start
+
 Visit http://localhost:3000 in your web browser.
 
-Contributing
+### Contributing
+
 If you'd like to contribute to this project, follow these steps:
-    Fork the repository and clone it locally:
-    bashCopy code
-    git clone https://github.com/your-username/MonitoringDashboard.git
-    cd MonitoringDashboard
-    Create a new branch for your changes:
-    bashCopy code
-    git checkout -b feature/new-feature
-    Make your changes, commit them, and push to your fork:
-    bashCopy code
-    git commit -m "Add new feature"
-    git push origin feature/new-feature
-    Create a pull request on GitHub.
+    
+Fork the repository and clone it locally:
+
+git clone https://github.com/your-username/MonitoringDashboard.git
+
+cd MonitoringDashboard
+
+Create a new branch for your changes:
+
+git checkout -b feature/new-feature
+
+Make your changes, commit them, and push to your fork:
+
+git commit -m "Add new feature"
+
+git push origin feature/new-feature
+
+Create a pull request on GitHub.
