@@ -27,6 +27,7 @@
     "chartjs-adapter-moment": "^1.0.1",
     "chartjs-plugin-annotation": "^3.0.1",
     "date-fns": "^2.30.0",
+    "date-fns-tz": "^2.0.0",
     "dayjs": "^1.11.10",
     "gantt-task-react": "^0.3.9",
     "moment": "^2.29.4",

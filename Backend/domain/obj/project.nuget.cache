@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "8nUckbmBv6Kj3iBi2QemmV7O0lbjzXbP4dx2LbKQ9otVA1BxhPXqI0uTFeAPIlGN+vuci2t6FLq2UdTuq9ChVA==",
+  "dgSpecHash": "5mQq8o+MUvP+tYO7jE8UXQxSbA449T8TYITRFXSxtEN3dWsaSZWqg9M7bbo01+mIaX/neeE3v4RnfopokrQlrA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\Backend\\Domain\\Domain.csproj",
+  "projectFilePath": "C:\\Users\\srborawake\\Desktop\\IVPDashboard\\IVPDashboard\\MonitoringDashboard\\backend\\Domain\\Domain.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

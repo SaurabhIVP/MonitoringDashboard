@@ -1,15 +1,4 @@
-select * from ivp_rad_task_status
-alter proc GetAllChainDetails
-as
-begin 
-		select a.chain_id,b.flow_id,a.chain_name,b.task_name,c.start_time,c.end_time
-		from ivp_rad_task_status c
-		inner join ivp_rad_flow b
-		on b.flow_id=c.flow_id
-		inner join ivp_rad_chained_tasks a
-		on a.chain_id=b.chain_id
-		where b.is_active=1
-end
+
 
 
 Create proc GetDistinctChainNames
@@ -21,8 +10,7 @@ begin
 end
 
 
-alter PROCEDURE GetTaskNamesByChain
-    @Chainname varchar(max)
+CREATE PROCEDURE GetDistinctChainNames
 AS
 BEGIN
     select distinct task_name

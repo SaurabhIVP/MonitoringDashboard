@@ -109,8 +109,8 @@ function Dashboard() {
     </AppBar>
       <div style={{ paddingBottom: "15px" }}>
         <div className="searchbar" style={{ paddingTop: "20px" }}>
-          <SearchBar fetchDataFunction={AllData} NameParam="chain_Name" Label="Search Chain Name" onSearch={ChainhandleSearch} />
-          <SearchBar fetchDataFunction={() => Tasknames({ chainname: selectedChainValue })} NameParam="task_Name" Label="Search Task Name" onSearch={TaskhandleSearch} />
+          <SearchBar fetchDataFunction={AllData} NameParam="chain_name" Label="Search Chain Name" onSearch={ChainhandleSearch} />
+          <SearchBar fetchDataFunction={() => Tasknames({ chainname: selectedChainValue })} NameParam="task_name" Label="Search Task Name" onSearch={TaskhandleSearch} />
           <Dropdown name="Benchmark Compute"></Dropdown>
         </div>
         <div className="searchbar">
