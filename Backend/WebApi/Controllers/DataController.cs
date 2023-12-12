@@ -8,24 +8,24 @@ namespace WebApi.Controllers;
 [Route("api/[controller]")]
 public class DataController : ControllerBase
 {
-    private readonly IService _chainService;
+    private readonly IService _objService;
 
-    public DataController(IService chainService)
+    public DataController(IService objService)
     {
-        _chainService = chainService;
+        _objService = objService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAllChainDetails()
     {
-        var chainDetails = await _chainService.GetAllChainDetailsAsync();
+        var chainDetails = await _objService.GetAllChainDetailsAsync();
         return Ok(chainDetails);
     }
     [HttpGet]
     [Route("chains")]
     public async Task<IActionResult> GetAllChainNames()
     {
-        var chainDetails = await _chainService.GetAllChainNamesAsync();
+        var chainDetails = await _objService.GetAllChainNamesAsync();
         return Ok(chainDetails);
     }
 
@@ -33,7 +33,7 @@ public class DataController : ControllerBase
     [Route("tasks/{chainname}")]
     public async Task<IActionResult> GetAllTaskNames(string chainname)
     {
-        var chainDetails = await _chainService.GetAllTaskNamesAsync(chainname);
+        var chainDetails = await _objService.GetAllTaskNamesAsync(chainname);
         return Ok(chainDetails);
     }
 
@@ -41,9 +41,16 @@ public class DataController : ControllerBase
     [Route("tasks/{start_time}/{end_time}")]
     public async Task<IActionResult> GetGanttDetails(DateTime start_time,DateTime end_time)
     {
-        var chainDetails = await _chainService.GetGanttDetailsAsync(start_time, end_time);
+        var chainDetails = await _objService.GetGanttDetailsAsync(start_time, end_time);
         return Ok(chainDetails);
     }
 
+    [HttpGet]
+    [Route("getAllChainDetails/{chainID}/{taskID}/{benchmarkCompute}/{startDate}/{endDate}/{benchmarkStartDate}/{benchmarkEndDate}")]
+    public async Task<IActionResult> getAllChainDetails(int chainID,int taskID,string benchmarkCompute,string startDate,string endDate, string benchmarkStartDate, string benchmarkEndDate)
+    {
+        var chainDetails = await _objService.getChainDetails(chainID,taskID,benchmarkCompute,startDate,endDate,benchmarkStartDate,benchmarkEndDate);
+        return Ok(chainDetails);
+    }
     
 }

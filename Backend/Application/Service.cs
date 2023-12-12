@@ -28,5 +28,8 @@ public class Service : IService
     {
         return await _dbAccess.GetGanttDetailsAsync(start_time,end_time);
     }
-    
+    public async Task<IEnumerable<ChainDetails>> getChainDetails(int chainID,int taskID,string benchmarkCompute,string startDate,string endDate, string benchmarkStartDate, string benchmarkEndDate)
+    {
+        return await _dbAccess.getChainDetails(chainID,taskID,benchmarkCompute,startDate,endDate,benchmarkStartDate,benchmarkEndDate);
+    }
 }
