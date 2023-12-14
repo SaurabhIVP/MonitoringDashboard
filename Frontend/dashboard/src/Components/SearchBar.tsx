@@ -3,13 +3,14 @@ import { Stack, TextField, Autocomplete } from "@mui/material";
 
 interface SearchBarProps {
     fetchDataFunction: () => Promise<any>;
-    NameParam: string;
-    Label: string;
-    onSearch: (selectedValue: string) => void;
+    nameParam: string;
+    label: string;
+    onSearch: (id:number|null) => void;
+    idParam:string;
 }
-const SearchBar: React.FC<SearchBarProps> = ({ fetchDataFunction, NameParam, Label, onSearch}) => {
+const SearchBar: React.FC<SearchBarProps> = ({ fetchDataFunction, nameParam, label, onSearch,idParam}) => {
     const [data, setData] = useState<any[]>([]);
-    const [selectedValue, setSelectedValue] = useState<string | null>(null);
+    const [selectedValue, setSelectedValue] = useState<{ id: number} | null>(null);
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -22,19 +23,27 @@ const SearchBar: React.FC<SearchBarProps> = ({ fetchDataFunction, NameParam, Lab
         };
         fetchData();
     }, [fetchDataFunction]);
-    const handleOnChange = (event: React.ChangeEvent<{}>, value: string | "") => {
-        setSelectedValue(value);
-        // Pass the selected value back to the parent component
-        onSearch(value || ""); // Ensure that the value is not null
+    const handleOnChange = (event: React.ChangeEvent<{}>, value: {[key:string]:any} | null) => {
+        
+if (value) {
+        setSelectedValue({id:value[idParam]}); // Assuming NameParam is the property name you want to display
+        // Pass both name and id back to the parent component
+        onSearch(value[idParam]);
+    } else {
+        setSelectedValue(null);
+        onSearch(null);
+    }
+
     };
     return (
         <>
             <Stack spacing={2} width={'500px'}>
             {data && (
                 <Autocomplete
-                    options={data.map((item) => item[NameParam] )}
-                    renderInput={(params) => <TextField {...params} label={Label} />}
-                    value={selectedValue}
+                    options={data}
+                    getOptionLabel={(option)=>option[nameParam]}
+                    renderInput={(params) => <TextField {...params} label={label} />}
+                    // value={selectedValue}
                     onChange={handleOnChange}
                 />
             )}

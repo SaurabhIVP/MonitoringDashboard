@@ -30,18 +30,18 @@ public class DataController : ControllerBase
     }
 
     [HttpGet]
-    [Route("tasks/{chainname}")]
-    public async Task<IActionResult> GetAllTaskNames(string chainname)
+    [Route("tasks/{chain_id}")]
+    public async Task<IActionResult> GetAllTaskNames(int chain_id)
     {
-        var chainDetails = await _chainService.GetAllTaskNamesAsync(chainname);
+        var chainDetails = await _chainService.GetAllTaskNamesAsync(chain_id);
         return Ok(chainDetails);
     }
 
     [HttpGet]
-    [Route("tasks/{start_time}/{end_time}")]
-    public async Task<IActionResult> GetGanttDetails(DateTime start_time,DateTime end_time)
+    [Route("tasks/{start_time?}/{end_time?}/{chains?}")]
+    public async Task<IActionResult> GetGanttDetails(DateTime? start_time=null,DateTime? end_time=null,string? chains=null)
     {
-        var chainDetails = await _chainService.GetGanttDetailsAsync(start_time, end_time);
+        var chainDetails = await _chainService.GetGanttDetailsAsync(chains,start_time, end_time);
         return Ok(chainDetails);
     }
 

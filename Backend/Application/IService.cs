@@ -7,7 +7,7 @@ public interface IService
 {
     Task<IEnumerable<Tasks>> GetAllChainDetailsAsync();   
     Task<IEnumerable<Tasks>> GetAllChainNamesAsync();
-    Task<IEnumerable<Tasks>> GetAllTaskNamesAsync(string chainname);   
-     Task<IEnumerable<Tasks>> GetGanttDetailsAsync(DateTime start_time,DateTime end_time);   
+    Task<IEnumerable<Tasks>> GetAllTaskNamesAsync(int chain_id);   
+     Task<IEnumerable<Tasks>> GetGanttDetailsAsync(string chains=null ,DateTime? start_time=null,DateTime? end_time=null);   
    
 }
