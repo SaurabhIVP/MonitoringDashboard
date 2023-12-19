@@ -34,5 +34,18 @@ public class DBAccess : IDBAccess
         return await _dbConnection.QueryAsync<Tasks>("SP_GetGanttDetails", parameters, commandType: CommandType.StoredProcedure);
     }
 
+    public async Task<IEnumerable<ChainDetails>> getChainDetails(int chainID,int taskID,string benchmarkCompute,string startDate,string endDate, string benchmarkStartDate, string benchmarkEndDate)
+    {
+        var parameters = new {
+            chainID = chainID,
+            taskID = taskID,
+            benchmarkCompute = benchmarkCompute,
+            startDate = startDate,
+            endDate = endDate,
+            benchmarkStartDate = benchmarkStartDate,
+            benchmarkEndDate = benchmarkEndDate
+        };
+        return await _dbConnection.QueryAsync<ChainDetails>("SP_GetAllChainDetails",parameters,commandType:CommandType.StoredProcedure);
+    }
 
 }
