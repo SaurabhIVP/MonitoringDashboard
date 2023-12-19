@@ -20,13 +20,13 @@ public class Service : IService
     {
         return await _dbAccess.GetAllChainNamesAsync();
     }
-    public async Task<IEnumerable<Tasks>> GetAllTaskNamesAsync(string chainname)
+    public async Task<IEnumerable<Tasks>> GetAllTaskNamesAsync(int chain_id)
     {
-        return await _dbAccess.GetAllTaskNamesAsync(chainname);
+        return await _dbAccess.GetAllTaskNamesAsync(chain_id);
     }
-    public async Task<IEnumerable<Tasks>> GetGanttDetailsAsync(DateTime start_time,DateTime end_time)
+    public async Task<IEnumerable<Tasks>> GetGanttDetailsAsync(string chains=null ,DateTime? start_time=null,DateTime? end_time=null)
     {
-        return await _dbAccess.GetGanttDetailsAsync(start_time,end_time);
+        return await _dbAccess.GetGanttDetailsAsync(chains,start_time,end_time);
     }
     public async Task<IEnumerable<ChainDetails>> getChainDetails(int chainID,int taskID,string benchmarkCompute,string startDate,string endDate, string benchmarkStartDate, string benchmarkEndDate)
     {

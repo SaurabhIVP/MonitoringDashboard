@@ -16,22 +16,22 @@ public class DBAccess : IDBAccess
 
     public async Task<IEnumerable<Tasks>> GetAllChainDetailsAsync()
     {
-        return await _dbConnection.QueryAsync<Tasks>("GetAllChainDetails", commandType: CommandType.StoredProcedure);
+        return await _dbConnection.QueryAsync<Tasks>("SP_GetGanttDetails", commandType: CommandType.StoredProcedure);
     }
     public async Task<IEnumerable<Tasks>> GetAllChainNamesAsync()
     {
         var parameters = new DynamicParameters();  
-        return await _dbConnection.QueryAsync<Tasks>("GetDistinctChainNames", parameters, commandType: CommandType.StoredProcedure);
+        return await _dbConnection.QueryAsync<Tasks>("SP_GetDistinctChainNames", parameters, commandType: CommandType.StoredProcedure);
     }
-    public async Task<IEnumerable<Tasks>> GetAllTaskNamesAsync(string chainname)
+    public async Task<IEnumerable<Tasks>> GetAllTaskNamesAsync(int chain_id)
     {
-        var parameters = new { Chainname = chainname };
-        return await _dbConnection.QueryAsync<Tasks>("GetTaskNamesByChain", parameters, commandType: CommandType.StoredProcedure);
+        var parameters = new { ChainId = chain_id };
+        return await _dbConnection.QueryAsync<Tasks>("SP_GetTaskNamesByChain", parameters, commandType: CommandType.StoredProcedure);
     }
-    public async Task<IEnumerable<Tasks>> GetGanttDetailsAsync(DateTime start_time,DateTime end_time)
+    public async Task<IEnumerable<Tasks>> GetGanttDetailsAsync(string chains=null ,DateTime? start_time=null,DateTime? end_time=null)
     {
-        var parameters = new {starttime = start_time, endtime = end_time};
-        return await _dbConnection.QueryAsync<Tasks>("GetGanttDetails", parameters, commandType: CommandType.StoredProcedure);
+        var parameters = new {chains=chains,starttime = start_time, endtime = end_time};
+        return await _dbConnection.QueryAsync<Tasks>("SP_GetGanttDetails", parameters, commandType: CommandType.StoredProcedure);
     }
 
     public async Task<IEnumerable<ChainDetails>> getChainDetails(int chainID,int taskID,string benchmarkCompute,string startDate,string endDate, string benchmarkStartDate, string benchmarkEndDate)
