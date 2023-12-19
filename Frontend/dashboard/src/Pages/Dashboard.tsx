@@ -7,15 +7,32 @@ import Datepicker from "../Components/Datepicker";
 import Dropdown from "../Components/Dropdown";
 import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material";
 import GanttChartHandle from "../Components/GanttChartHandle";
+import ChartModal from "../Components/ChartModal";
+import ChartChain from "../Api/ChartChain";
+import ChartTask from "../Api/ChartTask";
 
 function Dashboard() {
   const [selectedChainValue, setSelectedChainValue] = useState<number| null>(null);
   const [selectedTaskValue, setSelectedTaskValue] = useState<number| null>(null);
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [EndDate, setEndDate] = useState<Date | null>(new Date());
-  const [BenchstartDate, setBenchStartDate] = useState<Date | null>(new Date());
-  const [BenchendDate, SetBenchendDate] = useState<Date | null>(new Date());
+  const [startDate, setStartDate] = useState<Date | null>(new Date(2023, 10, 17));
+  const [EndDate, setEndDate] = useState<Date | null>(new Date(2023, 10, 24));
+  const [BenchstartDate, setBenchStartDate] = useState<Date | null>(new Date(2023, 10, 17));
+  const [BenchendDate, SetBenchendDate] = useState<Date | null>(new Date(2023, 10, 24));
+  const [isChainModalOpen, setIsChainModalOpen] = useState(false);
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+  const openChainModal = () => {
+    setIsChainModalOpen(true);
+  };
+  const openTaskModal = () => {
+    setIsTaskModalOpen(true);
+  };
 
+  const closeChainModal = () => {
+    setIsChainModalOpen(false);
+  };
+  const closeTaskModal = () => {
+    setIsTaskModalOpen(false);
+  };
   const handleStartDateChange = (newDate: Date | null) => {
     setStartDate(newDate);
   };
@@ -42,7 +59,6 @@ function Dashboard() {
   const TaskhandleSearch = async (id: number| null) => {
     setSelectedTaskValue(id);
   };
-
   return (
     <><div ><AppBar position="static">
       <Toolbar variant="dense">
@@ -68,12 +84,37 @@ function Dashboard() {
         </div>
       </div>
     </div>
+    <div>
+    <Button variant="contained" onClick={openTaskModal} size="medium" style={{ borderRadius: '100px' }}>
+        Open Task Chart
+      </Button>
+      <ChartModal isOpen={isTaskModalOpen} onClose={closeTaskModal} fetchDataFunction={()=>ChartTask({
+            flow_id:3257,
+            startDate:startDate,
+            endDate: EndDate,
+            benchStartDate: BenchstartDate,
+            benchEndDate: BenchendDate,
+          })} Label="FLOW_To Be Announced Analytics"/>
+    
+    </div>
+    <div>
+    <Button variant="contained" onClick={openChainModal} size="medium" style={{ borderRadius: '100px' }}>
+        Open Chain Chart
+      </Button>
+      <ChartModal isOpen={isChainModalOpen} onClose={closeChainModal} fetchDataFunction={()=>ChartChain({
+            chain_id:2775,
+            startDate:startDate,
+            endDate: EndDate,
+            benchStartDate: BenchstartDate,
+            benchEndDate: BenchendDate,
+          })} Label="Analytics Golden Copy - Mastered Analytics"/>
+    
+    </div>
       <div className="Gantt-container">
         <h2>Gantt Chart</h2>
         <div>
         <GanttChartHandle></GanttChartHandle>
         </div>
-        
       </div>
     </>
   )

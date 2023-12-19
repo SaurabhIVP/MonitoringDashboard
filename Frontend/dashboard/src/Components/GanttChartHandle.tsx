@@ -4,8 +4,9 @@ import MultiSelect from "./MultiSelect";
 import AllData from "../Api/AllData";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import GanttChart2 from "./GanttChart2";
+import GanttChart2 from "./GanttChart";
 import GanttData from "../Api/GanttData";
+import GanttChart from "./GanttChart";
 
 const GanttChartHandle = () => {
   const [multichains, setMultichains] = useState<string[]>([]);
@@ -50,11 +51,11 @@ const GanttChartHandle = () => {
         <div className="searchbar"  >
           
           <div style={{display:'flex',position:'relative',paddingBottom:'10px'}}>
-            <div style={{paddingRight:'300px'}}>
+            <div style={{paddingRight:'150px'}}>
           <MultiSelect fetchDataFunction={AllData} NameParam="chain_name" Label="Search chains" onSearch={HandleMultichains}></MultiSelect>
           </div>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <div style={{paddingRight:'300px'}}>
+            <div style={{paddingRight:'150px'}}>
             
               <DateTimePicker label="Gantt Start time" value={ganttstartTime} onChange={handleGanttStartTimeChange} />
             </div>
@@ -67,8 +68,8 @@ const GanttChartHandle = () => {
           
         </div>
         <Button variant="contained" onClick={ButtonHandler} size="medium" style={{ borderRadius: "100px"}}>Submit</Button>
-        <GanttChart2 data={filteredData} starttime={ganttstartTime}
-                endtime={ganttendTime}></GanttChart2>
+        <GanttChart data={filteredData} starttime={ganttstartTime}
+                endtime={ganttendTime}></GanttChart>
       </div>
      
     </div>
