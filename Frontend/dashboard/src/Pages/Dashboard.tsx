@@ -9,7 +9,6 @@ import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material";
 import GanttChartHandle from "../Components/GanttChartHandle";
 import { GetChainDetails } from "../Api/GetChainDetails";
 import ChartModal from "../Components/ChartModal";
-import ChartChain from "../Api/ChartChain";
 import ChartTask from "../Api/ChartTask";
 
 
@@ -102,19 +101,6 @@ function Dashboard() {
             benchStartDate: BenchstartDate,
             benchEndDate: BenchendDate,
           })} Label="FLOW_To Be Announced Analytics"/>
-    
-    </div>
-    <div>
-    <Button variant="contained" onClick={openChainModal} size="medium" style={{ borderRadius: '100px' }}>
-        Open Chain Chart
-      </Button>
-      <ChartModal isOpen={isChainModalOpen} onClose={closeChainModal} fetchDataFunction={()=>ChartChain({
-            chain_id:2775,
-            startDate:startDate,
-            endDate: EndDate,
-            benchStartDate: BenchstartDate,
-            benchEndDate: BenchendDate,
-          })} Label="Analytics Golden Copy - Mastered Analytics"/>
     
     </div>
       <div className="Gantt-container">
