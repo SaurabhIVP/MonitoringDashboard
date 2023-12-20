@@ -4,15 +4,13 @@ import { ChartConfiguration } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import { format } from 'date-fns-tz';
 
-
-
 interface ganttProps{
     data:any[];
     starttime:any;
     endtime:any;
 }
 
-const GanttChart2: React.FC<ganttProps> = ({data,starttime,endtime}) => {
+const GanttChart: React.FC<ganttProps> = ({data,starttime,endtime}) => {
     const [newdata, setnewData] = useState<any[]>([]);
     const [newstart, setnewstart] = useState<any>([]);
     const [newend, setnewend] = useState<any>([]);
@@ -59,9 +57,6 @@ const GanttChart2: React.FC<ganttProps> = ({data,starttime,endtime}) => {
         
         const templength=newdata.map((item)=>item.chain_name).filter((value,index,self)=>self.indexOf(value)===index);
         setlength(templength.length);
-        
-       
-        // You can adjust the multiplier as needed
         const backgroundColors = processedData.map(item => {
             if (item.status === 'failed') {
               return 'red';
@@ -88,10 +83,6 @@ const GanttChart2: React.FC<ganttProps> = ({data,starttime,endtime}) => {
             datasets: [
                 {
                     label: 'Daily TimeFrame',
-                    // data:processedData.map((item) => ({
-                    //     x: [item.x[0],item.x[1]],
-                    //     y:item.y
-                    // })),
                     data:processedData
                     
                 },
@@ -104,7 +95,7 @@ const GanttChart2: React.FC<ganttProps> = ({data,starttime,endtime}) => {
             options:{
                 layout: {
                     padding: {
-                        left: 10,
+                        left: 340,
                         top:10,
                         right:10
                     },
@@ -113,26 +104,20 @@ const GanttChart2: React.FC<ganttProps> = ({data,starttime,endtime}) => {
                 maintainAspectRatio: false,
                 indexAxis: 'y',
                 scales: {
-                    
                     x: {
-                       
                         position: 'top',
                         type: 'time',
-                       
                         time: {
                             unit: "millisecond",
                             minUnit: 'millisecond',
                             stepSize: 3600000,
-                            
                             tooltipFormat: 'HH:mm:ss'
                         },
                         min: newstart,
                         max: newend,
                         afterFit:(ctx:any)=>{
                             ctx.height=50
-                            
-                        }
-                        
+                        } 
                     },
                     y:{
                         ticks:{
@@ -141,9 +126,7 @@ const GanttChart2: React.FC<ganttProps> = ({data,starttime,endtime}) => {
                         grid:{
                             drawTicks:false
                         }
-                    }
-                    
-                    
+                    }  
                 },
                 plugins:{
                     legend:{
@@ -163,13 +146,11 @@ const GanttChart2: React.FC<ganttProps> = ({data,starttime,endtime}) => {
                         top:10,
                         right:10
                     },
-                    
                 },
                
                 indexAxis: 'y',
                 scales: {
                     x: {
-                       
                         position: 'top',
                         type: 'time',
                         time: {
@@ -181,16 +162,9 @@ const GanttChart2: React.FC<ganttProps> = ({data,starttime,endtime}) => {
                         min: newstart,
                         max: newend,
                         display:false,
-                        // ticks:{
-                        //     display:false
-                        // },
-                        // grid:{
-                        //     drawTicks:false
-                        // }
-                        
                     },
                     
-                    
+
                 }, plugins: {
                     legend:{
                         display:false,
@@ -249,13 +223,13 @@ const GanttChart2: React.FC<ganttProps> = ({data,starttime,endtime}) => {
 
     return (
         <div >
-            <div style={{ maxWidth:'1500px'}}>
-                <div style={{height:`50px`, width:'1410px',paddingBottom:'50px',paddingLeft:'290px'}}>
+            <div style={{}}>
+                <div style={{height:`50px`, width:'100%',paddingBottom:'1%'}}>
                     <canvas id="myChart1" ></canvas>
                 </div>
             </div>     
-            <div className="chartCard"  style={{ height:'400px',maxWidth:'1700px',overflowY:'scroll'}}>
-                <div className="chartBox" style={{ height:`${Math.max(length*30,200)-50}px`, width:'1700px'}}>
+            <div className="chartCard"  style={{ height:'400px',overflowY:'scroll'}}>
+                <div className="chartBox" style={{ height:`${Math.max(length*30,200)-50}px`, width:'100%'}}>
                     <canvas id="myChart"></canvas>
                 </div>
             </div>
@@ -263,4 +237,4 @@ const GanttChart2: React.FC<ganttProps> = ({data,starttime,endtime}) => {
     );
 };
 
-export default GanttChart2;
+export default GanttChart;

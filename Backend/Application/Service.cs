@@ -28,7 +28,12 @@ public class Service : IService
     {
         return await _dbAccess.GetGanttDetailsAsync(chains,start_time,end_time);
     }
-    public async Task<IEnumerable<ChainDetails>> getChainDetails(int chainID,int taskID,string benchmarkCompute,string startDate,string endDate, string benchmarkStartDate, string benchmarkEndDate)
+    public async Task<IEnumerable<Tasks>> GetChainTimeDetailsAsync(int chain_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null){
+        return await _dbAccess.GetChainTimeDetailsAsync(chain_id,startDate,endDate, benchStartDate, benchEndDate);
+    }
+    public async Task<IEnumerable<Tasks>> GetTaskTimeDetailsAsync(int flow_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null){
+        return await _dbAccess.GetTaskTimeDetailsAsync(flow_id,startDate,endDate, benchStartDate, benchEndDate);
+     }public async Task<IEnumerable<ChainDetails>> getChainDetails(int chainID,int taskID,string benchmarkCompute,string startDate,string endDate, string benchmarkStartDate, string benchmarkEndDate)
     {
         return await _dbAccess.getChainDetails(chainID,taskID,benchmarkCompute,startDate,endDate,benchmarkStartDate,benchmarkEndDate);
     }
