@@ -4,7 +4,6 @@ import MultiSelect from "./MultiSelect";
 import AllData from "../Api/AllData";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import GanttChart2 from "./GanttChart";
 import GanttData from "../Api/GanttData";
 import GanttChart from "./GanttChart";
 

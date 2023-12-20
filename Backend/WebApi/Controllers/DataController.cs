@@ -34,7 +34,7 @@ public class DataController : ControllerBase
     public async Task<IActionResult> GetAllTaskNames(int chain_id)
     {
 
-        var chainDetails = await _chainService.GetAllTaskNamesAsync(chain_id);
+        var chainDetails = await _objService.GetAllTaskNamesAsync(chain_id);
         return Ok(chainDetails);
     }
 
@@ -42,7 +42,7 @@ public class DataController : ControllerBase
     [Route("tasks/{start_time?}/{end_time?}/{chains?}")]
     public async Task<IActionResult> GetGanttDetails(DateTime? start_time=null,DateTime? end_time=null,string? chains=null)
     {
-        var chainDetails = await _chainService.GetGanttDetailsAsync(chains,start_time, end_time);
+        var chainDetails = await _objService.GetGanttDetailsAsync(chains,start_time, end_time);
         return Ok(chainDetails);
     }
 
@@ -51,14 +51,14 @@ public class DataController : ControllerBase
 [Route("chart/{chain_id}")]
 public async Task<IActionResult> GetChainTimeDetails(int chain_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null)
 {
-    var chainDetails = await _chainService.GetChainTimeDetailsAsync(chain_id, startDate, endDate, benchStartDate, benchEndDate);
+    var chainDetails = await _objService.GetChainTimeDetailsAsync(chain_id, startDate, endDate, benchStartDate, benchEndDate);
     return Ok(chainDetails);
 }
     [HttpGet]
 [Route("chart/tasktimes/{flow_id}")]
 public async Task<IActionResult> GetTaskTimeDetails(int flow_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null)
 {
-    var chainDetails = await _chainService.GetTaskTimeDetailsAsync(flow_id, startDate, endDate, benchStartDate, benchEndDate);
+    var chainDetails = await _objService.GetTaskTimeDetailsAsync(flow_id, startDate, endDate, benchStartDate, benchEndDate);
     return Ok(chainDetails);
 }
     [HttpGet]

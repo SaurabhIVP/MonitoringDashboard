@@ -6,15 +6,7 @@ import Tasknames from "../Api/Tasknames";
 import Datepicker from "../Components/Datepicker";
 import Dropdown from "../Components/Dropdown";
 import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material";
-
 import GanttChartHandle from "../Components/GanttChartHandle";
-
-
-import GanttChart from "../Components/GanttChart";
-import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import GanttData from "../Api/GanttData";
-import Table from "../Components/Table";
 import { GetChainDetails } from "../Api/GetChainDetails";
 import ChartModal from "../Components/ChartModal";
 import ChartChain from "../Api/ChartChain";
