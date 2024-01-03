@@ -37,6 +37,18 @@
   padding-right: 75px;
   
 }
+
+.datepicker{
+  display:flex;
+  padding-left: 75px;
+  padding-right: 75px;
+/*   
+  flex-direction: row; */
+  /* justify-content:space-evenly; */
+  /* gap: 10px; */
+  /* padding-left: 75px; */
+  /* padding-right: 25px; */
+}
 .timepicker{
   display:flex;
   flex-direction: row;

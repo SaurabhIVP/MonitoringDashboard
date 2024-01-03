@@ -4,29 +4,28 @@ import { ChartConfiguration } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import { format } from 'date-fns-tz';
 
-interface ganttProps{
-    data:any[];
-    starttime:any;
-    endtime:any;
+interface ganttProps {
+    data: any[];
+    starttime: any;
+    endtime: any;
 }
 
-const GanttChart: React.FC<ganttProps> = ({data,starttime,endtime}) => {
+const GanttChart: React.FC<ganttProps> = ({ data, starttime, endtime }) => {
     const [newdata, setnewData] = useState<any[]>([]);
     const [newstart, setnewstart] = useState<any>([]);
     const [newend, setnewend] = useState<any>([]);
     useEffect(() => {
         console.log(starttime);
-        if(starttime==null){
-            starttime='2023-11-24T00:00:00';
+        if (starttime == null) {
+            starttime = '2023-11-24T00:00:00';
         }
-        if(endtime==null){
-            endtime='2023-11-24T23:59:59';
+        if (endtime == null) {
+            endtime = '2023-11-24T23:59:59';
         }
         const start = new Date(starttime);
-        const end=new Date(endtime);
+        const end = new Date(endtime);
         const start_time = format(start, 'yyyy-MM-dd HH:mm:ss.SSS', { timeZone: 'Asia/Kolkata' });
         const end_time = format(end, 'yyyy-MM-dd HH:mm:ss.SSS', { timeZone: 'Asia/Kolkata' });
-        
         setnewstart(start_time);
         setnewend(end_time);
         console.log(newstart);
@@ -34,48 +33,46 @@ const GanttChart: React.FC<ganttProps> = ({data,starttime,endtime}) => {
             try {
                 setnewData(data);
                 console.log(data);
-                
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         };
         fetchData();
     }, [data]);
-    const [length,setlength]=useState<any>(500);
-    const [height,setHeight]=useState<any>(500);
+    const [length, setlength] = useState<any>(500);
     useEffect(() => {
         console.log(newdata);
-        let check=false;
+        let check = false;
         const processedData = newdata.map((item) => ({
             x: [item.start_time, item.end_time],
             y: item.chain_name,
             task_Name: item.task_name,
-            delay:item.expected_endtime,
-            status:item.status,
-            performance:item.performance
+            delay: item.expected_endtime,
+            status: item.status,
+            performance: item.performance
         }));
-        
-        const templength=newdata.map((item)=>item.chain_name).filter((value,index,self)=>self.indexOf(value)===index);
+
+        const templength = newdata.map((item) => item.chain_name).filter((value, index, self) => self.indexOf(value) === index);
         setlength(templength.length);
         const backgroundColors = processedData.map(item => {
             if (item.status === 'failed') {
-              return 'red';
+                return 'black';
             } else {
-              return item.performance < -25 ? 'orange' : 'lightgreen';
+                return item.performance < -25 ? '#FF3131' : '#50C878';
             }
-          });
+        });
         const data = {
-            labels: [],
             datasets: [
                 {
-                    label: 'Daily TimeFrame',
-                    data:processedData,
-                    backgroundColor:backgroundColors,
+                    label: 'Within Benchmark',
+                    data: processedData,
+                    backgroundColor: backgroundColors,
                     borderWidth: 1,
-                    barThickness:20,
-                    maxBarThickness: 20
-                    
+                    barThickness: 30,
+                    maxBarThickness: 30
+
                 },
+
             ],
         };
         const xdata = {
@@ -83,23 +80,23 @@ const GanttChart: React.FC<ganttProps> = ({data,starttime,endtime}) => {
             datasets: [
                 {
                     label: 'Daily TimeFrame',
-                    data:processedData
-                    
+                    data: processedData
+
                 },
             ],
         };
         // config
-        const config2: ChartConfiguration<any>={
-            type:'bar',
-            data:xdata,
-            options:{
+        const config2: ChartConfiguration<any> = {
+            type: 'bar',
+            data: xdata,
+            options: {
                 layout: {
                     padding: {
                         left: 340,
-                        top:10,
-                        right:10
+                        top: 10,
+                        right: 10
                     },
-                    
+
                 },
                 maintainAspectRatio: false,
                 indexAxis: 'y',
@@ -108,46 +105,50 @@ const GanttChart: React.FC<ganttProps> = ({data,starttime,endtime}) => {
                         position: 'top',
                         type: 'time',
                         time: {
-                            unit: "millisecond",
-                            minUnit: 'millisecond',
-                            stepSize: 3600000,
-                            tooltipFormat: 'HH:mm:ss'
+                            // unit: "millisecond",
+                            // minUnit: 'millisecond',
+                            // stepSize: 3600000,
+                            displayFormats: {
+                                second: 'HH:mm:ss'
+                            }
+                            // tooltipFormat: 'HH:mm:ss'
                         },
+
                         min: newstart,
                         max: newend,
-                        afterFit:(ctx:any)=>{
-                            ctx.height=50
-                        } 
-                    },
-                    y:{
-                        ticks:{
-                            display:false
-                        },
-                        grid:{
-                            drawTicks:false
+                        afterFit: (ctx: any) => {
+                            ctx.height = 50
                         }
-                    }  
+                    },
+                    y: {
+                        ticks: {
+                            display: false
+                        },
+                        grid: {
+                            drawTicks: false
+                        }
+                    }
                 },
-                plugins:{
-                    legend:{
-                        display:false
+                plugins: {
+                    legend: {
+                        display: false
                     }
                 }
             }
         };
-        const config1: ChartConfiguration<'bar'|any> = {
+        const config1: ChartConfiguration<'bar' | any> = {
             type: 'bar',
             data,
             options: {
-               maintainAspectRatio: false,
+                maintainAspectRatio: false,
                 layout: {
                     padding: {
                         left: 10,
-                        top:10,
-                        right:10
+                        top: 10,
+                        right: 10
                     },
                 },
-               
+
                 indexAxis: 'y',
                 scales: {
                     x: {
@@ -161,40 +162,40 @@ const GanttChart: React.FC<ganttProps> = ({data,starttime,endtime}) => {
                         },
                         min: newstart,
                         max: newend,
-                        display:false,
+                        display: false,
                     },
-                    
+
 
                 }, plugins: {
-                    legend:{
-                        display:false,
-                        
+                    legend: {
+                        display: false,
+
                     },
                     tooltip: {
-                        enabled:true,
+                        enabled: true,
                         callbacks: {
                             title: () => '', // Empty string to hide the title
                             label: (context: any) => {
                                 const dataIndex = context.dataIndex;
                                 const datasetIndex = context.datasetIndex;
                                 const dataItem = context.chart.data.datasets[datasetIndex].data[dataIndex];
-                              
+
                                 const startTime = new Date(dataItem.x[0]).toLocaleTimeString();
                                 const endTime = new Date(dataItem.x[1]).toLocaleTimeString();
                                 const expTime = new Date(dataItem.delay).toLocaleTimeString();
-                                const newLine=[];
+                                const newLine = [];
                                 newLine.push(`Chain: ${dataItem.y}`);
                                 newLine.push(`Task: ${dataItem.task_Name}`);
                                 newLine.push(`Start Time: ${startTime}`);
-                                newLine.push( `End Time: ${endTime}`);
-                                newLine.push( `Expected End Time: ${expTime}`);
-                                newLine.push( `Performance % : ${dataItem.performance}`);
-                                newLine.push( `Status : ${dataItem.status}`);
+                                newLine.push(`End Time: ${endTime}`);
+                                newLine.push(`Expected End Time: ${expTime}`);
+                                newLine.push(`Performance % : ${dataItem.performance}`);
+                                newLine.push(`Status : ${dataItem.status}`);
                                 return newLine;
                             }, // Display the y value in the tooltip label
                         }
                     },
-                    
+
                 },
             },
         };
@@ -210,26 +211,26 @@ const GanttChart: React.FC<ganttProps> = ({data,starttime,endtime}) => {
             myChart1.destroy();
         };
     }, [newdata]);
-    useEffect(() => {
-        // Wait until there is some data in templength
-        console.log(length);
-        if (length > 0) {
-            console.log(length);
-            setHeight(Math.max(200,length));
-        }
-    }, [length]);
-
-    
 
     return (
-        <div >
+        <div style={{ paddingLeft: 10, paddingRight: 20 }}>
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginLeft: '400px' }}>
+                <div style={{ width: '60px', height: '10px', backgroundColor: 'red', marginRight: '10px' }}></div>
+                <h5 style={{ marginRight: '20px' }}>Underperformed Tasks</h5>
+                <div style={{ width: '60px', height: '10px', backgroundColor: 'green', marginRight: '10px' }}></div>
+                <h5 style={{ marginRight: '20px' }}>Outperformed Tasks</h5>
+                <div style={{ width: '60px', height: '10px', backgroundColor: 'gray', marginRight: '10px' }}></div>
+                <h5 style={{ marginRight: '20px' }}>Failed Tasks</h5>
+            </div>
+
+
             <div style={{}}>
-                <div style={{height:`50px`, width:'100%',paddingBottom:'1%'}}>
+                <div style={{ height: `50px`, width: '100%', paddingBottom: '1%' }}>
                     <canvas id="myChart1" ></canvas>
                 </div>
-            </div>     
-            <div className="chartCard"  style={{ height:'400px',overflowY:'scroll'}}>
-                <div className="chartBox" style={{ height:`${Math.max(length*30,200)-50}px`, width:'100%'}}>
+            </div>
+            <div className="chartCard" style={{ height: '400px', overflowY: 'scroll' }}>
+                <div className="chartBox" style={{ height: `${Math.max(length * 40, 200) - 50}px`, width: '100%' }}>
                     <canvas id="myChart"></canvas>
                 </div>
             </div>

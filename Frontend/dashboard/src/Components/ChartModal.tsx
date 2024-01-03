@@ -1,16 +1,16 @@
 import React, { FC } from 'react';
 import { Dialog, DialogTitle, DialogContent, Button } from '@mui/material';
-import BasicLineChart from './BasicLineChart'; // Adjust the import path based on your project structure
+import BasicLineChart from './LineChart'; // Adjust the import path based on your project structure
 import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-  } from "chart.js";
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -18,13 +18,13 @@ interface ChartModalProps {
   isOpen: boolean;
   onClose: () => void;
   fetchDataFunction: () => Promise<any>;
-  Label:string
+  Label: string
 }
 
 const ChartModal: FC<ChartModalProps> = ({
   isOpen,
   onClose,
-  fetchDataFunction,Label
+  fetchDataFunction, Label
 }) => {
   return (
     <Dialog open={isOpen} onClose={onClose} maxWidth="md" fullWidth>
