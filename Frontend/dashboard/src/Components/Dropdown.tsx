@@ -6,7 +6,7 @@ interface dropprops {
 
 function Dropdown({ name }: dropprops) {
     return (
-        <FormControl sx={{ m: 1, minWidth: 200 }}>
+        <FormControl sx={{ minWidth: 200 }}>
             <InputLabel id="demo-simple-select-autowidth-label">{name}</InputLabel>
             <Select
                 labelId="demo-simple-select-autowidth-label"

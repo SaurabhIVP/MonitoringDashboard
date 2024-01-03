@@ -38,14 +38,14 @@ const BasicLineChart: React.FC<BasicLineChartProps> = ({fetchDataFunction}) => {
     labels: data.map((item) =>new Date(item.date).getDate()),
     datasets: [
       {
-        label: 'ChainTime',
+        label: 'Task Time',
         data: data.map((item) => item.total_times),
         fill: false,
         borderColor: 'green',
         tension: 0.1,
       },
       {
-        label: 'Benchmark',
+        label: 'Benchmark Time',
         data: data.map((item) => item.avg_total_time),
         fill: false,
         borderColor: 'blue',
