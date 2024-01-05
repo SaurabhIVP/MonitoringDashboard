@@ -1,5 +1,5 @@
-import TableHeader from "../Components/TableHeader"
-import TableRow from "../Components/TableRow";
+import TableHeader from "../components/TableHeader";
+import TableRow from "../components/TableRow";
 // interface tableProps{
 //     ChainDetails:
 //     {
@@ -52,23 +52,26 @@ import TableRow from "../Components/TableRow";
 
 // export default Table;
 
-export type columnProps<T, K extends keyof T>={
-    key:K;
-    header:string;
-}
+export type columnProps<T, K extends keyof T> = {
+  key: K;
+  header: string;
+};
 
-type tableProps<T, K extends keyof T>={
-    data: Array<T>;
-    columns: Array<columnProps<T,K>>;
-}
+type tableProps<T, K extends keyof T> = {
+  data: Array<T>;
+  columns: Array<columnProps<T, K>>;
+};
 
-const Table =<T,K extends keyof T>({data,columns}:tableProps<T,K>): JSX.Element=>{
-    return(
-                <table id="table">
-                <TableHeader columns={columns}></TableHeader>
-                <TableRow data={data} columns={columns}></TableRow>
-                </table>
-    );
-}
+const Table = <T, K extends keyof T>({
+  data,
+  columns,
+}: tableProps<T, K>): JSX.Element => {
+  return (
+    <table id="table">
+      <TableHeader columns={columns}></TableHeader>
+      <TableRow data={data} columns={columns}></TableRow>
+    </table>
+  );
+};
 
 export default Table;

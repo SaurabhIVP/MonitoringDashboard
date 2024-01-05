@@ -1,6 +1,7 @@
-import React, { FC } from 'react';
-import { Dialog, DialogTitle, DialogContent, Button } from '@mui/material';
-import BasicLineChart from './LineChart'; // Adjust the import path based on your project structure
+import React, { FC } from "react";
+import { Dialog, DialogTitle, DialogContent, Button } from "@mui/material";
+
+// Import necessary components from 'chart.js'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,30 +13,40 @@ import {
   Legend,
 } from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+// Register chart components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 interface ChartModalProps {
   isOpen: boolean;
   onClose: () => void;
   fetchDataFunction: () => Promise<any>;
-  Label: string
+  ChartComponent: React.ComponentType<any>; // Accept any React component
+  Label: string;
 }
 
 const ChartModal: FC<ChartModalProps> = ({
   isOpen,
   onClose,
-  fetchDataFunction, Label
+  fetchDataFunction,
+  ChartComponent,
+  Label,
 }) => {
   return (
     <Dialog open={isOpen} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>{Label}</DialogTitle>
       <DialogContent>
-        <BasicLineChart fetchDataFunction={fetchDataFunction}
-        />
+        <ChartComponent fetchDataFunction={fetchDataFunction} />
       </DialogContent>
     </Dialog>
   );
 };
 
 export default ChartModal;
-

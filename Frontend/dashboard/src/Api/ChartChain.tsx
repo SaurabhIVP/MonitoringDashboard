@@ -2,15 +2,15 @@ import axios from "axios";
 import { format } from "date-fns-tz";
 import { apiService } from "./ApiService";
 interface TaskProps {
-  flow_id: number | null;
+  chain_id: number | null;
   startDate?: any | null; // Assuming you're using string for date format, adjust if needed
   endDate?: any | null;
   benchStartDate?: any | null;
   benchEndDate?: any | null;
 }
 
-async function ChartTask({
-  flow_id,
+async function ChartChain({
+  chain_id,
   startDate,
   endDate,
   benchStartDate,
@@ -31,7 +31,7 @@ async function ChartTask({
     const bencend_time = format(benEnd, "yyyy-MM-dd", {
       timeZone: "Asia/Kolkata",
     });
-    const url = `/chart/tasktimes/${flow_id}`;
+    const url = `/chart/${chain_id}`;
     const params = {
       startDate: start_time,
       endDate: end_time,
@@ -48,4 +48,4 @@ async function ChartTask({
   }
 }
 
-export default ChartTask;
+export default ChartChain;

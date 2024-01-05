@@ -1,6 +1,6 @@
-import dayjs from 'dayjs';
-import { TextField } from '@mui/material';
-import '../App.css';
+import dayjs from "dayjs";
+import { TextField } from "@mui/material";
+import "../App.css";
 
 interface dateProps {
   name: string;
@@ -10,17 +10,20 @@ interface dateProps {
 
 function Datepicker({ name, selectedDate, onDateChange }: dateProps) {
   return (
-    <form noValidate style={{ width: '200px', margin: 'auto', marginTop: '20px' }}>
+    <form
+      noValidate
+      style={{ width: "200px", margin: "auto", marginTop: "20px" }}
+    >
       <TextField
         id="date"
         label={name}
         type="date"
-        value={selectedDate ? dayjs(selectedDate).format('YYYY-MM-DD') : ''}
+        value={selectedDate ? dayjs(selectedDate).format("YYYY-MM-DD") : ""}
         onChange={(event) => onDateChange(dayjs(event.target.value).toDate())}
         InputLabelProps={{
           shrink: true,
         }}
-        style={{ width: '100%' }}
+        style={{ width: "100%" }}
       />
     </form>
   );

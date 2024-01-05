@@ -37,11 +37,25 @@
   padding-right: 75px;
   
 }
+.scrollToTopButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
+.scrollToTopButton:hover {
+  background-color: #0056b3;
+}
 .datepicker{
   display:flex;
-  padding-left: 75px;
-  padding-right: 75px;
+  padding-left: 50px;
+  padding-right: 50px;
 /*   
   flex-direction: row; */
   /* justify-content:space-evenly; */
@@ -60,7 +74,7 @@
   display: flex;
 }
 .Gantt-container{
-  padding-top: 10px;
+  padding-top: 80px;
 }
 @keyframes App-logo-spin {
   from {

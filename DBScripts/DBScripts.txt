@@ -1,34 +1,368 @@
-
-
-
-Create proc GetDistinctChainNames
-as
-begin 
-	select distinct chain_name,chain_id
-	from ivp_rad_chained_tasks
-	where chain_name !='NULL' and is_active=1
-end
-
-
-CREATE PROCEDURE GetDistinctChainNames
+ALTER PROCEDURE [dbo].[SP_GetAllChainDetails] 
+	@chainID INT=0,
+	@taskID INT=0,
+	@benchmarkCompute VARCHAR(100)='AVERAGE',
+	@startDate DATE='20231116',
+	@endDate DATE='20231117',
+	@benchmarkStartDate DATE='20231116',
+	@benchmarkEndDate DATE='20231117'
 AS
 BEGIN
-    select distinct task_name
-	from ivp_rad_flow_sample
-	where  is_active=1 and chain_id=(select chain_id
-									from ivp_rad_chained_tasks
-									where chain_name=@Chainname)
+	
+	SET NOCOUNT ON;
+
+	--DECLARE @StartDate DATE='20231116'
+	--DECLARE @EndDate DATE='20231117'
+	--DECLARE @benchmarkTimeStartDate DATE='20231116'
+	--DECLARE @benchmarkTimeEndDate DATE='20231117'
+
+	IF(OBJECT_ID('tempdb..#ChainDetails') IS NOT NULL)
+	BEGIN
+		DROP TABLE #ChainDetails
+	END
+
+	IF(OBJECT_ID('tempdb..#benchmarkTimeDetails') IS NOT NULL)
+	BEGIN
+		DROP TABLE #benchmarkTimeDetails
+	END
+
+	SELECT * INTO #ChainDetails
+	FROM
+	(
+	SELECT chainStartTime,chainEndTime,currentTime,
+	SUM((DATEDIFF(SECOND,chainStartTime,chainEndTime))/60) +
+	ROUND(CAST(SUM((DATEDIFF(SECOND,chainStartTime,chainEndTime)) - ((DATEDIFF(SECOND,chainStartTime,chainEndTime))/60) * 60) AS DECIMAL)/60 ,2)AS chainTotalTime,
+	chain_id,chain_name
+	from 
+	(
+	SELECT MIN(TS1.start_time) AS chainStartTime, MAX(TS2.end_time) AS chainEndTime, GETDATE() AS currentTime,C.chain_id,C.chain_name
+	FROM ivp_rad_task_status TS1
+	INNER JOIN ivp_rad_task_status TS2 ON TS1.chain_guid=TS2.chain_guid and TS1.start_time=TS2.start_time and TS1.end_time=TS2.end_time
+	INNER JOIN ivp_rad_flow_sample F ON F.flow_id = TS1.flow_id and F.flow_id= TS2.flow_id
+	INNER JOIN ivp_rad_chained_tasks C ON C.chain_id = F.chain_id
+	where 
+	TS1.start_time BETWEEN @StartDate AND @EndDate
+	--AND
+	--C.chain_id=2775
+	GROUP BY TS1.chain_guid,TS2.chain_guid,C.chain_id,C.chain_name
+	) AS Tbl1
+	GROUP BY chainStartTime,chainEndTime,currentTime,chain_id,chain_name
+	) AS TB1
+	
+	
+	SELECT * INTO #benchmarkTimeDetails
+	FROM
+	(
+	SELECT SUM(chainTotalTime)/COUNT(chainTotalTime) AS benchmarkTime,COUNT(chainTotalTime) AS NoOfChainCount,SUM(chainTotalTime) AS SumOfchainTotalTime,chain_id
+	FROM(
+	SELECT chainStartTime,chainEndTime,currentTime,
+	SUM((DATEDIFF(SECOND,chainStartTime,chainEndTime))/60) +
+	ROUND(CAST(SUM((DATEDIFF(SECOND,chainStartTime,chainEndTime)) - ((DATEDIFF(SECOND,chainStartTime,chainEndTime))/60) * 60) AS DECIMAL)/60 ,2)AS chainTotalTime,chain_id
+	FROM (
+	SELECT MIN(TS1.start_time) AS chainStartTime, MAX(TS2.end_time) AS chainEndTime, GETDATE() AS currentTime,C.chain_id
+	FROM ivp_rad_task_status TS1
+	INNER JOIN ivp_rad_task_status TS2 ON TS1.chain_guid=TS2.chain_guid
+	INNER JOIN ivp_rad_flow_sample F ON F.flow_id = TS1.flow_id and F.flow_id= TS2.flow_id
+	INNER JOIN ivp_rad_chained_tasks C ON C.chain_id = F.chain_id
+	WHERE 
+	TS1.start_time BETWEEN @benchmarkStartDate AND @benchmarkEndDate
+	--AND
+	--C.chain_id=2775
+	GROUP BY TS1.chain_guid,TS2.chain_guid,C.chain_id
+	) AS Tbl1
+	GROUP BY chainStartTime,chainEndTime,currentTime,chain_id
+	) AS Tbl2
+	GROUP BY chain_id
+	) AS TBL3
+	
+	SELECT C.chain_id AS chainID,chain_name AS chainName,chainStartTime,chainEndTime,currentTime,chainTotalTime,benchmarkTime, 
+	chainTotalTime-benchmarkTime AS deviationTime--,(chainTotalTime-benchmarkTime)/chainTotalTime*100 AS DeviationPercentage  
+	
+	FROM #ChainDetails AS C
+	INNER JOIN #benchmarkTimeDetails AS B ON B.chain_id=C.chain_id
+ 
+END
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+ALTER PROCEDURE [dbo].[SP_GetChainTimeDetails]
+    @chainId INT,
+    @startDate DATE = NULL,
+    @endDate DATE = NULL,
+    @benchStartDate DATE = NULL,
+    @benchEndDate DATE = NULL
+AS
+BEGIN
+    -- If start date and end date are not provided, show details for the last 7 days
+    IF @startDate IS NULL
+        SET @startDate = '2023-11-17'; -- 7 days before the current date '2023-11-24'
+    IF @endDate IS NULL
+        SET @endDate = '2023-11-24'; -- Current date '2023-11-24'
+
+    -- If bench start date and end date are not provided, calculate avg for the last 7 days
+    IF @benchStartDate IS NULL
+        SET @benchStartDate = '2023-11-17'; -- 7 days before the current date '2023-11-24'
+    IF @benchEndDate IS NULL
+        SET @benchEndDate = '2023-11-24'; -- Current date '2023-11-24'
+
+    SELECT
+        chain_id,
+        chain_name,
+        date,
+        total_time AS total_times,
+        AVG(CASE WHEN date BETWEEN @benchStartDate AND @benchEndDate THEN total_time END) OVER (PARTITION BY chain_id) AS avg_total_time
+    FROM (
+        SELECT
+            ct.chain_id,
+            ct.chain_name,
+            CONVERT(DATE, ts.start_time) AS date,
+            SUM(DATEDIFF(MINUTE, ts.start_time, ts.end_time)) AS total_time
+        FROM
+            ivp_rad_chained_tasks ct
+        INNER JOIN
+            ivp_rad_flow_sample fl ON ct.chain_id = fl.chain_id
+        INNER JOIN
+            ivp_rad_task_status ts ON fl.flow_id = ts.flow_id
+        WHERE
+            ct.chain_id = @chainId
+        GROUP BY
+            ct.chain_id,
+            CONVERT(DATE, ts.start_time),
+            ct.chain_name
+    ) AS subquery
+    WHERE date BETWEEN @startDate AND @endDate;
 END;
 
-alter proc GetGanttDetails @starttime datetime, @endtime datetime
-as 
-begin
-	select a.chain_id,b.flow_id,a.chain_name,b.task_name,c.start_time,c.end_time
-	from ivp_rad_task_status c
-	inner join ivp_rad_flow b
-	on b.flow_id=c.flow_id
-	inner join ivp_rad_chained_tasks a
-	on a.chain_id=b.chain_id
-	where b.is_active=1 and c.start_time>=@starttime and c.end_time<=@endtime
+
+
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+ALTER proc [dbo].[SP_GetDistinctChainNames]
+as
+begin 
+	select distinct ct.chain_name,ct.chain_id
+	from ivp_rad_chained_tasks ct
+	inner join ivp_rad_flow_sample rf
+	on ct.chain_id=rf.chain_id
+	inner join ivp_rad_task_status ts
+	on rf.flow_id=ts.flow_id
+	where ct.chain_name !='NULL' and ct.is_active=1 and ts.status='PASSED'
+	group by ct.chain_id,ct.chain_name
+	having min(ts.start_time)!=max(ts.end_time)
 end
 
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+ALTER PROCEDURE [dbo].[SP_GetGanttDetails]
+    @chains NVARCHAR(MAX) = NULL,
+    @starttime DATETIME = NULL,
+    @endtime DATETIME = NULL
+AS
+BEGIN
+    -- Split the comma-separated values into a table if @chains is not NULL
+    DECLARE @ChainTable TABLE (chainname NVARCHAR(MAX));
+    
+    IF @chains IS NOT NULL
+    BEGIN
+        INSERT INTO @ChainTable (chainname)
+        SELECT value FROM STRING_SPLIT(@chains, ',');
+    END;
+
+    -- Rest of your stored procedure logic using @ChainTable
+    WITH TaskDurations AS (
+         SELECT
+            a.chain_id,
+            a.chain_name,
+            b.flow_id,
+            b.task_name,
+            c.start_time,
+            c.end_time,
+            DATEDIFF(MINUTE, c.start_time, c.end_time) AS duration
+        FROM
+            ivp_rad_task_status c
+        INNER JOIN
+            ivp_rad_flow b ON b.flow_id = c.flow_id
+        INNER JOIN
+            ivp_rad_chained_tasks a ON a.chain_id = b.chain_id
+        WHERE
+            b.is_active = 1
+            AND c.start_time != c.end_time
+    )
+    SELECT
+        a.chain_id,
+        b.flow_id,
+        a.chain_name,
+        b.task_name,
+        c.start_time,
+        c.end_time,
+        td.duration,
+        c.status,
+        avg_duration.avg_duration_minutes AS avg_duration_minutes,
+        avg_duration.avg_duration_minutes - td.duration as delay,
+        DATEADD(MINUTE, avg_duration.avg_duration_minutes, c.start_time) as expected_endtime,
+		((avg_duration.avg_duration_minutes-td.duration)*100)/avg_duration.avg_duration_minutes as performance
+    FROM
+        ivp_rad_task_status c
+    INNER JOIN
+        ivp_rad_flow b ON b.flow_id = c.flow_id
+    INNER JOIN
+        ivp_rad_chained_tasks a ON a.chain_id = b.chain_id
+    INNER JOIN
+        TaskDurations td ON b.flow_id = td.flow_id AND c.start_time=td.start_time and c.end_time=td.end_time
+		LEFT JOIN (
+        
+
+SELECT
+            b.flow_id,
+            AVG(DATEDIFF(MINUTE, c.start_time, c.end_time)) AS avg_duration_minutes
+        FROM
+            ivp_rad_task_status c
+        INNER JOIN
+            ivp_rad_flow b ON b.flow_id = c.flow_id
+       
+        WHERE
+            b.is_active = 1
+            AND c.start_time != c.end_time
+        GROUP BY
+            b.flow_id
+    ) avg_duration ON avg_duration.flow_id = b.flow_id
+    WHERE
+        b.is_active = 1
+        AND c.start_time != c.end_time 
+        AND (@starttime IS NULL OR c.start_time >= @starttime)
+        AND (@endtime IS NULL OR c.end_time <= @endtime)
+        AND (@chains IS NULL OR a.chain_name IN (SELECT chainname FROM @ChainTable))
+    GROUP BY
+         a.chain_id, b.flow_id, a.chain_name, b.task_name, td.duration, c.start_time, c.end_time, c.status, avg_duration.avg_duration_minutes;
+
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+ALTER PROCEDURE [dbo].[SP_GetTaskNamesByChain]
+    @ChainId int
+AS
+BEGIN
+    select distinct task_name,flow_id
+	from ivp_rad_flow_sample
+	where  is_active=1 and chain_id=@ChainId
+END;
+
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+ALTER PROCEDURE [dbo].[SP_GetTaskTimeDetails]
+    @flowId INT,
+    @startDate DATE = NULL,
+    @endDate DATE = NULL,
+    @benchStartDate DATE = NULL,
+    @benchEndDate DATE = NULL
+AS
+BEGIN
+    -- If start date and end date are not provided, show details for the last 7 days
+    IF @startDate IS NULL
+        SET @startDate = '2023-11-17'; -- 7 days before the current date '2023-11-24'
+    IF @endDate IS NULL
+        SET @endDate = '2023-11-24'; -- Current date '2023-11-24'
+
+    -- If bench start date and end date are not provided, calculate avg for the last 7 days
+    IF @benchStartDate IS NULL
+        SET @benchStartDate = '2023-11-17'; -- 7 days before the current date '2023-11-24'
+    IF @benchEndDate IS NULL
+        SET @benchEndDate = '2023-11-24'; -- Current date '2023-11-24'
+
+    WITH Benchmarkdata AS (
+        SELECT
+            rf.flow_id,
+            AVG(DATEDIFF(MINUTE, ts.start_time, ts.end_time)) AS total_time
+        FROM
+            ivp_rad_task_status ts
+        INNER JOIN
+            ivp_rad_flow_sample rf ON ts.flow_id = rf.flow_id
+        WHERE
+            rf.flow_id = @flowId AND
+            ts.start_time != ts.end_time AND
+            CONVERT(DATE, ts.start_time) BETWEEN @benchStartDate AND @benchEndDate
+        GROUP BY
+            rf.flow_id
+    )
+
+    SELECT
+        rf.flow_id,
+        rf.task_name,
+        CONVERT(DATE, ts.start_time) AS date,
+        AVG(DATEDIFF(MINUTE, ts.start_time, ts.end_time)) AS total_times,
+        AVG(bd.total_time) AS avg_total_time
+    FROM
+        ivp_rad_task_status ts
+    INNER JOIN
+        ivp_rad_flow_sample rf ON ts.flow_id = rf.flow_id
+    INNER JOIN
+        Benchmarkdata bd ON bd.flow_id = rf.flow_id
+    WHERE
+        rf.flow_id = @flowId AND
+        ts.start_time != ts.end_time AND
+        CONVERT(DATE, ts.start_time) BETWEEN @startDate AND @endDate
+    GROUP BY
+        rf.flow_id,
+        rf.task_name,
+        CONVERT(DATE, ts.start_time);
+
+END;
