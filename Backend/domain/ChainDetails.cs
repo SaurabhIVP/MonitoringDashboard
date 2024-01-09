@@ -1,6 +1,6 @@
 public class ChainDetails
 {
-    public int chainID { get; set; }
+    //public int chainID { get; set; }
     public string chainName { get; set; }
     public string chainStartTime { get; set; }
     public string chainEndTime { get; set; }

@@ -59,28 +59,33 @@
   }
 }
 
-#table {
+table {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
 }
 
-#table td, #table th {
+table td, table tr {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 8px 12px;
   text-align: left;
+  font-size:small;
+  overflow-y: auto;
 }
 
-#table tr:nth-child(even){background-color: #f2f2f2;}
+table tr:nth-child(even){background-color: #f2f2f2;}
 
-#table tr:hover {background-color: #ddd;}
+table tr:hover {background-color: #ddd;}
 
-#table th {
-  padding-top: 12px;
-  padding-bottom: 12px;
+table th {
+  /* padding-top: 12px;
+  padding-bottom: 12px; */
   text-align: left;
   background-color: #04AA6D;
   color: white;
+  z-index: 1;
+  border: 1px solid #ddd;
+  padding: 8px 12px;
 }
 
 #scrollable{
@@ -91,3 +96,30 @@
 #NoData {
   text-align: center !important;
 }
+
+.tableFixHead {
+  overflow-y: auto; 
+  height: 450px; /* gives an initial height of 200px to the table */
+  /* padding: 0px 40px; */
+}
+.tableFixHead thead th {
+  position: sticky; /* make the table heads sticky */
+  top: -1px; /* table head will be placed from the top of the table and sticks to it */
+}
+
+.table{
+  padding: 0px 40px;
+}
+/* table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse; 
+  width: 100%;
+}
+th,
+td {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+}
+th {
+  background: #eee;
+} */
