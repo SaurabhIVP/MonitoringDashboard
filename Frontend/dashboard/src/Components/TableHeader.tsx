@@ -6,6 +6,7 @@ type tableHeaderProps<T,K extends keyof T>={
 
 const TableHeader=<T, K extends keyof T>({columns}:tableHeaderProps<T,K>):JSX.Element=>{
     return(
+        <thead>
         <tr>
             {
                 columns.map(column=>{
@@ -15,6 +16,7 @@ const TableHeader=<T, K extends keyof T>({columns}:tableHeaderProps<T,K>):JSX.El
                 })
             }
         </tr>  
+        </thead>
     );
 }
 
