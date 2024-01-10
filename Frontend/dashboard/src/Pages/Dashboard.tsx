@@ -122,7 +122,8 @@ function Dashboard() {
               variant="contained"
               onClick={openChainModal}
               style={{
-                marginTop: "15px",
+                marginTop: "20px",
+                marginBottom:"10px",
                 flexShrink: 0,
                 borderRadius: "10px",
                 backgroundColor: "#005A44", // Set your desired color here
@@ -135,7 +136,8 @@ function Dashboard() {
               variant="contained"
               onClick={openTaskModal}
               style={{
-                marginTop: "15px",
+                marginTop: "20px",
+                marginBottom:"10px",
                 marginLeft: "20px",
                 borderRadius: "10px",
                 backgroundColor: "#005A44",

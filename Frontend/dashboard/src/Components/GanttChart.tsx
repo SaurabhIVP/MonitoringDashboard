@@ -87,6 +87,10 @@ const GanttChart: React.FC<ganttProps> = ({ data, starttime, endtime }) => {
         {
           label: "Daily TimeFrame",
           data: processedData,
+          backgroundColor: backgroundColors,
+          borderWidth: 1,
+          barThickness: 30,
+          maxBarThickness: 30,
         },
       ],
     };
@@ -97,7 +101,7 @@ const GanttChart: React.FC<ganttProps> = ({ data, starttime, endtime }) => {
       options: {
         layout: {
           padding: {
-            left: 340,
+            left: 260,
             top: 10,
             right: 10,
           },
@@ -126,7 +130,7 @@ const GanttChart: React.FC<ganttProps> = ({ data, starttime, endtime }) => {
           },
           y: {
             ticks: {
-              display: false,
+              display: true,
             },
             grid: {
               drawTicks: false,
@@ -159,10 +163,13 @@ const GanttChart: React.FC<ganttProps> = ({ data, starttime, endtime }) => {
             position: "top",
             type: "time",
             time: {
-              unit: "millisecond",
-              minUnit: "millisecond",
-              stepSize: 3600000,
-              tooltipFormat: "yyyy-MM-dd HH:mm:ss",
+              // unit: "millisecond",
+              // minUnit: 'millisecond',
+              // stepSize: 3600000,
+              displayFormats: {
+                second: "HH:mm:ss",
+              },
+              // tooltipFormat: 'HH:mm:ss'
             },
             min: newstart,
             max: newend,
@@ -229,7 +236,7 @@ const GanttChart: React.FC<ganttProps> = ({ data, starttime, endtime }) => {
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
-          marginLeft: "400px",
+          marginLeft: "30%",
         }}
       >
         <div
@@ -238,34 +245,40 @@ const GanttChart: React.FC<ganttProps> = ({ data, starttime, endtime }) => {
             height: "10px",
             backgroundColor: "red",
             marginRight: "10px",
-            borderRadius:'20px'
+            borderRadius: "20px",
           }}
         ></div>
-        <h5 style={{ marginRight: "30px" }}>Underperformed Tasks</h5>
+        <h5 style={{ marginRight: "10%" }}>Underperformed Tasks</h5>
         <div
           style={{
             width: "40px",
             height: "10px",
             backgroundColor: "green",
             marginRight: "10px",
-            borderRadius:'20px'
+            borderRadius: "20px",
           }}
         ></div>
-        <h5 style={{ marginRight: "30px" }}>Outperformed Tasks</h5>
+        <h5 style={{ marginRight: "10%" }}>Outperformed Tasks</h5>
         <div
           style={{
             width: "40px",
             height: "10px",
             backgroundColor: "gray",
             marginRight: "10px",
-            borderRadius:'20px'
+            borderRadius: "20px",
           }}
         ></div>
         <h5 style={{ marginRight: "30px" }}>Failed Tasks</h5>
       </div>
 
       <div style={{}}>
-        <div style={{ height: `50px`, width: "100%", paddingBottom: "1%" }}>
+        <div
+          style={{
+            height: `50px`,
+            width: "100%",
+            paddingBottom: "1%",
+          }}
+        >
           <canvas id="myChart1"></canvas>
         </div>
       </div>
