@@ -8,7 +8,7 @@ interface TaskProps {
   benchStartDate?: any | null;
   benchEndDate?: any | null;
 }
-
+const API_URL = process.env.REACT_APP_API_BASE_URL;
 async function ChartChain({
   chain_id,
   startDate,
@@ -31,17 +31,17 @@ async function ChartChain({
     const bencend_time = format(benEnd, "yyyy-MM-dd", {
       timeZone: "Asia/Kolkata",
     });
-    const url = `/chart/${chain_id}`;
+    const url = `${API_URL}/chart/${chain_id}`;
     const params = {
       startDate: start_time,
       endDate: end_time,
       benchStartDate: benstart_time,
       benchEndDate: bencend_time,
     };
-
-    const response = await apiService.get(url, { params });
+    console.log(params);
+    const response = await axios.get(url, { params });
     console.log(response);
-    return response; // Assuming you want to return the data property of the response
+    return response.data; // Assuming you want to return the data property of the response
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;

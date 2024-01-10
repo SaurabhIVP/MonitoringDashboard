@@ -1,6 +1,7 @@
 import axios from "axios";
 import { format } from "date-fns-tz";
 import { apiService } from "./ApiService";
+const API_URL = process.env.REACT_APP_API_BASE_URL;
 interface TaskProps {
   flow_id: number | null;
   startDate?: any | null; // Assuming you're using string for date format, adjust if needed
@@ -31,7 +32,8 @@ async function ChartTask({
     const bencend_time = format(benEnd, "yyyy-MM-dd", {
       timeZone: "Asia/Kolkata",
     });
-    const url = `/chart/tasktimes/${flow_id}`;
+    // const url = `/chart/tasktimes/${flow_id}`;
+    const url = `${API_URL}/chart/tasktimes/${flow_id}`;
     const params = {
       startDate: start_time,
       endDate: end_time,
@@ -39,9 +41,9 @@ async function ChartTask({
       benchEndDate: bencend_time,
     };
 
-    const response = await apiService.get(url, { params });
+    const response = await axios.get(url, { params });
     console.log(response);
-    return response; // Assuming you want to return the data property of the response
+    return response.data; // Assuming you want to return the data property of the response
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;

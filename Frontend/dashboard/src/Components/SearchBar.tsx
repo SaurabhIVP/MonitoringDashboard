@@ -56,12 +56,13 @@ const SearchBar: React.FC<SearchBarProps> = ({
     <>
       <Stack spacing={2} width={"500px"}>
         {data && (
-          <Autocomplete
-            options={data}
-            getOptionLabel={(option) => option[nameParam]}
-            renderInput={(params) => <TextField {...params} label={label} />}
-            onChange={handleOnChange}
-          />
+           <Autocomplete
+           options={data}
+           getOptionLabel={(option) => option[nameParam]}
+           isOptionEqualToValue={(option, value) => option[nameParam] === value[nameParam]}
+           renderInput={(params) => <TextField {...params} label={label} />}
+           onChange={handleOnChange}
+         />
         )}
       </Stack>
     </>
