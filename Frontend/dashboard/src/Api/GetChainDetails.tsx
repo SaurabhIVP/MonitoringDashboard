@@ -1,113 +1,126 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Table, { columnProps } from "../components/Table";
-import { format } from "date-fns-tz";
+import Table,{ columnProps } from "../components/Table";
+import {format} from 'date-fns-tz';
 import { Button } from "@mui/material";
-import { apiService } from "./ApiService";
-interface chainDetailsProps {
-  chainID: number;
-  taskID: number;
-  benchmarkCompute: string;
-  startDate: any | null;
-  endDate: any | null;
-  benchmarkStartDate: any | null;
-  benchmarkEndDate: any | null;
-  //showTableComponent: boolean;
+
+interface chainDetailsProps
+{
+    chainID:number;
+    taskID:number;
+    benchmarkCompute:string;
+    startDate:any | null;
+    endDate:any | null;
+    benchmarkStartDate:any | null;
+    benchmarkEndDate:any | null;
+    //showTableComponent: boolean;
 }
-const API_URL = process.env.REACT_APP_API_BASE_URL;
-interface ChainDetails {
-  chainID: number;
-  chainName: string;
-  chainStartTime: string;
-  chainEndTime: string;
-  currentTime: string;
-  chainTotalTime: string;
-  benchmarkTime: string;
-  deviationTime: string;
+
+interface ChainDetails
+{
+    //chainID:number;
+    chainName:string;
+    chainStartTime:string;
+    chainEndTime:string;
+    currentTime:string;
+    chainTotalTime:string;
+    benchmarkTime:string;
+    deviationTime:string;
+    action:string;
 }
 
 export function GetChainDetails({chainID,taskID,benchmarkCompute,startDate,endDate,benchmarkStartDate,benchmarkEndDate}:chainDetailsProps)
 {
     const columnList: columnProps<ChainDetails, keyof ChainDetails>[]=[
-        {
-            key:'chainID',
-            header:'Chain ID'
-        },
+        // {
+        //     key:'chainID',
+        //     header:'Chain ID',
+        //     passValue:false
+        // },
         {
             key:'chainName',
-            header:'Chain Name'
+            header:'Chain Name',
+            action:false
         },
         {
             key:'chainStartTime',
-            header:'Chain Start Time'
+            header:'Chain Start Time',
+            action:false
         },
         {
             key:'chainEndTime',
-            header:'Chain End Time'
+            header:'Chain End Time',
+            action:false
         },
         {
             key:'currentTime',
-            header:'Current Time'
+            header:'Current Time',
+            action:false
         },
         {
             key:'chainTotalTime',
-            header:'Chain Total Time'
+            header:'Chain Total Time',
+            action:false
         },
         {
             key:'benchmarkTime',
-            header:'Benchmark Time'
+            header:'Benchmark Time',
+            action:false
         },
         {
             key:'deviationTime',
-            header:'Deviation Time'
+            header:'Deviation Time',
+            action:false
+        }
+        ,
+        {
+            key:'action',
+            header:'Action',
+            action:true
         }
     ]
     
     const [chainList,setChainList] = useState<ChainDetails[]>([]);
 
-  const strStartDate = format(startDate, "yyyyMMdd");
-  const strEndDate = format(endDate, "yyyyMMdd");
-  const strBenchmarkStartDate = format(benchmarkStartDate, "yyyyMMdd");
-  const strBenchmarkEndDate = format(benchmarkEndDate, "yyyyMMdd");
+    const strStartDate = format(startDate,'yyyyMMdd');
+    const strEndDate = format(endDate,'yyyyMMdd');
+    const strBenchmarkStartDate = format(benchmarkStartDate,'yyyyMMdd');
+    const strBenchmarkEndDate = format(benchmarkEndDate,'yyyyMMdd');
 
-  const [showTableComponent, setShowTableComponent] = useState(false);
+    const [showTableComponent,setShowTableComponent] = useState(false);
 
-  const handleButtonClick = () => {
-    setShowTableComponent(true);
-  };
+    const handleButtonClick=()=>{
+        setShowTableComponent(true);
+    }
 
-  useEffect(() => {
-    apiService
-      .get(
-        `/getAllChainDetails/${chainID}/${taskID}/${benchmarkCompute}/${strStartDate}/${strEndDate}/${strBenchmarkStartDate}/${strBenchmarkEndDate}`
-      )
-      .then((res: any) => {
-        const data = res.data;
-        setChainList(res);
-        setShowTableComponent(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [showTableComponent]);
+    useEffect(()=>{
 
-  return (
-    <div>
-      <Button
-        variant="contained"
-        onClick={handleButtonClick}
-        size="medium"
-        style={{
-          borderRadius: "10px",
+        axios
+        .get(`https://localhost:7022/api/Data/getAllChainDetails/${chainID}/${taskID}/${benchmarkCompute}/${strStartDate}/${strEndDate}/${strBenchmarkStartDate}/${strBenchmarkEndDate}`
+        )
+        .then(
+            res=>
+            {
+                console.log(res.data);
+                const data = res.data;
+                setChainList(data);
+                setShowTableComponent(false);
+            }
+        )
+        .catch(err=>{
+            console.log(err);
+        });
+
+    },[showTableComponent]);
+    
+    return(
+        <div>
+        <Button variant="contained" onClick={handleButtonClick} size="medium" style={{ borderRadius: "10px",
           marginBottom: "2%",
-          backgroundColor: "#005A44",
-        }}
-      >
-        Submit
-      </Button>
-      <Table data={chainList} columns={columnList}></Table>
-    </div>
-  );
+          backgroundColor: "#005A44", }}>Submit</Button>
+        <Table data={chainList} columns={columnList}></Table>
+        </div>
+    )
 }
 
 //export default GetChainDetails;

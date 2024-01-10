@@ -1,5 +1,5 @@
-import TableHeader from "../Components/TableHeader"
-import TableRow from "../Components/TableRow";
+import TableHeader from "../components/TableHeader"
+import TableRow from "../components/TableRow";
 
 export type columnProps<T, K extends keyof T>={
     key:K;

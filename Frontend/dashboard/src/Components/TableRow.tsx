@@ -1,5 +1,5 @@
 import { Avatar, Button } from "@mui/material";
-import {columnProps} from "../Components/Table"
+import {columnProps} from "../components/Table"
 import { useState } from "react";
 import LineChart from "./HorizontalBarChart";
 import Modal from "./Modal";
