@@ -18,7 +18,7 @@ interface chainDetailsProps
 
 interface ChainDetails
 {
-    chainID:number;
+    //chainID:number;
     chainName:string;
     chainStartTime:string;
     chainEndTime:string;
@@ -26,42 +26,57 @@ interface ChainDetails
     chainTotalTime:string;
     benchmarkTime:string;
     deviationTime:string;
+    action:string;
 }
 
 export function GetChainDetails({chainID,taskID,benchmarkCompute,startDate,endDate,benchmarkStartDate,benchmarkEndDate}:chainDetailsProps)
 {
     const columnList: columnProps<ChainDetails, keyof ChainDetails>[]=[
-        {
-            key:'chainID',
-            header:'Chain ID'
-        },
+        // {
+        //     key:'chainID',
+        //     header:'Chain ID',
+        //     passValue:false
+        // },
         {
             key:'chainName',
-            header:'Chain Name'
+            header:'Chain Name',
+            action:false
         },
         {
             key:'chainStartTime',
-            header:'Chain Start Time'
+            header:'Chain Start Time',
+            action:false
         },
         {
             key:'chainEndTime',
-            header:'Chain End Time'
+            header:'Chain End Time',
+            action:false
         },
         {
             key:'currentTime',
-            header:'Current Time'
+            header:'Current Time',
+            action:false
         },
         {
             key:'chainTotalTime',
-            header:'Chain Total Time'
+            header:'Chain Total Time',
+            action:false
         },
         {
             key:'benchmarkTime',
-            header:'Benchmark Time'
+            header:'Benchmark Time',
+            action:false
         },
         {
             key:'deviationTime',
-            header:'Deviation Time'
+            header:'Deviation Time',
+            action:false
+        }
+        ,
+        {
+            key:'action',
+            header:'Action',
+            action:true
         }
     ]
     
