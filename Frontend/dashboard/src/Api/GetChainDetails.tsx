@@ -104,7 +104,11 @@ export function GetChainDetails({
         variant="contained"
         onClick={handleButtonClick}
         size="medium"
-        style={{ borderRadius: "100px" }}
+        style={{
+          borderRadius: "10px",
+          marginBottom: "2%",
+          backgroundColor: "#005A44",
+        }}
       >
         Submit
       </Button>

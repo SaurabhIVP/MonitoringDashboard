@@ -33,8 +33,8 @@
   display:flex;
   flex-direction: row;
   justify-content: space-between;
-  padding-left: 75px;
-  padding-right: 75px;
+  padding-left: 7%;
+  padding-right: 5%;
   
 }
 .scrollToTopButton {
@@ -54,8 +54,8 @@
 }
 .datepicker{
   display:flex;
-  padding-left: 50px;
-  padding-right: 50px;
+  padding-left: 5%;
+  padding-right: 5%;
 /*   
   flex-direction: row; */
   /* justify-content:space-evenly; */
@@ -116,4 +116,28 @@
 
 #NoData {
   text-align: center !important;
+}
+
+.dashboard-container {
+  padding: 5%;
+}
+
+.searchbar-container {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.datepicker-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.chart-button {
+  margin-top: 15px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background-color: #005a44;
+  color: white;
 }

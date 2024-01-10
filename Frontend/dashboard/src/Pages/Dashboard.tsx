@@ -77,8 +77,8 @@ function Dashboard() {
   };
   return (
     <>
-      <div>
-        <div style={{ paddingBottom: "30px", paddingTop: "80px" }}>
+    
+        <div style={{ paddingBottom: "2%", paddingTop: "5%" }}>
           <div
             className="searchbar"
             style={{ paddingTop: "20px", display: "flex" }}
@@ -195,7 +195,7 @@ function Dashboard() {
           benchmarkStartDate={BenchstartDate}
           benchmarkEndDate={BenchendDate}
         ></GetChainDetails>
-      </div>
+      
     </>
   );
 }

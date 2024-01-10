@@ -234,31 +234,34 @@ const GanttChart: React.FC<ganttProps> = ({ data, starttime, endtime }) => {
       >
         <div
           style={{
-            width: "60px",
+            width: "40px",
             height: "10px",
             backgroundColor: "red",
             marginRight: "10px",
+            borderRadius:'20px'
           }}
         ></div>
-        <h5 style={{ marginRight: "20px" }}>Underperformed Tasks</h5>
+        <h5 style={{ marginRight: "30px" }}>Underperformed Tasks</h5>
         <div
           style={{
-            width: "60px",
+            width: "40px",
             height: "10px",
             backgroundColor: "green",
             marginRight: "10px",
+            borderRadius:'20px'
           }}
         ></div>
-        <h5 style={{ marginRight: "20px" }}>Outperformed Tasks</h5>
+        <h5 style={{ marginRight: "30px" }}>Outperformed Tasks</h5>
         <div
           style={{
-            width: "60px",
+            width: "40px",
             height: "10px",
             backgroundColor: "gray",
             marginRight: "10px",
+            borderRadius:'20px'
           }}
         ></div>
-        <h5 style={{ marginRight: "20px" }}>Failed Tasks</h5>
+        <h5 style={{ marginRight: "30px" }}>Failed Tasks</h5>
       </div>
 
       <div style={{}}>
