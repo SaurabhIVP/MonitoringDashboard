@@ -1,9 +1,10 @@
 import axios from "axios";
+import { apiService } from "./ApiService";
 
 async function AllData() {
   try {
-    const response = await axios.get("https://localhost:7022/api/Data/chains");
-    
+    const response = await apiService.get("/chains");
+    console.log(response);
     return response;
   } catch (error) {
     console.error("Error fetching data:", error);

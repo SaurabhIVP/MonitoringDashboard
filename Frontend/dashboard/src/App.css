@@ -33,15 +33,29 @@
   display:flex;
   flex-direction: row;
   justify-content: space-between;
-  padding-left: 75px;
-  padding-right: 75px;
+  padding-left: 7%;
+  padding-right: 5%;
   
 }
+.scrollToTopButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
+.scrollToTopButton:hover {
+  background-color: #0056b3;
+}
 .datepicker{
   display:flex;
-  padding-left: 75px;
-  padding-right: 75px;
+  padding-left: 5%;
+  padding-right: 5%;
 /*   
   flex-direction: row; */
   /* justify-content:space-evenly; */
@@ -60,7 +74,7 @@
   display: flex;
 }
 .Gantt-container{
-  padding-top: 10px;
+  padding-top: 80px;
 }
 @keyframes App-logo-spin {
   from {
@@ -108,6 +122,31 @@ table th {
 #NoData {
   text-align: center !important;
 }
+
+.dashboard-container {
+  padding: 5%;
+}
+
+.searchbar-container {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.datepicker-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.chart-button {
+  margin-top: 15px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background-color: #005a44;
+  color: white;
+}
+
 
 .tableFixHead {
   overflow-y: auto; 
