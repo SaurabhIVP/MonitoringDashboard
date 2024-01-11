@@ -9,4 +9,5 @@ public class ChainDetails
     public string benchmarkTime { get; set; }
     public string deviationTime { get; set; }
     public string deviationPercentage { get; set; }
+    public string status {get; set;}
 }
