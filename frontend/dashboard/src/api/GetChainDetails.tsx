@@ -6,8 +6,14 @@ import { Button } from "@mui/material";
 
 interface chainDetailsProps
 {
-    chainID:number|null;
-    taskID:number|null;
+    chainID:{
+        id: number;
+        [key: string]: any;
+      } | null;
+    taskID:{
+        id: number;
+        [key: string]: any;
+      } | null;
     benchmarkCompute:string;
     startDate:any | null;
     endDate:any | null;
@@ -102,8 +108,8 @@ export function GetChainDetails({chainID,taskID,benchmarkCompute,startDate,endDa
 
     useEffect(()=>{
 
-        console.log("chainID",chainID);
-        console.log("taskID",taskID);
+        console.log("chainID",chainID?.id);
+        console.log("taskID",taskID?.id);
         console.log("benchmarkCompute",benchmarkCompute);
         console.log("strStartDate",strStartDate);
         console.log("strEndDate",strEndDate);
@@ -111,7 +117,7 @@ export function GetChainDetails({chainID,taskID,benchmarkCompute,startDate,endDa
         console.log("strBenchmarkEndDate",strBenchmarkEndDate);
 
         axios
-        .get(`https://localhost:7022/api/Data/getAllChainDetails/${chainID}/${taskID}/${benchmarkCompute}/${strStartDate}/${strEndDate}/${strBenchmarkStartDate}/${strBenchmarkEndDate}`
+        .get(`https://localhost:7022/api/Data/getAllChainDetails/${chainID?.id}/${taskID?.id}/${benchmarkCompute}/${strStartDate}/${strEndDate}/${strBenchmarkStartDate}/${strBenchmarkEndDate}`
         )
         .then(
             res=>
