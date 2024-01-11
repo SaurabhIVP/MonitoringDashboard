@@ -15,6 +15,14 @@ import TaskChart from "../components/TaskChart";
 import ChartChain from "../api/ChartChain";
 
 function Dashboard() {
+
+  const benchmarkComputeOptions = [
+    {
+      text:"Average",
+      value:"Average"
+    }
+  ]
+
   const [selectedChainValue, setSelectedChainValue] = useState<{
     id: number;
     [key: string]: any;
@@ -69,6 +77,13 @@ function Dashboard() {
   const TaskhandleSearch = async (id: number | null, key: string | null) => {
     setSelectedTaskValue(id !== null ? { id, key } : null);
   };
+
+  const [benchmarkCompute,setBenchmarkCompute]=useState("Average")
+  const onChange = (value:string)=>{
+    setBenchmarkCompute(value);
+    console.log(benchmarkCompute);
+  }
+
   return (
     <>
     
@@ -95,7 +110,12 @@ function Dashboard() {
               onSearch={TaskhandleSearch}
               idParam="flow_id"
             />
-            <Dropdown name="Benchmark Compute"></Dropdown>
+            <Dropdown 
+              name="Benchmark Compute" 
+              benchmarkComputeOptions={benchmarkComputeOptions} 
+              onChange={onChange} 
+            />
+
           </div>
           <div className="datepicker">
             <Datepicker
@@ -182,15 +202,15 @@ function Dashboard() {
             Label={selectedChainValue ? selectedChainValue.key : ""}
           />
         </div>
-        <GetChainDetails
-          chainID={1}
-          taskID={1}
-          benchmarkCompute="AVG"
-          startDate={startDate}
-          endDate={EndDate}
-          benchmarkStartDate={BenchstartDate}
-          benchmarkEndDate={BenchendDate}
-        ></GetChainDetails>
+        <GetChainDetails 
+          chainID={selectedChainValue} 
+          taskID={selectedTaskValue} 
+          benchmarkCompute={benchmarkCompute} 
+          startDate={startDate} 
+          endDate={EndDate} 
+          benchmarkStartDate={BenchstartDate} 
+          benchmarkEndDate={BenchendDate} 
+        />
       
     </>
   );

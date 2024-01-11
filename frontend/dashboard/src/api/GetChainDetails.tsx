@@ -6,8 +6,14 @@ import { Button } from "@mui/material";
 
 interface chainDetailsProps
 {
-    chainID:number;
-    taskID:number;
+    chainID:{
+        id: number;
+        [key: string]: any;
+      } | null;
+    taskID:{
+        id: number;
+        [key: string]: any;
+      } | null;
     benchmarkCompute:string;
     startDate:any | null;
     endDate:any | null;
@@ -26,6 +32,7 @@ interface ChainDetails
     chainTotalTime:string;
     benchmarkTime:string;
     deviationTime:string;
+    status:string;
     action:string;
 }
 
@@ -71,7 +78,13 @@ export function GetChainDetails({chainID,taskID,benchmarkCompute,startDate,endDa
             key:'deviationTime',
             header:'Deviation Time',
             action:false
+        },
+        {
+            key:'status',
+            header:'Status',
+            action:false
         }
+        
         ,
         {
             key:'action',
@@ -95,8 +108,16 @@ export function GetChainDetails({chainID,taskID,benchmarkCompute,startDate,endDa
 
     useEffect(()=>{
 
+        console.log("chainID",chainID?.id);
+        console.log("taskID",taskID?.id);
+        console.log("benchmarkCompute",benchmarkCompute);
+        console.log("strStartDate",strStartDate);
+        console.log("strEndDate",strEndDate);
+        console.log("strBenchmarkStartDate",strBenchmarkStartDate);
+        console.log("strBenchmarkEndDate",strBenchmarkEndDate);
+
         axios
-        .get(`https://localhost:7022/api/Data/getAllChainDetails/${chainID}/${taskID}/${benchmarkCompute}/${strStartDate}/${strEndDate}/${strBenchmarkStartDate}/${strBenchmarkEndDate}`
+        .get(`https://localhost:7022/api/Data/getAllChainDetails/${chainID?.id}/${taskID?.id}/${benchmarkCompute}/${strStartDate}/${strEndDate}/${strBenchmarkStartDate}/${strBenchmarkEndDate}`
         )
         .then(
             res=>
