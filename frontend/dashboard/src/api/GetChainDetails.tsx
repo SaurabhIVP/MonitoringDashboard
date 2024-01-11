@@ -116,8 +116,29 @@ export function GetChainDetails({chainID,taskID,benchmarkCompute,startDate,endDa
         console.log("strBenchmarkStartDate",strBenchmarkStartDate);
         console.log("strBenchmarkEndDate",strBenchmarkEndDate);
 
+        let chain_ID:number=0;
+        let task_ID:number=0;
+        if(!chainID)
+        {
+            chain_ID=0;
+        }
+        else
+        {
+            chain_ID=chainID.id;
+        }
+
+        if(!taskID)
+        {
+            task_ID=0;
+        }
+        else
+        {
+            task_ID=taskID.id;
+        }
+        console.log(task_ID);
+
         axios
-        .get(`https://localhost:7022/api/Data/getAllChainDetails/${chainID?.id}/${taskID?.id}/${benchmarkCompute}/${strStartDate}/${strEndDate}/${strBenchmarkStartDate}/${strBenchmarkEndDate}`
+        .get(`https://localhost:7022/api/Data/getAllChainDetails/${chain_ID}/${task_ID}/${benchmarkCompute}/${strStartDate}/${strEndDate}/${strBenchmarkStartDate}/${strBenchmarkEndDate}`
         )
         .then(
             res=>
