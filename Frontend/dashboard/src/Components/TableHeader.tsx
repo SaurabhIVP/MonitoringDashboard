@@ -1,4 +1,4 @@
-import {columnProps} from "../Components/Table"
+import {columnProps} from "../components/Table"
 
 type tableHeaderProps<T,K extends keyof T>={
     columns: Array<columnProps<T,K>>;

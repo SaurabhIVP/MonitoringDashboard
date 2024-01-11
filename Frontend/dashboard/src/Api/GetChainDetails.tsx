@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Table,{ columnProps } from "../Components/Table";
+import Table,{ columnProps } from "../components/Table";
 import {format} from 'date-fns-tz';
 import { Button } from "@mui/material";
 
@@ -115,7 +115,9 @@ export function GetChainDetails({chainID,taskID,benchmarkCompute,startDate,endDa
     
     return(
         <div>
-        <Button variant="contained" onClick={handleButtonClick} size="medium" style={{ borderRadius: "100px" }}>Submit</Button>
+        <Button variant="contained" onClick={handleButtonClick} size="medium" style={{ borderRadius: "10px",
+          marginBottom: "2%",
+          backgroundColor: "#005A44", }}>Submit</Button>
         <Table data={chainList} columns={columnList}></Table>
         </div>
     )

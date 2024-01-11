@@ -58,6 +58,7 @@ public async Task<IActionResult> GetChainTimeDetails(int chain_id, DateTime? sta
 [Route("chart/tasktimes/{flow_id}")]
 public async Task<IActionResult> GetTaskTimeDetails(int flow_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null)
 {
+    
     var chainDetails = await _objService.GetTaskTimeDetailsAsync(flow_id, startDate, endDate, benchStartDate, benchEndDate);
     return Ok(chainDetails);
 }
