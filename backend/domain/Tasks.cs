@@ -17,7 +17,7 @@ public class Tasks
     public int flow_id { get; set; }
     public int performance { get; set; }
     public DateTime date { get; set; }
-
+    public string chain_guid { get; set; }
     public int total_times { get; set; }
     public int avg_total_time { get; set; }
 

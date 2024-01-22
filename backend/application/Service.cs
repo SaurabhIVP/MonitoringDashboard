@@ -16,6 +16,10 @@ public class Service : IService
     {
         return await _dbAccess.GetAllChainDetailsAsync();
     }
+    public async Task<IEnumerable<Tasks>> GetAllChainDetailsAsync1()
+    {
+        return await _dbAccess.GetAllChainDetailsAsync1();
+    }
     public async Task<IEnumerable<Tasks>> GetAllChainNamesAsync()
     {
         return await _dbAccess.GetAllChainNamesAsync();
@@ -31,10 +35,17 @@ public class Service : IService
     public async Task<IEnumerable<Tasks>> GetChainTimeDetailsAsync(int chain_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null){
         return await _dbAccess.GetChainTimeDetailsAsync(chain_id,startDate,endDate, benchStartDate, benchEndDate);
     }
+    public async Task<IEnumerable<Tasks>> GetChainDetailsAsync(int chain_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null){
+        return await _dbAccess.GetChainDetailsAsync(chain_id,startDate,endDate, benchStartDate, benchEndDate);
+    }
     public async Task<IEnumerable<Tasks>> GetTaskTimeDetailsAsync(int flow_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null){
         return await _dbAccess.GetTaskTimeDetailsAsync(flow_id,startDate,endDate, benchStartDate, benchEndDate);
-     }public async Task<IEnumerable<ChainDetails>> getChainDetails(int chainID,int taskID,string benchmarkCompute,string startDate,string endDate, string benchmarkStartDate, string benchmarkEndDate)
+     }
+     public async Task<IEnumerable<ChainDetails>> getChainDetails(int chainID,int taskID,string benchmarkCompute,string startDate,string endDate, string benchmarkStartDate, string benchmarkEndDate)
     {
         return await _dbAccess.getChainDetails(chainID,taskID,benchmarkCompute,startDate,endDate,benchmarkStartDate,benchmarkEndDate);
     }
+    public async Task<IEnumerable<Tasks>> GetTaskDetailsAsync(int chain_id, DateTime? startTime = null,DateTime? endTime = null){
+        return await _dbAccess.GetTaskDetailsAsync(chain_id,startTime,endTime);
+     }
 }
