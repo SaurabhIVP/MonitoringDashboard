@@ -1,19 +1,17 @@
 import { apiService } from "./ApiService";
 
 interface TaskProps {
-  chain_id?: number | null;
-  startTime?: any | null;
-  endTime?:any|null
+ row:any
 }
 
-async function TaskDetails({ chain_id, startTime,endTime }: TaskProps) {
+async function ChainDetails1({ row}: TaskProps) {
   try {
     // console.log(startDate);
     // const params = {
     //   startTime: startDate,
     // };
     const response = await apiService.get(
-      `/taskss/tasktimes/${chain_id}/${startTime}/${endTime}`
+      `/taskss/tasktimes/${row.chain_id}/${row.start_time}/${row.end_time}`
     );
     console.log(response);
     return response; // Assuming you want to return the data property of the response
@@ -23,4 +21,4 @@ async function TaskDetails({ chain_id, startTime,endTime }: TaskProps) {
   }
 }
 
-export default TaskDetails;
+export default ChainDetails1;

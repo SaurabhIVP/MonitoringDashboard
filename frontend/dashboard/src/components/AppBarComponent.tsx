@@ -69,6 +69,13 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
             to="/gantt"
             style={{ color: "white" }}
           />
+          <Tab
+            label="Charts"
+            value={2}
+            component={Link}
+            to="/charts"
+            style={{ color: "white" }}
+          />
         </Tabs>
       </Toolbar>
     </AppBar>

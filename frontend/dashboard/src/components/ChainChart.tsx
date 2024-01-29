@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { format } from "date-fns-tz";
 
 ChartJS.register(
   CategoryScale,
@@ -40,9 +41,15 @@ const ChainChart: React.FC<BasicLineChartProps> = ({ fetchDataFunction }) => {
     };
     fetchData();
   }, [fetchDataFunction]);
-
+  const formatDate = (datestring: any | null) => {
+    const start = new Date(datestring);
+    const start_time = format(start, "yyyy-MM-dd", {
+      timeZone: "Asia/Kolkata",
+    });
+    return start_time;
+  };
   const chartData = {
-    labels: data.map((item) => new Date(item.date).getDate()),
+    labels: data.map((item) => formatDate(item.date)),
     datasets: [
       {
         label: "Chain Time",
@@ -74,9 +81,10 @@ const ChainChart: React.FC<BasicLineChartProps> = ({ fetchDataFunction }) => {
             },
           },
           y: {
+            beginAtZero:true,
             title: {
               display: true,
-              text: "Time (minutes)",
+              text: "Time (seconds)",
             },
           },
         },

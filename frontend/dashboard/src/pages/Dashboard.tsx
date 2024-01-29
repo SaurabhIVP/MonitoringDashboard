@@ -14,6 +14,10 @@ import ChartChain from "../api/ChartChain";
 import CollapsibleTable from "../components/CollapsibleTable";
 import ChainDetails from "../api/ChainDetails";
 import CurrentData from "../api/CurrentData";
+import ChainChart from "../components/ChainChart";
+import FilterModal from "../components/FilterModal";
+import { GetChainDetails1 } from "../components/GetChainDetails1";
+import TaskDetails from "../api/TaskDetails";
 
 function Dashboard() {
   const benchmarkComputeOptions = [
@@ -136,7 +140,7 @@ function Dashboard() {
             selectedDate={BenchendDate}
             onDateChange={handleBenchendDateChange}
           />
-          {/* <Button
+          <Button
             variant="contained"
             onClick={openChainModal}
             style={{
@@ -163,7 +167,8 @@ function Dashboard() {
             }}
           >
             Task Chart
-          </Button> */}
+          </Button>
+          {/* <FilterModal></FilterModal> */}
         </div>
       </div>
       <div>
@@ -187,9 +192,9 @@ function Dashboard() {
         <ChartModal
           isOpen={isChainModalOpen}
           onClose={closeChainModal}
-          ChartComponent={TaskChart}
+          ChartComponent={ChainChart}
           fetchDataFunction={() =>
-            ChainDetails({
+            ChartChain({
               chain_id: selectedChainValue ? selectedChainValue.id : null,
               startDate: startDate,
               endDate: EndDate,
@@ -200,16 +205,16 @@ function Dashboard() {
           Label={selectedChainValue ? selectedChainValue.key : ""}
         />
       </div>
-      <GetChainDetails
+      {/* <GetChainDetails1
         chainID={selectedChainValue}
-        taskID={selectedTaskValue}
-        benchmarkCompute={benchmarkCompute}
+       
+        
         startDate={startDate}
         endDate={EndDate}
         benchmarkStartDate={BenchstartDate}
         benchmarkEndDate={BenchendDate}
-      />
-      {/* <CollapsibleTable
+      /> */}
+      <CollapsibleTable
         fetchDataFunction={() =>
           selectedChainValue
             ? ChainDetails({
@@ -221,7 +226,12 @@ function Dashboard() {
               })
             : CurrentData()
         }
-      ></CollapsibleTable> */}
+        taskDetailsFunction={async (params)=> await TaskDetails({
+          chain_id:params.chain_id,
+          startTime:params.startTime,
+          endTime:params.endTime
+        })}
+      ></CollapsibleTable>
     </>
   );
 }
