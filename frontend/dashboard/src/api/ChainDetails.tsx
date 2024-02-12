@@ -1,7 +1,6 @@
 import axios from "axios";
-import { format } from "date-fns-tz";
-import { apiService } from "./ApiService";
-interface TaskProps {
+import { DateConversion } from "../utils/DateConversion";
+interface ChainDetailsProps {
   chain_id: number | null;
   startDate?: any | null; // Assuming you're using string for date format, adjust if needed
   endDate?: any | null;
@@ -15,33 +14,24 @@ async function ChainDetails({
   endDate,
   benchStartDate,
   benchEndDate,
-}: TaskProps) {
+}: ChainDetailsProps) {
   try {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const benStart = new Date(benchStartDate);
-    const benEnd = new Date(benchEndDate);
-    const start_time = format(start, "yyyy-MM-dd", {
-      timeZone: "Asia/Kolkata",
-    });
-    const end_time = format(end, "yyyy-MM-dd", { timeZone: "Asia/Kolkata" });
-    const benstart_time = format(benStart, "yyyy-MM-dd", {
-      timeZone: "Asia/Kolkata",
-    });
-    const bencend_time = format(benEnd, "yyyy-MM-dd", {
-      timeZone: "Asia/Kolkata",
-    });
-    const url = `${API_URL}/chart/g/${chain_id}`;
+    const startInProperFormat = DateConversion(startDate);
+    const endInProperFormat = DateConversion(endDate);
+    const benchmarkStartInProperFormat = DateConversion(benchStartDate);
+    const benchmarkEndInProperFormat = DateConversion(benchEndDate);
+    const url = `${API_URL}/chaindetails/${chain_id}`;
     const params = {
-      startDate: start_time,
-      endDate: end_time,
-      benchStartDate: benstart_time,
-      benchEndDate: bencend_time,
+      
+      startDate: startInProperFormat,
+      endDate: endInProperFormat,
+      benchStartDate: benchmarkStartInProperFormat,
+      benchEndDate: benchmarkEndInProperFormat,
     };
     console.log(params);
     const response = await axios.get(url, { params });
-    console.log(response);
-    return response.data; // Assuming you want to return the data property of the response
+    console.log(response.data);
+    return response.data; 
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;

@@ -22,7 +22,7 @@ public class DataController : ControllerBase
         return Ok(chainDetails);
     }
     [HttpGet]
-    [Route("chains1")]
+    [Route("currentData")]
     public async Task<IActionResult> GetAllChainDetails1()
     {
         var chainDetails = await _objService.GetAllChainDetailsAsync1();
@@ -46,30 +46,51 @@ public class DataController : ControllerBase
     }
 
     [HttpGet]
-    [Route("tasks/{start_time?}/{end_time?}/{chains?}")]
-    public async Task<IActionResult> GetGanttDetails(DateTime? start_time=null,DateTime? end_time=null,string? chains=null)
+    [Route("tasks/{date?}/{start_time?}/{end_time?}/{chains?}")]
+    public async Task<IActionResult> GetGanttDetails(string chains=null ,string? start_time=null,string? end_time=null,DateTime? date=null)
     {
-        var chainDetails = await _objService.GetGanttDetailsAsync(chains,start_time, end_time);
+        var chainDetails = await _objService.GetGanttDetailsAsync(chains,start_time, end_time,date);
         return Ok(chainDetails);
     }
 
 
    [HttpGet]
-[Route("chart/{chain_id}")]
+[Route("chart")]
 public async Task<IActionResult> GetChainTimeDetails(int chain_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null)
 {
     var chainDetails = await _objService.GetChainTimeDetailsAsync(chain_id, startDate, endDate, benchStartDate, benchEndDate);
     return Ok(chainDetails);
 }
 [HttpGet]
-[Route("chart/g/{chain_id}")]
+[Route("chaindetails/{chain_id}")]
 public async Task<IActionResult> GetChainDetails(int chain_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null)
 {
     var chainDetails = await _objService.GetChainDetailsAsync(chain_id, startDate, endDate, benchStartDate, benchEndDate);
     return Ok(chainDetails);
 }
+[HttpGet]
+[Route("chainDetailsByTaskname")]
+public async Task<IActionResult> GetChainDetailsByTasknames(string tasknames, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null)
+{
+    var chainDetails = await _objService.GetChainDetailsByTasknamesAsync(tasknames, startDate, endDate, benchStartDate, benchEndDate);
+    return Ok(chainDetails);
+}
+[HttpGet]
+[Route("chart/tasks/{taskname}")]
+public async Task<IActionResult> GetChainByTask(string taskname)
+{
+    var chainDetails = await _objService.GetChainByTaskAsync(taskname);
+    return Ok(chainDetails);
+}
+[HttpGet]
+[Route("getFlowId/{taskname}/{chainname}")]
+public async Task<IActionResult> GetFlowIdByChainTaskNames(string taskname,string chainname)
+{
+    var chainDetails = await _objService.GetFlowIdByChainTaskNamesAsync(taskname,chainname);
+    return Ok(chainDetails);
+}
     [HttpGet]
-[Route("chart/tasktimes/{flow_id}")]
+[Route("chartTimes")]
 public async Task<IActionResult> GetTaskTimeDetails(int flow_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null)
 {
     
@@ -85,7 +106,7 @@ public async Task<IActionResult> GetTaskTimeDetails(int flow_id, DateTime? start
     }
 
     [HttpGet]
-    [Route("taskss/tasktimes/{chain_id}/{startTime?}/{endTime?}")]
+    [Route("taskdetails/{chain_id}/{startTime?}/{endTime?}")]
     public async Task<IActionResult> GetTaskDetails(int chain_id,DateTime? startTime = null,DateTime? endTime=null)
     {
         var chainDetails = await _objService.GetTaskDetailsAsync(chain_id,startTime,endTime);

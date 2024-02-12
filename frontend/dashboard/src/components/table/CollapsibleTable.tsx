@@ -8,26 +8,19 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useEffect, useState } from "react";
-import { format } from "date-fns-tz";
-import TaskDetails from "../api/TaskDetails";
-import { Button } from "@mui/material";
-import { TaskHeaders, TaskLabels, chainHeaders, chainLabels } from "./TableContents";
+import {
+  TaskHeaders,
+  TaskLabels,
+  chainHeaders,
+  chainLabels,
+} from "./TableContents";
+import { SecondaryColor } from "../../utils/Colors";
 
 
-
-const formatDateString = (dateString: string | null): string => {
-  if (!dateString) return ""; // Return empty string for null or undefined input
-
-  const date = new Date(dateString);
-  return format(date, "yyyy-MM-dd HH:mm:ss", {
-    timeZone: "Your-Time-Zone", // Specify your desired time zone
-  });
-};
 function Row(props: { row: any; childDataFunction: () => void }) {
   const { row, childDataFunction } = props;
   const [open, setOpen] = useState(false);
@@ -49,14 +42,6 @@ function Row(props: { row: any; childDataFunction: () => void }) {
       fetchData();
     }
   }, [open, row.chain_id, row.date, childDataFunction]);
-
-  const formatDate = (datestring: any | null) => {
-    const start = new Date(datestring);
-    const start_time = format(start, "yyyy-MM-dd", {
-      timeZone: "Asia/Kolkata",
-    });
-    return start_time;
-  };
   const getDeviationColor = (
     chainDuration: number,
     benchmarkDuration: number
@@ -76,9 +61,9 @@ function Row(props: { row: any; childDataFunction: () => void }) {
           </IconButton>
         </TableCell>
         {chainLabels.map((x: any) =>
-          x === "performance" ? ( // Render nothing or add your logic for 'performance'
+          x === chainLabels[chainLabels.length - 1] ? (
             <TableCell
-              align="right"
+              align="center"
               style={{
                 fontSize: "12px",
                 fontWeight: "bold",
@@ -88,53 +73,60 @@ function Row(props: { row: any; childDataFunction: () => void }) {
               {row.performance}
             </TableCell>
           ) : (
-            <TableCell key={x} scope="row" style={{ fontSize: "12px" }}>
+            <TableCell align="center" key={x} scope="row" style={{ fontSize: "12px" }}>
               {row[x]}
             </TableCell>
           )
         )}
-    
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell
+          style={{ paddingBottom: 0, paddingTop: 0 }}
+          colSpan={TaskLabels.length + 1}
+        >
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              
               <Table size="small" aria-label="purchases">
                 <TableHead>
-                  <TableRow>
-                    {
-                      TaskHeaders.map((x)=>(
-                        <TableCell style={{ fontSize: "12px" }}>
-                      {x}
-                    </TableCell>
-                      ))
-                    }
-                    
+                  <TableRow style={{ backgroundColor: SecondaryColor }}>
+                    {TaskHeaders.map((x) => (
+                      <TableCell
+                      align="center"
+                        style={{
+                          fontSize: "12px",
+                          color:"white",
+                          backgroundColor: SecondaryColor,
+                        }}
+                      >
+                        {x}
+                      </TableCell>
+                    ))}
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {data.map((item) => (
                     <TableRow>
-                      {
-                        TaskLabels.map((x)=> x === "performance" ? ( // Render nothing or add your logic for 'performance'
-                        <TableCell
-                          align="right"
-                          style={{
-                            fontSize: "12px",
-                            fontWeight: "bold",
-                            color: getDeviationColor(item.total_times, item.avg_total_time),
-                          }}
-                        >
-                          {item.performance}
-                        </TableCell>
-                      ) :(
-                          <TableCell style={{ fontSize: "12px" }}>
-                        {item[x]}
-                      </TableCell>
-                        ))
-                      }
-
+                      {TaskLabels.map((x) =>
+                        x === TaskLabels[TaskLabels.length - 1] ? ( // Render nothing or add your logic for 'performance'
+                          <TableCell
+                            align="center"
+                            style={{
+                              fontSize: "12px",
+                              fontWeight: "bold",
+                              color: getDeviationColor(
+                                item.total_times,
+                                item.avg_total_time
+                              ),
+                            }}
+                          >
+                            {item.performance}
+                          </TableCell>
+                        ) : (
+                          <TableCell align="center" style={{ fontSize: "12px" }}>
+                            {item[x]}
+                          </TableCell>
+                        )
+                      )}
                     </TableRow>
                   ))}
                 </TableBody>
@@ -146,7 +138,6 @@ function Row(props: { row: any; childDataFunction: () => void }) {
     </React.Fragment>
   );
 }
-
 
 interface BasicLineChartProps {
   fetchDataFunction: () => Promise<any>;
@@ -162,10 +153,6 @@ const CollapsibleTable: React.FC<BasicLineChartProps> = ({
   taskDetailsFunction,
 }) => {
   const [data, setData] = useState<any[]>([]);
-  const [filter, setFilter] = useState(false);
-  const buttonHandler = () => {
-    setFilter(true);
-  };
   const fetchData = async () => {
     try {
       setData([]);
@@ -178,49 +165,37 @@ const CollapsibleTable: React.FC<BasicLineChartProps> = ({
   };
   useEffect(() => {
     fetchData();
-    setFilter(false);
-  }, [filter]);
+  }, [fetchDataFunction]);
 
   return (
-    <div>
-      <Button
-        variant="contained"
-        onClick={buttonHandler}
-        style={{
-          marginTop: "10px",
-          marginBottom: "10px",
-          marginLeft: "10px",
-          borderRadius: "5px",
-          backgroundColor: "#009B77",
-          color: "white",
-          fontSize: "12px", // Adjust font size
-        }}
-      >
-        Show Results
-      </Button>
+    <div style={{ paddingTop: 30 }}>
       <TableContainer
+     style={{ maxHeight: "650px", overflowY: "auto" }}
         component={Paper}
-        style={{ maxHeight: "500px", overflowY: "auto" }}
+        
       >
-        <Table aria-label="collapsible table" size="small">
+        <Table aria-label="collapsible table" size="small" >
           {" "}
-          {/* Set table size to small */}
-          <TableHead>
+          <TableHead style={{position:'sticky',top: 0, zIndex: 1}}>
             <TableRow>
-              <TableCell />
-              {
-                chainHeaders.map((x)=>(
-                  <TableCell style={{ fontSize: "12px", color: "white" }}>
-                {x}
-              </TableCell>
-                ))
-              }
+              <TableCell style={{ backgroundColor: SecondaryColor }} />
+              {chainHeaders.map((x) => (
+                <TableCell
+                align="center"
+                  style={{
+                    fontSize: "12px",
+                    color: "white",
+                    backgroundColor: SecondaryColor,
+                  }}
+                >
+                  {x}
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody >
             {data.map((row) => (
-              <Row
-                key={row.date}
+              <Row 
                 row={row}
                 childDataFunction={() =>
                   taskDetailsFunction({

@@ -51,7 +51,7 @@ const ScrollTop: React.FC<ScrollTopProps> = ({ targetClass }) => {
             bottom: "20px",
             right: "20px",
             cursor: "pointer",
-            backgroundColor: "#005A44",
+            backgroundColor: "#778899",
             color: "white",
             borderRadius: "10px",
             padding: "10px",

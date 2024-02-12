@@ -32,9 +32,19 @@ public class DBAccess : IDBAccess
         var parameters = new { ChainId = chain_id };
         return await _dbConnection.QueryAsync<Tasks>("SP_GetTaskNamesByChain", parameters, commandType: CommandType.StoredProcedure);
     }
-    public async Task<IEnumerable<Tasks>> GetGanttDetailsAsync(string chains = null, DateTime? start_time = null, DateTime? end_time = null)
+    public async Task<IEnumerable<Tasks>> GetChainByTaskAsync(string taskname)
     {
-        var parameters = new { chains = chains, starttime = start_time, endtime = end_time };
+        var parameters=new {taskname=taskname};
+        return await _dbConnection.QueryAsync<Tasks>("SP_GetChainByTask",parameters, commandType: CommandType.StoredProcedure);
+    }
+    public async Task<IEnumerable<Tasks>> GetFlowIdByChainTaskNamesAsync(string taskname,string chainname)
+    {
+        var parameters=new {taskname=taskname,chainname=chainname};
+        return await _dbConnection.QueryAsync<Tasks>("SP_GetFlowIdByChainTaskNames",parameters, commandType: CommandType.StoredProcedure);
+    }
+    public async Task<IEnumerable<Tasks>> GetGanttDetailsAsync(string chains=null ,string? start_time=null,string? end_time=null,DateTime? date=null)
+    {
+        var parameters = new { chains = chains, starttime = start_time, endtime = end_time,date=date };
         return await _dbConnection.QueryAsync<Tasks>("SP_GetGanttDetails", parameters, commandType: CommandType.StoredProcedure);
     }
     public async Task<IEnumerable<Tasks>> GetChainTimeDetailsAsync(int chain_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null)
@@ -62,6 +72,19 @@ public class DBAccess : IDBAccess
         };
 
         return await _dbConnection.QueryAsync<Tasks>("SP_GetChainDetails", parameters, commandType: CommandType.StoredProcedure);
+    }
+     public async Task<IEnumerable<Tasks>> GetChainDetailsByTasknamesAsync(string tasknames, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null)
+    {
+        var parameters = new
+        {
+            taskname = tasknames,
+            startDate = startDate,
+            endDate = endDate,
+            benchStartDate = benchStartDate,
+            benchEndDate = benchEndDate
+        };
+
+        return await _dbConnection.QueryAsync<Tasks>("SP_GetChainDetailsByTaskNames", parameters, commandType: CommandType.StoredProcedure);
     }
     public async Task<IEnumerable<Tasks>> GetTaskTimeDetailsAsync(int flow_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null)
     {
@@ -101,5 +124,5 @@ public class DBAccess : IDBAccess
         };
         return await _dbConnection.QueryAsync<ChainDetails>("SP_GetAllChainDetails",parameters,commandType:CommandType.StoredProcedure);
     }
-
+    
 }

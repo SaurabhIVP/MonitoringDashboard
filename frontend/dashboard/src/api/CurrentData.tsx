@@ -1,9 +1,8 @@
-import axios from "axios";
-import { apiService } from "./ApiService";
+import { apiService } from "./configurations/ApiService";
 
 async function CurrentData() {
   try {
-    const response = await apiService.get("/chains1");
+    const response = await apiService.get("/currentData");
     console.log(response);
     return response;
   } catch (error) {

@@ -1,7 +1,6 @@
-import axios from "axios";
-import { apiService } from "./ApiService";
+import { apiService } from "./configurations/ApiService";
 
-async function AllData() {
+async function GetAllChainNames() {
   try {
     const response = await apiService.get("/chains");
     console.log(response);
@@ -12,4 +11,4 @@ async function AllData() {
   }
 }
 
-export default AllData;
+export default GetAllChainNames;

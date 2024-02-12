@@ -11,7 +11,7 @@ export const router = createBrowserRouter([
     children: [
       { path: "", element: <Dashboard></Dashboard> },
       { path: "/gantt", element: <GanttPage></GanttPage> },
-      {path:"/charts",element:<Charts></Charts>}
+      { path: "/charts", element: <Charts></Charts> },
     ],
   },
 ]);

@@ -7,7 +7,7 @@ import {
   Routes,
   useNavigate,
 } from "react-router-dom";
-import GanttChartHandle from "../components/GanttChartHandle";
+import GanttChartHandle from "../components/gantt/GanttChartHandle";
 
 function GanttPage() {
   const history = useNavigate();

@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { TextField } from "@mui/material";
-import "../App.css";
+import "../../App.css";
 
 interface dateProps {
   name: string;
@@ -9,10 +9,14 @@ interface dateProps {
 }
 
 function Datepicker({ name, selectedDate, onDateChange }: dateProps) {
+  const handleClick = (event: any) => {
+    event.stopPropagation();
+  };
   return (
     <form
       noValidate
       style={{ width: "200px", margin: "auto", marginTop: "20px" }}
+      onClick={handleClick}
     >
       <TextField
         id="date"

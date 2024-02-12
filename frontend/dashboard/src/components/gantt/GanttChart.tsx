@@ -3,38 +3,42 @@ import Chart from "chart.js/auto";
 import { ChartConfiguration } from "chart.js";
 import "chartjs-adapter-date-fns";
 import { format } from "date-fns-tz";
-import ScrollTop from "./ScrollTop";
+import ScrollTop from "../generics/ScrollTop";
+import "./GanttChart.css";
 
 interface ganttProps {
   data: any[];
   starttime: any;
   endtime: any;
+  date: any;
 }
 
-const GanttChart: React.FC<ganttProps> = ({ data, starttime, endtime }) => {
+const GanttChart: React.FC<ganttProps> = ({
+  data,
+  starttime,
+  endtime,
+  date,
+}) => {
   const [newdata, setnewData] = useState<any[]>([]);
   const [newstart, setnewstart] = useState<any>([]);
   const [newend, setnewend] = useState<any>([]);
-
+  date = format(date, "yyyy-MM-dd");
+  starttime = date + "T" + starttime;
+  endtime = date + "T" + endtime;
   useEffect(() => {
-    console.log(starttime);
     if (starttime == null) {
-      starttime = "2023-11-24T00:00:00";
+      console.log("sssssssssssssssssssssssssssssssssssss");
+      starttime = "2023-11-24T00:00:57";
     }
     if (endtime == null) {
       endtime = "2023-11-24T23:59:59";
     }
+
     const start = new Date(starttime);
     const end = new Date(endtime);
-    const start_time = format(start, "yyyy-MM-dd HH:mm:ss.SSS", {
-      timeZone: "Asia/Kolkata",
-    });
-    const end_time = format(end, "yyyy-MM-dd HH:mm:ss.SSS", {
-      timeZone: "Asia/Kolkata",
-    });
-    setnewstart(start_time);
-    setnewend(end_time);
-    console.log(newstart);
+    setnewstart(start);
+    setnewend(end);
+    console.log(newstart + newend);
     const fetchData = async () => {
       try {
         setnewData(data);
@@ -48,7 +52,6 @@ const GanttChart: React.FC<ganttProps> = ({ data, starttime, endtime }) => {
   const [length, setlength] = useState<any>(500);
   useEffect(() => {
     console.log(newdata);
-    let check = false;
     const processedData = newdata.map((item) => ({
       x: [item.start_time, item.end_time],
       y: item.chain_name,
@@ -64,9 +67,9 @@ const GanttChart: React.FC<ganttProps> = ({ data, starttime, endtime }) => {
     setlength(templength.length);
     const backgroundColors = processedData.map((item) => {
       if (item.status === "failed") {
-        return "black";
+        return "blue";
       } else {
-        return item.performance < -25 ? "#FF3131" : "#50C878";
+        return item.performance < -25 ? "#FF3131" : "#778899";
       }
     });
     const data = {
@@ -113,13 +116,9 @@ const GanttChart: React.FC<ganttProps> = ({ data, starttime, endtime }) => {
             position: "top",
             type: "time",
             time: {
-              // unit: "millisecond",
-              // minUnit: 'millisecond',
-              // stepSize: 3600000,
               displayFormats: {
                 second: "HH:mm:ss",
               },
-              // tooltipFormat: 'HH:mm:ss'
             },
 
             min: newstart,
@@ -130,7 +129,7 @@ const GanttChart: React.FC<ganttProps> = ({ data, starttime, endtime }) => {
           },
           y: {
             ticks: {
-              display: true,
+              display: false,
             },
             grid: {
               drawTicks: false,
@@ -163,13 +162,9 @@ const GanttChart: React.FC<ganttProps> = ({ data, starttime, endtime }) => {
             position: "top",
             type: "time",
             time: {
-              // unit: "millisecond",
-              // minUnit: 'millisecond',
-              // stepSize: 3600000,
               displayFormats: {
                 second: "HH:mm:ss",
               },
-              // tooltipFormat: 'HH:mm:ss'
             },
             min: newstart,
             max: newend,
@@ -183,7 +178,7 @@ const GanttChart: React.FC<ganttProps> = ({ data, starttime, endtime }) => {
           tooltip: {
             enabled: true,
             callbacks: {
-              title: () => "", // Empty string to hide the title
+              title: () => "",
               label: (context: any) => {
                 const dataIndex = context.dataIndex;
                 const datasetIndex = context.datasetIndex;
@@ -202,7 +197,7 @@ const GanttChart: React.FC<ganttProps> = ({ data, starttime, endtime }) => {
                 newLine.push(`Performance % : ${dataItem.performance}`);
                 newLine.push(`Status : ${dataItem.status}`);
                 return newLine;
-              }, // Display the y value in the tooltip label
+              },
             },
           },
         },
@@ -230,71 +225,43 @@ const GanttChart: React.FC<ganttProps> = ({ data, starttime, endtime }) => {
   }, [newdata]);
 
   return (
-    <div style={{ paddingLeft: 10, paddingRight: 20 }}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          marginLeft: "30%",
-        }}
-      >
+    <div style={{ marginLeft: 10, marginRight: 10, padding: 10 }}>
+      <h4>Date: {date}</h4>
+      <div className="legend-box">
+        <div className="legend" style={{ backgroundColor: "red" }}></div>
+        <h5 className="legend-title">Crossed Benchmark</h5>
         <div
+          className="legend"
           style={{
-            width: "40px",
-            height: "10px",
-            backgroundColor: "red",
-            marginRight: "10px",
-            borderRadius: "20px",
+            backgroundColor: "#778899",
           }}
         ></div>
-        <h5 style={{ marginRight: "10%" }}>Underperformed Tasks</h5>
+        <h5 className="legend-title">Within Benchmark</h5>
         <div
+          className="legend"
           style={{
-            width: "40px",
-            height: "10px",
-            backgroundColor: "green",
-            marginRight: "10px",
-            borderRadius: "20px",
+            backgroundColor: "black",
           }}
         ></div>
-        <h5 style={{ marginRight: "10%" }}>Outperformed Tasks</h5>
-        <div
-          style={{
-            width: "40px",
-            height: "10px",
-            backgroundColor: "gray",
-            marginRight: "10px",
-            borderRadius: "20px",
-          }}
-        ></div>
-        <h5 style={{ marginRight: "30px" }}>Failed Tasks</h5>
+        <h5 className="legend-title">Failed </h5>
       </div>
 
-      <div style={{}}>
-        <div
-          style={{
-            height: `50px`,
-            width: "100%",
-            paddingBottom: "1%",
-          }}
-        >
+      <div className="chart-box">
+        <div className="fixed-axis">
           <canvas id="myChart1"></canvas>
         </div>
-      </div>
-      <div
-        className="chartCard"
-        style={{ height: "400px", overflowY: "scroll", position: "relative" }}
-      >
-        <div
-          className="chartBox"
-          style={{
-            height: `${Math.max(length * 40, 200) - 50}px`,
-            width: "100%",
-          }}
-        >
-          <canvas id="myChart"></canvas>
-          <ScrollTop targetClass="chartCard"></ScrollTop>
+
+        <div className="chartCard">
+          <div
+            className="chartBox"
+            style={{
+              height: `${Math.max(length * 40, 200) - 50}px`,
+              width: "100%",
+            }}
+          >
+            <canvas id="myChart"></canvas>
+            <ScrollTop targetClass="chartCard"></ScrollTop>
+          </div>
         </div>
       </div>
     </div>

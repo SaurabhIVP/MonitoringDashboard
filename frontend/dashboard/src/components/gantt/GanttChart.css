@@ -1,0 +1,29 @@
+.legend{
+    width: 40px;
+    height: 10px;
+    margin-right:10px;
+    border-radius:10px
+}
+.legend-title{
+    margin-right: 10%;
+}
+.legend-box{
+    display: flex;
+          flex-direction:row;
+          align-items:center;
+          margin-left: 30%;
+}
+.chart-box{
+    border-style: ridge;
+}
+.fixed-axis{
+    padding-left: 100px;
+    height: 50px;
+    width: 1529;
+    padding-bottom: 1%
+}
+.chartCard{
+    height: 475px;
+     overflow-y: scroll;
+      position: relative
+}

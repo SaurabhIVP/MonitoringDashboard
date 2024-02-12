@@ -4,7 +4,7 @@ export const chainLabels = [
     "end_time",
     "total_times",
     "avg_total_time",
-    "performance",
+    "performance"
   ] as any;
   
   export const chainHeaders = [
@@ -13,7 +13,8 @@ export const chainLabels = [
     "Chain End Time",
     "Chain Instance Duration",
     "Benchmark Duration",
-    "Deviation"
+    "Deviation",
+    
   ];
 
   export const TaskLabels=[
@@ -22,7 +23,8 @@ export const chainLabels = [
     "end_time",
     "total_times",
     "avg_total_time",
-    "performance"
+    "performance",
+    
   ]
   export const TaskHeaders=[
     "Task Name",
@@ -30,5 +32,7 @@ export const chainLabels = [
     "Task End Time",
     "Task Instance Duration",
     "Benchmark Duration",
-    "Deviation"
+    "Deviation",
+    
+    
   ]

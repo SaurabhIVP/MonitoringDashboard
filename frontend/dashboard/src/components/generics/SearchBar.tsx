@@ -1,27 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useImperativeHandle, useState } from "react";
 import { Stack, TextField, Autocomplete } from "@mui/material";
 
-interface SearchBarProps {
+type SearchBarProps= {
   fetchDataFunction: () => Promise<any>;
   nameParam: string;
   label: string;
   onSearch: (id: number | null, key: string | null) => void;
   idParam: string;
 }
-
-const SearchBar: React.FC<SearchBarProps> = ({
+type SearchBarRef = {
+  reset: () => void;
+};
+const SearchBar: React.ForwardRefRenderFunction<SearchBarRef,SearchBarProps> = ({
   fetchDataFunction,
   nameParam,
   label,
   onSearch,
   idParam,
-}) => {
+},ref) => {
   const [data, setData] = useState<any[]>([]);
+  
   const [selectedValue, setSelectedValue] = useState<{
     id: number;
     [key: string]: any;
   } | null>(null);
-
+ 
+  const handleClick = (event:any) => {
+    // Stop the event propagation to prevent it from reaching the parent components
+    // event.stopPropagation();
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,7 +61,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   return (
     <>
-      <Stack spacing={2} width={"500px"}>
+    <div onClick={handleClick} onKeyDown={handleClick}>
+    <Stack spacing={2} width={"500px"} >
         {data && (
            <Autocomplete
            options={data}
@@ -65,6 +73,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
          />
         )}
       </Stack>
+    </div>
+      
     </>
   );
 };

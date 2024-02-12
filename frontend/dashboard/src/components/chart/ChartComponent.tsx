@@ -10,7 +10,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { format } from "date-fns-tz";
+import { DateConversion } from "../../utils/DateConversion";
+import { PrimaryColor, SecondaryColor } from "../../utils/Colors";
 
 ChartJS.register(
   CategoryScale,
@@ -24,11 +25,14 @@ ChartJS.register(
 
 interface BasicLineChartProps {
   fetchDataFunction: () => Promise<any>;
+  title: string;
 }
 
-const ChainChart: React.FC<BasicLineChartProps> = ({ fetchDataFunction }) => {
+const ChainChart: React.FC<BasicLineChartProps> = ({
+  fetchDataFunction,
+  title,
+}) => {
   const [data, setData] = useState<any[]>([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,55 +45,58 @@ const ChainChart: React.FC<BasicLineChartProps> = ({ fetchDataFunction }) => {
     };
     fetchData();
   }, [fetchDataFunction]);
-  const formatDate = (datestring: any | null) => {
-    const start = new Date(datestring);
-    const start_time = format(start, "yyyy-MM-dd", {
-      timeZone: "Asia/Kolkata",
-    });
-    return start_time;
-  };
   const chartData = {
-    labels: data.map((item) => formatDate(item.date)),
+    labels: data.map((item) => DateConversion(item.date)),
     datasets: [
       {
-        label: "Chain Time",
+        label: `${title}`,
         data: data.map((item) => item.total_times),
         fill: false,
-        borderColor: "green",
+        borderColor: PrimaryColor,
         tension: 0.1,
       },
       {
         label: "Benchmark Time",
         data: data.map((item) => item.avg_total_time),
         fill: false,
-        borderColor: "blue",
+        borderColor: SecondaryColor,
         tension: 0.1,
       },
     ],
   };
 
   return (
-    <Line
-      data={chartData}
-      options={{
-        maintainAspectRatio: false,
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: "Date",
+    <div style={{ height: 250 }}>
+      <Line
+        data={chartData}
+        options={{
+          layout: {},
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              type:'time',
+              time: {
+                unit: 'day', // Display one day per tick
+                displayFormats: {
+                    day: 'MMM dd' // Format for the tick labels
+                }
+            },
+              title: {
+                display: true,
+                text: "Date",
+              },
+            },
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: "Time (seconds)",
+              },
             },
           },
-          y: {
-            beginAtZero:true,
-            title: {
-              display: true,
-              text: "Time (seconds)",
-            },
-          },
-        },
-      }}
-    />
+        }}
+      />
+    </div>
   );
 };
 

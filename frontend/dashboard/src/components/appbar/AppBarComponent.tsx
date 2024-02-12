@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   IconButton,
@@ -8,7 +8,8 @@ import {
   Tab,
 } from "@mui/material";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { PrimaryColor } from "../../utils/Colors";
 
 interface AppBarComponentProps {
   selectedTab: number | null;
@@ -19,10 +20,18 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
   selectedTab,
   handleTabChange,
 }) => {
-  const history = useNavigate();
-
+  const [tabColors, setTabColors] = useState<string[]>([
+    "white",
+    "white",
+    "white",
+  ]);
+  const handleTabClick = (index: number) => {
+    const newTabColors = [...tabColors].fill("white");
+    newTabColors[index] = "black"; // Change to desired color
+    setTabColors(newTabColors);
+  };
   return (
-    <AppBar position="fixed" style={{ backgroundColor: "#009B77" }}>
+    <AppBar position="fixed" style={{ backgroundColor: PrimaryColor }}>
       <Toolbar variant="dense">
         <Link to="/" style={{ color: "white" }}>
           <IconButton
@@ -37,15 +46,16 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
 
         <Typography
           variant="h6"
-          color="white"
+          color="inherit"
           sx={{
             flexGrow: 1,
+            paddingLeft: 4,
             fontSize: "1.5rem",
             fontWeight: "bold",
             textTransform: "uppercase",
             letterSpacing: "0.1em",
             margin: "0.5rem",
-            textAlign: "center",
+            textAlign: "left",
             transition: "color 0.3s ease",
             "&:hover": {
               color: "#34568B",
@@ -60,21 +70,24 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
             value={0}
             component={Link}
             to="/"
-            style={{ color: "white" }}
+            style={{ color: tabColors[0] }}
+            onClick={()=>handleTabClick(0)}
           />
           <Tab
             label="Gantt Chart"
             value={1}
             component={Link}
             to="/gantt"
-            style={{ color: "white" }}
+            style={{ color: tabColors[1]  }}
+            onClick={()=>handleTabClick(1)}
           />
           <Tab
-            label="Charts"
+            label="Trend Analysis"
             value={2}
             component={Link}
             to="/charts"
-            style={{ color: "white" }}
+            style={{ color: tabColors[2]  }}
+            onClick={()=>handleTabClick(2)}
           />
         </Tabs>
       </Toolbar>

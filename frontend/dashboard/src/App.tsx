@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import { Outlet, useNavigate } from "react-router";
-import AppBarComponent from "./components/AppBarComponent";
+import AppBarComponent from "./components/appbar/AppBarComponent";
 
 function App() {
   const history = useNavigate();
@@ -21,7 +21,7 @@ function App() {
         selectedTab={selectedTab}
         handleTabChange={handleTabChange}
       />
-      <Outlet></Outlet>
+      <Outlet ></Outlet>
       {/* <Dashboard/> */}
       {/* <GanttPage></GanttPage> */}
     </div>

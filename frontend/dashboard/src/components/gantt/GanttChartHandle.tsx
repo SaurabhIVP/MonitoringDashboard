@@ -1,0 +1,77 @@
+import { useEffect, useState } from "react";
+import GanttData from "../../api/GanttData";
+import GanttChart from "./GanttChart";
+import GanttFilter from "../filters/GanttFilter";
+
+const GanttChartHandle = () => {
+  const [multichains, setMultichains] = useState<string[]>([]);
+  const [ganttstartTime, setGanttStartTime] = useState<Date | null>(
+    new Date(2024, 0, 24)
+  );
+  const [startTime, setStartTime] = useState<any | null>("00:00:00");
+  const [endTime, setEndTime] = useState<any | null>("23:59:59");
+  const [benchstartTime, setBenchStartTime] = useState<Date | null>(null);
+  const [benchendTime, setBenchEndTime] = useState<Date | null>(null);
+  const [filteredData, setFilteredData] = useState<any[]>([]);
+  const [filter, setfilter] = useState(false);
+  const handleStartTimeChange = (val: any | null) => {
+    setStartTime(val);
+  };
+  const handleEndTimeChange = (val: any | null) => {
+    setEndTime(val);
+  };
+  const HandleMultichains = (values: string[]) => {
+    setMultichains(values);
+  };
+  const handleGanttStartTimeChange = (time: Date | null) => {
+    setGanttStartTime(time);
+  };
+  useEffect(() => {
+    fetchData();
+  }, [filter]);
+
+  const fetchData = async () => {
+    try {
+      const response = await GanttData({
+        chains: multichains,
+        starttime: startTime,
+        endtime: endTime,
+        date: ganttstartTime,
+      });
+      setFilteredData(response as any[]);
+      console.log(filteredData);
+      setfilter(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  const filterHandler = () => {
+    console.log(filteredData);
+    setfilter(true);
+  };
+  return (
+    <div>
+      <div>
+        <div>
+          <GanttFilter
+            onFilter={filterHandler}
+            onChainSelected={HandleMultichains}
+            onStartDateSelected={handleGanttStartTimeChange}
+            onStartTimeSelected={handleStartTimeChange}
+            onEndTimeSelected={handleEndTimeChange}
+            onBenchStartDateSelected={setBenchStartTime}
+            onBenchEndDateSelected={setBenchEndTime}
+          ></GanttFilter>
+        </div>
+
+        <GanttChart
+          data={filteredData}
+          starttime={startTime}
+          endtime={endTime}
+          date={ganttstartTime}
+        ></GanttChart>
+      </div>
+    </div>
+  );
+};
+export default GanttChartHandle;
