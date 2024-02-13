@@ -1,3 +1,2 @@
-export const PrimaryColor="#758396";
-export const SecondaryColor="#5c86bf";
-export const ButtonColor="#264e85";
+export const PrimaryColor="#1F3A84";
+export const SecondaryColor="#057ef0";

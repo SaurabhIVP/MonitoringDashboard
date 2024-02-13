@@ -59,7 +59,7 @@ const ChainChart: React.FC<BasicLineChartProps> = ({
         label: "Benchmark Time",
         data: data.map((item) => item.avg_total_time),
         fill: false,
-        borderColor: SecondaryColor,
+        borderColor: "blue",
         tension: 0.1,
       },
     ],

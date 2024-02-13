@@ -128,6 +128,7 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
                   label="Start Time"
                   value={startTime}
                   onChange={handleStartTimeChange}
+                  
                 />
               </DemoContainer>
               <DemoContainer components={["TimePicker"]}>

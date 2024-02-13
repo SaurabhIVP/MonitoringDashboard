@@ -21,13 +21,13 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
   handleTabChange,
 }) => {
   const [tabColors, setTabColors] = useState<string[]>([
-    "white",
-    "white",
-    "white",
+   "white",
+   "white",
+   "white",
   ]);
   const handleTabClick = (index: number) => {
     const newTabColors = [...tabColors].fill("white");
-    newTabColors[index] = "black"; // Change to desired color
+    newTabColors[index] = "#F2CE72"; // Change to desired color
     setTabColors(newTabColors);
   };
   return (
@@ -46,7 +46,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
 
         <Typography
           variant="h6"
-          color="inherit"
+          color="white"
           sx={{
             flexGrow: 1,
             paddingLeft: 4,
@@ -58,7 +58,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
             textAlign: "left",
             transition: "color 0.3s ease",
             "&:hover": {
-              color: "#34568B",
+              color: "#388087",
             },
           }}
         >
@@ -70,7 +70,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
             value={0}
             component={Link}
             to="/"
-            style={{ color: tabColors[0] }}
+            style={{ color: tabColors[0] ,fontFamily :'sans-serif'}}
             onClick={()=>handleTabClick(0)}
           />
           <Tab
@@ -78,7 +78,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
             value={1}
             component={Link}
             to="/gantt"
-            style={{ color: tabColors[1]  }}
+            style={{ color: tabColors[1] ,fontFamily :'sans-serif' }}
             onClick={()=>handleTabClick(1)}
           />
           <Tab
@@ -86,7 +86,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
             value={2}
             component={Link}
             to="/charts"
-            style={{ color: tabColors[2]  }}
+            style={{ color: tabColors[2] ,fontFamily :'sans-serif' }}
             onClick={()=>handleTabClick(2)}
           />
         </Tabs>

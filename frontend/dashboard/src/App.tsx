@@ -16,7 +16,7 @@ function App() {
     }
   };
   return (
-    <div className="App">
+    <div className="App" style={{backgroundColor:'WHITE',height:'900px'}}>
       <AppBarComponent
         selectedTab={selectedTab}
         handleTabChange={handleTabChange}

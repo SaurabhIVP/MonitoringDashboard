@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Box, Button } from "@mui/material";
-import { ButtonColor, PrimaryColor } from "./Colors";
+import { PrimaryColor, SecondaryColor } from "./Colors";
 
 export const StyledBox = styled(Box)({
     width: "550px",
@@ -17,11 +17,11 @@ export  const StyledHeading = styled("h4")({
 export  const StyledButton = styled(Button)({
     marginTop: 17,
     fontWeight: "bold",
-    backgroundColor: ButtonColor,
+    backgroundColor: PrimaryColor,
     // position:'absolute',
     color: "white",
     "&:hover": {
-      backgroundColor: PrimaryColor,
+      backgroundColor: SecondaryColor,
     },
   });
   

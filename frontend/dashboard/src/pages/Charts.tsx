@@ -74,6 +74,18 @@ const Charts: React.FC = () => {
   const [BenchendDate, setBenchEndDate] = useState<Date | null>(
     new Date(2024, 0, 24)
   );
+  const [BenchTaskstartDate, setBenchTaskStartDate] = useState<Date | null>(
+    new Date(2024, 0, 17)
+  );
+  const [BenchTaskendDate, setBenchTaskEndDate] = useState<Date | null>(
+    new Date(2024, 0, 24)
+  );
+  const [BenchChildstartDate, setBenchChildStartDate] = useState<Date | null>(
+    new Date(2024, 0, 17)
+  );
+  const [BenchChildendDate, setBenchChildEndDate] = useState<Date | null>(
+    new Date(2024, 0, 24)
+  );
 
   const handleStartDateChange = (newDate: Date | null) => {
     setStartDate(newDate);
@@ -99,7 +111,18 @@ const Charts: React.FC = () => {
   const handleBenchendDateChange = (newDate: Date | null) => {
     setBenchEndDate(newDate);
   };
-
+  const handleTaskBenchStartDateChange = (newDate: Date | null) => {
+    setBenchTaskStartDate(newDate);
+  };
+  const handleTaskBenchendDateChange = (newDate: Date | null) => {
+    setBenchTaskEndDate(newDate);
+  };
+  const handleBenchChildStartDateChange = (newDate: Date | null) => {
+    setBenchChildStartDate(newDate);
+  };
+  const handleBenchChildendDateChange = (newDate: Date | null) => {
+    setBenchChildEndDate(newDate);
+  };
   //Data for Child charts (Task charts) for selected chain
   const [data, setData] = useState([]);
   const fetchData = async () => {
@@ -139,24 +162,33 @@ const Charts: React.FC = () => {
               justifyContent: "space-between",
             }}
           >
-            <h3 style={{color:PrimaryColor,fontFamily:'cursive',fontWeight:'bolder'}}>
-              Chain Name:{" "}
-              {`${selectedChainValue?.key || "Analytics Golden Copy - Mastered Analytics"}`}
-            </h3>
-            <div style={{display:'flex'}}>
-            <StyledButton 
-              onClick={handleClickOpen} style={{marginBottom:'10px',marginRight:'10px'}}
+            <h3
+              style={{
+                color: PrimaryColor,
+                fontFamily: 'sans-serif',
+                // fontWeight: "bolder",
+              }}
             >
-              Show Tasks
-            </StyledButton>
-            <ChartFilter
-              onChainSelected={handleChainSelected}
-              onStartDateSelected={handleStartDateChange}
-              onEndDateSelected={handleEndDateChange}
-              onBenchStartDateSelected={handleBenchStartDateChange}
-              onBenchEndDateSelected={handleBenchendDateChange}
-            />
-            
+              Chain Name:{" "}
+              {`${
+                selectedChainValue?.key ||
+                "Analytics Golden Copy - Mastered Analytics"
+              }`}
+            </h3>
+            <div style={{ display: "flex" }}>
+              <StyledButton
+                onClick={handleClickOpen}
+                style={{ marginBottom: "10px", marginRight: "10px" }}
+              >
+                Show Tasks
+              </StyledButton>
+              <ChartFilter
+                onChainSelected={handleChainSelected}
+                onStartDateSelected={handleStartDateChange}
+                onEndDateSelected={handleEndDateChange}
+                onBenchStartDateSelected={handleBenchStartDateChange}
+                onBenchEndDateSelected={handleBenchendDateChange}
+              />
             </div>
           </div>
 
@@ -173,32 +205,36 @@ const Charts: React.FC = () => {
               }
               title="Chain Time"
             />
-            
           </div>
         </Paper>
       </div>
 
       <div style={{ paddingTop: 50, paddingLeft: 100, paddingRight: 100 }}>
         <Paper elevation={10} style={{ padding: 20, marginBottom: 20 }}>
-        <div
+          <div
             style={{
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
             }}
           >
-        <h3 style={{color:PrimaryColor,fontFamily:'cursive',fontWeight:'bolder'}}>
+            <h3
+              style={{
+                color: PrimaryColor,
+                fontFamily: "cursive",
+                // fontWeight: "bolder",
+              }}
+            >
               Task Name: {`${selectedTaskValue?.key || "CRD Loans Task"}`}
             </h3>
-          
+
             <TaskChartFilter
               onTaskSelected={handleTaskSelected}
               onStartDateSelected={handleTaskStartDateChange}
               onEndDateSelected={handleTaskEndDateChange}
-              onBenchStartDateSelected={handleBenchStartDateChange}
-              onBenchEndDateSelected={handleBenchendDateChange}
+              onBenchStartDateSelected={handleTaskBenchStartDateChange}
+              onBenchEndDateSelected={handleTaskBenchendDateChange}
             />
-            
           </div>
           <div>
             <ChainChart
@@ -207,8 +243,8 @@ const Charts: React.FC = () => {
                   flow_id: selectedTaskValue?.id || 2919,
                   startDate: taskStartDate,
                   endDate: taskEndDate,
-                  benchStartDate: BenchstartDate,
-                  benchEndDate: BenchendDate,
+                  benchStartDate: BenchTaskstartDate,
+                  benchEndDate: BenchTaskendDate,
                 })
               }
               title="Task Time"
@@ -236,8 +272,8 @@ const Charts: React.FC = () => {
           <DateFilters
             onStartDateSelected={handleChildStartDateChange}
             onEndDateSelected={handleChildEndDateChange}
-            onBenchStartDateSelected={handleBenchStartDateChange}
-            onBenchEndDateSelected={handleBenchendDateChange}
+            onBenchStartDateSelected={handleBenchChildStartDateChange}
+            onBenchEndDateSelected={handleBenchChildendDateChange}
           />
           <DialogContent>
             {data.map((item: any) => (
@@ -265,8 +301,8 @@ const Charts: React.FC = () => {
                           flow_id: item.flow_id,
                           startDate: childStartDate,
                           endDate: childEndDate,
-                          benchStartDate: new Date(2024, 0, 17),
-                          benchEndDate: new Date(2024, 0, 24),
+                          benchStartDate: BenchChildstartDate,
+                          benchEndDate: BenchChildendDate,
                         })
                       }
                       title="Task Time"

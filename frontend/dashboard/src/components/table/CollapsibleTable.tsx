@@ -18,7 +18,7 @@ import {
   chainHeaders,
   chainLabels,
 } from "./TableContents";
-import { SecondaryColor } from "../../utils/Colors";
+import { PrimaryColor, SecondaryColor } from "../../utils/Colors";
 
 
 function Row(props: { row: any; childDataFunction: () => void }) {
@@ -88,14 +88,14 @@ function Row(props: { row: any; childDataFunction: () => void }) {
             <Box sx={{ margin: 1 }}>
               <Table size="small" aria-label="purchases">
                 <TableHead>
-                  <TableRow style={{ backgroundColor: SecondaryColor }}>
+                  <TableRow style={{ backgroundColor: PrimaryColor }}>
                     {TaskHeaders.map((x) => (
                       <TableCell
                       align="center"
                         style={{
                           fontSize: "12px",
                           color:"white",
-                          backgroundColor: SecondaryColor,
+                          backgroundColor: PrimaryColor,
                         }}
                       >
                         {x}
@@ -178,14 +178,14 @@ const CollapsibleTable: React.FC<BasicLineChartProps> = ({
           {" "}
           <TableHead style={{position:'sticky',top: 0, zIndex: 1}}>
             <TableRow>
-              <TableCell style={{ backgroundColor: SecondaryColor }} />
+              <TableCell style={{ backgroundColor: PrimaryColor }} />
               {chainHeaders.map((x) => (
                 <TableCell
                 align="center"
                   style={{
                     fontSize: "12px",
                     color: "white",
-                    backgroundColor: SecondaryColor,
+                    backgroundColor: PrimaryColor,
                   }}
                 >
                   {x}
