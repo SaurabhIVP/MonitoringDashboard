@@ -23,9 +23,9 @@ public class DataController : ControllerBase
     }
     [HttpGet]
     [Route("currentData")]
-    public async Task<IActionResult> GetAllChainDetails1()
+    public async Task<IActionResult> GetAllChainDetails1(DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null)
     {
-        var chainDetails = await _objService.GetAllChainDetailsAsync1();
+        var chainDetails = await _objService.GetAllChainDetailsAsync1(startDate ,endDate ,benchStartDate ,  benchEndDate,benchmarkCompute,deviationPercentage );
         return Ok(chainDetails);
     }
     [HttpGet]
@@ -46,10 +46,10 @@ public class DataController : ControllerBase
     }
 
     [HttpGet]
-    [Route("tasks/{date?}/{start_time?}/{end_time?}/{chains?}")]
-    public async Task<IActionResult> GetGanttDetails(string chains=null ,string? start_time=null,string? end_time=null,DateTime? date=null)
+    [Route("tasks/{date?}/{benchStartDate?}/{benchEndDate?}/{chains?}")]
+    public async Task<IActionResult> GetGanttDetails(string chains=null ,string? start_time="00:00:00.0000000",string? end_time="23:59:59.9999999",string? date="2024-01-17",string? benchStartDate = "2024-01-17", string? benchEndDate = "2024-01-24")
     {
-        var chainDetails = await _objService.GetGanttDetailsAsync(chains,start_time, end_time,date);
+        var chainDetails = await _objService.GetGanttDetailsAsync(chains,start_time, end_time,date,benchStartDate,benchEndDate);
         return Ok(chainDetails);
     }
 
@@ -63,16 +63,16 @@ public async Task<IActionResult> GetChainTimeDetails(int chain_id, DateTime? sta
 }
 [HttpGet]
 [Route("chaindetails/{chain_id}")]
-public async Task<IActionResult> GetChainDetails(int chain_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null)
+public async Task<IActionResult> GetChainDetails(int chain_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null)
 {
-    var chainDetails = await _objService.GetChainDetailsAsync(chain_id, startDate, endDate, benchStartDate, benchEndDate);
+    var chainDetails = await _objService.GetChainDetailsAsync(chain_id, startDate, endDate, benchStartDate, benchEndDate,benchmarkCompute,deviationPercentage);
     return Ok(chainDetails);
 }
 [HttpGet]
 [Route("chainDetailsByTaskname")]
-public async Task<IActionResult> GetChainDetailsByTasknames(string tasknames, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null)
+public async Task<IActionResult> GetChainDetailsByTasknames(string tasknames, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null)
 {
-    var chainDetails = await _objService.GetChainDetailsByTasknamesAsync(tasknames, startDate, endDate, benchStartDate, benchEndDate);
+    var chainDetails = await _objService.GetChainDetailsByTasknamesAsync(tasknames, startDate, endDate, benchStartDate, benchEndDate, benchmarkCompute,deviationPercentage);
     return Ok(chainDetails);
 }
 [HttpGet]
@@ -106,10 +106,10 @@ public async Task<IActionResult> GetTaskTimeDetails(int flow_id, DateTime? start
     }
 
     [HttpGet]
-    [Route("taskdetails/{chain_id}/{startTime?}/{endTime?}")]
-    public async Task<IActionResult> GetTaskDetails(int chain_id,DateTime? startTime = null,DateTime? endTime=null)
+    [Route("taskdetails/{chain_id}")]
+    public async Task<IActionResult> GetTaskDetails(int chain_id,DateTime? startTime = null,DateTime? endTime=null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null)
     {
-        var chainDetails = await _objService.GetTaskDetailsAsync(chain_id,startTime,endTime);
+        var chainDetails = await _objService.GetTaskDetailsAsync(chain_id, startTime, endTime, benchStartDate, benchEndDate,benchmarkCompute,deviationPercentage);
         return Ok(chainDetails);
     }
     

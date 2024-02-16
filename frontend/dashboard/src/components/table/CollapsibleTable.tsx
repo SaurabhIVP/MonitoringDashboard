@@ -12,6 +12,8 @@ import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useEffect, useState } from "react";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import {
   TaskHeaders,
   TaskLabels,
@@ -19,9 +21,9 @@ import {
   chainLabels,
 } from "./TableContents";
 import { PrimaryColor, SecondaryColor } from "../../utils/Colors";
+import ScrollTop from "../generics/ScrollTop";
 
-
-function Row(props: { row: any; childDataFunction: () => void }) {
+function Row(props: { row: any | null; childDataFunction: () => void | null }) {
   const { row, childDataFunction } = props;
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<any[]>([]);
@@ -48,10 +50,36 @@ function Row(props: { row: any; childDataFunction: () => void }) {
   ) => {
     return chainDuration > benchmarkDuration ? "red" : "green";
   };
+  const getDeviationIconStyling = (
+    chainDuration: number,
+    benchmarkDuration: number
+  ) => {
+    if (chainDuration > benchmarkDuration) {
+      return (
+        <>
+          <ArrowDropDownIcon
+            style={{
+              verticalAlign: "bottom",
+              color: "red",
+              justifyContent: "end",
+            }}
+          />
+        </>
+      );
+    } else if (chainDuration < benchmarkDuration) {
+      return (
+        <>
+          <ArrowDropUpIcon
+            style={{ verticalAlign: "bottom", color: "green" }}
+          />
+        </>
+      );
+    }
+  };
   return (
     <React.Fragment>
-      <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-        <TableCell>
+      <TableRow sx={{ "& > *": { borderBottom: "unset", border: "0" } }}>
+        {/* <TableCell>
           <IconButton
             aria-label="expand row"
             size="small"
@@ -59,43 +87,78 @@ function Row(props: { row: any; childDataFunction: () => void }) {
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
-        </TableCell>
-        {chainLabels.map((x: any) =>
+        </TableCell> */}
+
+        {chainLabels.map((x: any, index: number) =>
           x === chainLabels[chainLabels.length - 1] ? (
             <TableCell
               align="center"
               style={{
+                fontFamily: "sans-serif",
                 fontSize: "12px",
-                fontWeight: "bold",
-                color: getDeviationColor(row.total_times, row.avg_total_time),
+                // fontWeight: "bold",
+                // color: getDeviationColor(row.total_times, row.avg_total_time),
               }}
             >
-              {row.performance}
+              {row.performance + " %"}{" "}
+              {getDeviationIconStyling(row.total_times, row.avg_total_time)}
             </TableCell>
+          ) : index === 0 ? (
+            <>
+              <TableCell
+                style={{
+                  fontFamily: "sans-serif",
+                  fontSize: "12px",
+                  // fontWeight: "bold",
+                  // color: getDeviationColor(row.total_times, row.avg_total_time),
+                }}
+              >
+                <IconButton
+                  aria-label="expand row"
+                  size="small"
+                  onClick={() => setOpen(!open)}
+                >
+                  {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                </IconButton>
+                {row[x]}
+              </TableCell>
+            </>
           ) : (
-            <TableCell align="center" key={x} scope="row" style={{ fontSize: "12px" }}>
-              {row[x]}
-            </TableCell>
+            <>
+              <TableCell
+                align="center"
+                key={x}
+                scope="row"
+                style={{ fontFamily: "sans-serif", fontSize: "12px" }}
+              >
+                {row[x]}
+              </TableCell>
+            </>
           )
         )}
       </TableRow>
-      <TableRow>
+      <TableRow sx={{ "& > *": { borderBottom: "unset", border: "0" } }}>
         <TableCell
           style={{ paddingBottom: 0, paddingTop: 0 }}
-          colSpan={TaskLabels.length + 1}
+          colSpan={TaskLabels.length}
         >
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Table size="small" aria-label="purchases">
                 <TableHead>
-                  <TableRow style={{ backgroundColor: PrimaryColor }}>
+                  <TableRow
+                    style={{ backgroundColor: PrimaryColor }}
+                    sx={{ "& > *": { borderBottom: "unset", border: "0" } }}
+                  >
                     {TaskHeaders.map((x) => (
                       <TableCell
-                      align="center"
+                        align="center"
                         style={{
-                          fontSize: "12px",
-                          color:"white",
-                          backgroundColor: PrimaryColor,
+                          fontFamily: "sans-serif",
+                          fontSize: "13px",
+                          fontWeight: "bold",
+                          color: "white",
+                          backgroundColor: SecondaryColor,
                         }}
                       >
                         {x}
@@ -104,31 +167,77 @@ function Row(props: { row: any; childDataFunction: () => void }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {data.map((item) => (
-                    <TableRow>
-                      {TaskLabels.map((x) =>
-                        x === TaskLabels[TaskLabels.length - 1] ? ( // Render nothing or add your logic for 'performance'
-                          <TableCell
-                            align="center"
-                            style={{
-                              fontSize: "12px",
-                              fontWeight: "bold",
-                              color: getDeviationColor(
-                                item.total_times,
-                                item.avg_total_time
-                              ),
-                            }}
-                          >
-                            {item.performance}
-                          </TableCell>
-                        ) : (
-                          <TableCell align="center" style={{ fontSize: "12px" }}>
-                            {item[x]}
-                          </TableCell>
-                        )
-                      )}
-                    </TableRow>
-                  ))}
+                  {data.length == 0 ? (
+                    <>
+                      <TableRow
+                        sx={{
+                          "& > *": {
+                            borderBottom: "unset",
+                            border: "0",
+                            backgroundColor: "white",
+                          },
+                        }}
+                      >
+                        <TableCell colSpan={TaskLabels.length} align="center">
+                          No Data Available
+                        </TableCell>
+                      </TableRow>
+                    </>
+                  ) : (
+                    data.map((item) => (
+                      <TableRow
+                        sx={{
+                          "& > *": {
+                            borderBottom: "unset",
+                            border: "0",
+                            backgroundColor: "white",
+                          },
+                        }}
+                      >
+                        {TaskLabels.map((x, index) =>
+                          x === TaskLabels[TaskLabels.length - 1] ? ( // Render nothing or add your logic for 'performance'
+                            <TableCell
+                              align="center"
+                              style={{
+                                fontSize: "12px",
+                                // fontWeight: "bold",
+                                // color: getDeviationColor(
+                                //   item.total_times,
+                                //   item.avg_total_time
+                                // ),
+                              }}
+                            >
+                              {item.performance + " %"}
+                              {getDeviationIconStyling(
+                                row.total_times,
+                                row.avg_total_time
+                              )}
+                            </TableCell>
+                          ) : index == 0 ? (
+                            <TableCell
+                              align="left"
+                              style={{
+                                fontSize: "12px",
+                                fontFamily: "sans-serif",
+                              }}
+                            >
+                              {item[x]}
+                            </TableCell>
+                          ) : (
+                            <TableCell
+                              align="center"
+                              style={{
+                                fontSize: "12px",
+                                fontFamily: "sans-serif",
+                              }}
+                            >
+                              {item[x]}
+                            </TableCell>
+                          )
+                        )}
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </Box>
@@ -168,22 +277,23 @@ const CollapsibleTable: React.FC<BasicLineChartProps> = ({
   }, [fetchDataFunction]);
 
   return (
-    <div style={{ paddingTop: 30 }}>
+    <div style={{ paddingTop: 30 ,}}>
       <TableContainer
-     style={{ maxHeight: "650px", overflowY: "auto" }}
+        style={{ maxHeight: "650px", overflowY: "auto",boxShadow:'5px 5px 5px lightgray' }}
         component={Paper}
-        
+        className="tableclass"
       >
-        <Table aria-label="collapsible table" size="small" >
+        <Table aria-label="collapsible table" size="small">
           {" "}
-          <TableHead style={{position:'sticky',top: 0, zIndex: 1}}>
-            <TableRow>
-              <TableCell style={{ backgroundColor: PrimaryColor }} />
+          <TableHead style={{ position: "sticky", top: 0, zIndex: 1 }}>
+            <TableRow sx={{ "& > *": { borderBottom: "unset", border: "0" } }}>
+              {/* <TableCell style={{ backgroundColor: PrimaryColor }} /> */}
               {chainHeaders.map((x) => (
                 <TableCell
-                align="center"
+                  align="center"
                   style={{
-                    fontSize: "12px",
+                    fontSize: "14px",
+                    fontWeight: "bold",
                     color: "white",
                     backgroundColor: PrimaryColor,
                   }}
@@ -193,22 +303,43 @@ const CollapsibleTable: React.FC<BasicLineChartProps> = ({
               ))}
             </TableRow>
           </TableHead>
-          <TableBody >
-            {data.map((row) => (
-              <Row 
-                row={row}
-                childDataFunction={() =>
-                  taskDetailsFunction({
-                    chain_id: row.chain_id,
-                    startTime: row.start_time,
-                    endTime: row.end_time,
-                  })
-                }
-              />
-            ))}
+          <TableBody>
+            {data.length == 0 ? (
+              <>
+                <TableRow>
+                  <TableCell
+                    colSpan={chainLabels.length}
+                    align="center"
+                    sx={{
+                      "& > *": {
+                        borderBottom: "unset",
+                        border: "0",
+                        backgroundColor: "white",
+                      },
+                    }}
+                  >
+                    No Data Available
+                  </TableCell>
+                </TableRow>
+              </>
+            ) : (
+              data.map((row) => (
+                <Row
+                  row={row}
+                  childDataFunction={() =>
+                    taskDetailsFunction({
+                      chain_id: row.chain_id,
+                      startTime: row.start_time,
+                      endTime: row.end_time,
+                    })
+                  }
+                />
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
+      <ScrollTop targetClass="tableclass"></ScrollTop>
     </div>
   );
 };

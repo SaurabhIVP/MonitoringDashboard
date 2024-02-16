@@ -41,7 +41,7 @@ const MultiSelect: React.FC<SearchBarProps> = ({
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
   return (
-    <Stack spacing={2} width={"500px"}>
+    <Stack spacing={2} width={"470px"}>
       {data && (
         <Autocomplete
           multiple

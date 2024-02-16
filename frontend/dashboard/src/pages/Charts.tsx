@@ -19,7 +19,7 @@ import Tasknames from "../api/Tasknames";
 import Draggable from "react-draggable";
 import DateFilters from "../components/filters/DateFilters";
 import ChainDetails from "../api/ChainDetails";
-import { StyledButton } from "../utils/StyledComponents";
+import { StyledButton, StyledDatepickerContainer } from "../utils/StyledComponents";
 import { PrimaryColor } from "../utils/Colors";
 
 function PaperComponent(props: PaperProps) {
@@ -175,10 +175,10 @@ const Charts: React.FC = () => {
                 "Analytics Golden Copy - Mastered Analytics"
               }`}
             </h3>
-            <div style={{ display: "flex" }}>
+            <StyledDatepickerContainer>
               <StyledButton
                 onClick={handleClickOpen}
-                style={{ marginBottom: "10px", marginRight: "10px" }}
+                style={{ marginTop: "10px", marginRight: "10px" }}
               >
                 Show Tasks
               </StyledButton>
@@ -189,8 +189,9 @@ const Charts: React.FC = () => {
                 onBenchStartDateSelected={handleBenchStartDateChange}
                 onBenchEndDateSelected={handleBenchendDateChange}
               />
+              </StyledDatepickerContainer>
             </div>
-          </div>
+          
 
           <div>
             <ChainChart
@@ -221,7 +222,7 @@ const Charts: React.FC = () => {
             <h3
               style={{
                 color: PrimaryColor,
-                fontFamily: "cursive",
+                fontFamily: 'sans-serif',
                 // fontWeight: "bolder",
               }}
             >
@@ -262,8 +263,8 @@ const Charts: React.FC = () => {
           <DialogTitle
             style={{
               cursor: "move",
-              fontStyle: "italic",
-              fontWeight: "inherit",
+              color: PrimaryColor,
+                fontFamily: 'sans-serif',
             }}
             id="draggable-dialog-title"
           >
@@ -292,7 +293,8 @@ const Charts: React.FC = () => {
                       justifyContent: "space-between",
                     }}
                   >
-                    <h3>Task Name: {`${item.task_name}`}</h3>
+                    <h3 style={{color: PrimaryColor,
+                fontFamily: 'sans-serif',}}>Task Name: {`${item.task_name}`}</h3>
                   </div>
                   <div>
                     <ChainChart
@@ -313,9 +315,10 @@ const Charts: React.FC = () => {
             ))}
           </DialogContent>
           <DialogActions>
-            <Button autoFocus onClick={handleClose}>
-              Cancel
-            </Button>
+            
+            <StyledButton autoFocus onClick={handleClose}>
+            Cancel
+          </StyledButton>
           </DialogActions>
         </Dialog>
       </div>

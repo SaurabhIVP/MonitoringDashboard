@@ -5,6 +5,8 @@ import "chartjs-adapter-date-fns";
 import { format } from "date-fns-tz";
 import ScrollTop from "../generics/ScrollTop";
 import "./GanttChart.css";
+import { PrimaryColor, SecondaryColor } from "../../utils/Colors";
+import { DateConversioninddMMMMyyyy } from "../../utils/DateConversion";
 
 interface ganttProps {
   data: any[];
@@ -22,6 +24,7 @@ const GanttChart: React.FC<ganttProps> = ({
   const [newdata, setnewData] = useState<any[]>([]);
   const [newstart, setnewstart] = useState<any>([]);
   const [newend, setnewend] = useState<any>([]);
+  const TitleDate = DateConversioninddMMMMyyyy(date);
   date = format(date, "yyyy-MM-dd");
   starttime = date + "T" + starttime;
   endtime = date + "T" + endtime;
@@ -69,7 +72,7 @@ const GanttChart: React.FC<ganttProps> = ({
       if (item.status === "failed") {
         return "blue";
       } else {
-        return item.performance < -25 ? "#FF3131" : "#778899";
+        return item.performance < -25 ? "#E31837" : "#50c878";
       }
     });
     const data = {
@@ -81,6 +84,7 @@ const GanttChart: React.FC<ganttProps> = ({
           borderWidth: 1,
           barThickness: 30,
           maxBarThickness: 30,
+          barBorderRadius: 3,
         },
       ],
     };
@@ -225,15 +229,33 @@ const GanttChart: React.FC<ganttProps> = ({
   }, [newdata]);
 
   return (
-    <div style={{ marginLeft: 10, marginRight: 10, padding: 10 }}>
-      <h4>Date: {date}</h4>
-      <div className="legend-box">
-        <div className="legend" style={{ backgroundColor: "red" }}></div>
+    <div
+      style={{
+        marginLeft: 10,
+        marginRight: 10,
+        paddingLeft: 10,
+        paddingRight: 10,
+      }}
+    >
+      
+      <div className="legend-box" >
+      <h3
+        style={{
+          color: "black",
+          fontFamily: "sans-serif",
+          fontSize: 15,
+          fontWeight: "bold",
+          textAlign: "left",
+        }}
+      >
+        {TitleDate}
+      </h3>
+        <div className="legend" style={{ backgroundColor: "#E31837" }}></div>
         <h5 className="legend-title">Crossed Benchmark</h5>
         <div
           className="legend"
           style={{
-            backgroundColor: "#778899",
+            backgroundColor: "#50c878",
           }}
         ></div>
         <h5 className="legend-title">Within Benchmark</h5>

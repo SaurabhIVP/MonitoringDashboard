@@ -8,6 +8,8 @@ interface Props {
   endDate?: any | null;
   benchStartDate?: any | null;
   benchEndDate?: any | null;
+  benchmarkCompute?:any |null;
+  deviationPercentage?:any |null;
 }
 
 async function ChainDetailsByTaskname({
@@ -16,6 +18,8 @@ async function ChainDetailsByTaskname({
   endDate,
   benchStartDate,
   benchEndDate,
+  benchmarkCompute,
+  deviationPercentage
 }: Props) {
   try {
     const startInProperFormat = DateConversion(startDate);
@@ -29,6 +33,8 @@ async function ChainDetailsByTaskname({
       endDate: endInProperFormat,
       benchStartDate: benchmarkStartInProperFormat,
       benchEndDate: benchmarkEndInProperFormat,
+      benchmarkCompute: benchmarkCompute,
+      deviationPercentage: deviationPercentage
     };
     const response = await axios.get(url, { params });
     return response.data;

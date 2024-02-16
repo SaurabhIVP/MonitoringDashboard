@@ -12,6 +12,9 @@ import {
   StyledDatepickerContainer,
   StyledHeading,
 } from "../../utils/StyledComponents";
+import { IconButton } from "@mui/material";
+import { FilterColor, SecondaryColor } from "../../utils/Colors";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 type ChartFilterProps = {
   onChainSelected: (chainData: { id: number; key: string }) => void;
@@ -63,22 +66,18 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
 
   const handleEndDateChange = (newDate: Date | null) => {
     setEndDate(newDate);
-    onEndDateSelected(newDate);
   };
 
   const handleStartDateChange = (newDate: Date | null) => {
     setStartDate(newDate);
-    onStartDateSelected(newDate);
   };
 
   const handleBenchStartDateChange = (newDate: Date | null) => {
     setBenchStartDate(newDate);
-    onBenchStartDateSelected(newDate);
   };
 
   const handleBenchendDateChange = (newDate: Date | null) => {
     setBenchEndDate(newDate);
-    onBenchEndDateSelected(newDate);
   };
 
   const buttonHandler = () => {
@@ -87,12 +86,22 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
     if (id != null && key != null) {
       onChainSelected({ id, key });
     }
+    onStartDateSelected(startDate);
+    onEndDateSelected(EndDate);
+    onBenchStartDateSelected(BenchstartDate);
+    onBenchEndDateSelected(BenchendDate);
     handleClose();
   };
 
   return (
     <div style={{}}>
-      <StyledButton onClick={handleClick}>Filter</StyledButton>
+      <IconButton
+        onClick={handleClick}
+        aria-label="filter"
+        sx={{ color: FilterColor }}
+      >
+        <FilterAltIcon fontSize="large"></FilterAltIcon>
+      </IconButton>
       <Popover
         keepMounted={true}
         id={id}
@@ -108,8 +117,7 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
           horizontal: "right",
         }}
       >
-        <StyledBox>
-          <StyledHeading>Select Chain Name :</StyledHeading>
+        <StyledBox height={"270px"}>
           <div>
             <SearchBar
               fetchDataFunction={GetAllChainNames}
@@ -120,7 +128,6 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
             />
           </div>
 
-          <StyledHeading>Select Duration :</StyledHeading>
           <StyledDatepickerContainer>
             <Datepicker
               name="Start Date"
@@ -134,7 +141,6 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
             />
           </StyledDatepickerContainer>
 
-          <StyledHeading>Select Benchmark Duration :</StyledHeading>
           <StyledDatepickerContainer>
             <Datepicker
               name="Start Date"
@@ -147,10 +153,21 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
               onDateChange={handleBenchendDateChange}
             />
           </StyledDatepickerContainer>
-
-          <StyledButton onClick={buttonHandler} style={{ marginRight: 10 }}>
-            SUBMIT
+          <div
+            style={{
+              position: "absolute",
+              bottom: "5px",
+              right: "45px",
+              zIndex: 999,
+            }}
+          >
+            <StyledButton onClick={buttonHandler} style={{ marginRight: 5 }}>
+              SUBMIT
+            </StyledButton>
+            <StyledButton autoFocus onClick={handleClose}>
+            Cancel
           </StyledButton>
+          </div>
         </StyledBox>
       </Popover>
     </div>

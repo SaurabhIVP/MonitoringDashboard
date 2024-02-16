@@ -10,12 +10,22 @@ const GanttChartHandle = () => {
   );
   const [startTime, setStartTime] = useState<any | null>("00:00:00");
   const [endTime, setEndTime] = useState<any | null>("23:59:59");
-  const [benchstartTime, setBenchStartTime] = useState<Date | null>(null);
-  const [benchendTime, setBenchEndTime] = useState<Date | null>(null);
+  const [BenchstartDate, setBenchStartDate] = useState<Date | null>(
+    new Date(2024, 0, 17)
+  );
+  const [BenchendDate, setBenchEndDate] = useState<Date | null>(
+    new Date(2024, 0, 24)
+  );
   const [filteredData, setFilteredData] = useState<any[]>([]);
   const [filter, setfilter] = useState(false);
   const handleStartTimeChange = (val: any | null) => {
     setStartTime(val);
+  };
+  const handlebenStartTimeChange = (val: any | null) => {
+    setBenchStartDate(val);
+  };
+  const handlebenEndTimeChange = (val: any | null) => {
+    setBenchEndDate(val);
   };
   const handleEndTimeChange = (val: any | null) => {
     setEndTime(val);
@@ -37,6 +47,8 @@ const GanttChartHandle = () => {
         starttime: startTime,
         endtime: endTime,
         date: ganttstartTime,
+        benchStartDate: BenchstartDate,
+        benchEndDate: BenchendDate,
       });
       setFilteredData(response as any[]);
       console.log(filteredData);
@@ -59,8 +71,8 @@ const GanttChartHandle = () => {
             onStartDateSelected={handleGanttStartTimeChange}
             onStartTimeSelected={handleStartTimeChange}
             onEndTimeSelected={handleEndTimeChange}
-            onBenchStartDateSelected={setBenchStartTime}
-            onBenchEndDateSelected={setBenchEndTime}
+            onBenchStartDateSelected={handlebenStartTimeChange}
+            onBenchEndDateSelected={handlebenEndTimeChange}
           ></GanttFilter>
         </div>
 

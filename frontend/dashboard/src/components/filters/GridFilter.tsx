@@ -1,6 +1,6 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import { styled } from "@mui/system";
 import Popover from "@mui/material/Popover";
 import SearchBar from "../generics/SearchBar";
@@ -22,6 +22,11 @@ import {
   StyledDatepickerContainer,
   StyledHeading,
 } from "../../utils/StyledComponents";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import { FilterColor, SecondaryColor } from "../../utils/Colors";
+import NumberField from "../generics/NumberField";
+import { useState } from "react";
+import Dropdown from "../generics/Dropdown";
 
 type ChartFilterProps = {
   onChainSelected: (chainData: {
@@ -32,6 +37,8 @@ type ChartFilterProps = {
   onEndDateSelected: (enddate: Date | null) => void;
   onBenchStartDateSelected: (sdate: Date | null) => void;
   onBenchEndDateSelected: (edate: Date | null) => void;
+  onDeviationChange: (val: any | null) => void;
+  onBenchmarkComputeChange: (val: any | null) => void;
   onCheck: (flag: any | null) => void;
 };
 
@@ -41,10 +48,14 @@ const GridFilter: React.FC<ChartFilterProps> = ({
   onEndDateSelected,
   onBenchStartDateSelected,
   onBenchEndDateSelected,
+  onDeviationChange,
   onCheck,
+  onBenchmarkComputeChange,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
+  const [deviationPercentage, setDeviationPercentage] = useState<string | null>(
+    "0"
+  );
   const selectedChainValueRef = React.useRef<{
     id: number;
     [key: string]: any;
@@ -59,6 +70,10 @@ const GridFilter: React.FC<ChartFilterProps> = ({
     selectedTaskValueRef.current = key !== null ? { key } : null;
     console.log(selectedTaskValueRef.current);
   };
+  const handleDeviationChange = (value: string | null) => {
+    setDeviationPercentage(value);
+    console.log(deviationPercentage);
+  };
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -71,10 +86,10 @@ const GridFilter: React.FC<ChartFilterProps> = ({
   const id = open ? "simple-popover" : undefined;
 
   const [startDate, setStartDate] = React.useState<Date | null>(
-    new Date(2024, 0, 17)
+    new Date(2024, 0, 10)
   );
   const [EndDate, setEndDate] = React.useState<Date | null>(
-    new Date(2024, 0, 30)
+    new Date(2024, 0, 10)
   );
   const [BenchstartDate, setBenchStartDate] = React.useState<Date | null>(
     new Date(2024, 0, 17)
@@ -85,26 +100,32 @@ const GridFilter: React.FC<ChartFilterProps> = ({
 
   const handleEndDateChange = (newDate: Date | null) => {
     setEndDate(newDate);
-    onEndDateSelected(newDate);
   };
 
   const handleStartDateChange = (newDate: Date | null) => {
     setStartDate(newDate);
-    onStartDateSelected(newDate);
   };
 
   const handleBenchStartDateChange = (newDate: Date | null) => {
     setBenchStartDate(newDate);
-    onBenchStartDateSelected(newDate);
   };
-  const [age, setAge] = React.useState("10");
+  const [age, setAge] = React.useState("30");
   const handleChange = (event: SelectChangeEvent) => {
     setAge(event.target.value as string);
   };
-
+  const benchmarkComputeOptions = [
+    {
+      text: "Average",
+      value: "Average",
+    },
+  ];
+  const [benchmarkCompute, setBenchmarkCompute] = useState("Average");
+  const onChange = (value: string) => {
+    setBenchmarkCompute(value);
+    console.log(benchmarkCompute);
+  };
   const handleBenchendDateChange = (newDate: Date | null) => {
     setBenchEndDate(newDate);
-    onBenchEndDateSelected(newDate);
   };
 
   const buttonHandler = () => {
@@ -121,14 +142,25 @@ const GridFilter: React.FC<ChartFilterProps> = ({
     if (age == "20") {
       onChainSelected({ id: 1, key: taskKey });
     }
-
+    onStartDateSelected(startDate);
+    onEndDateSelected(EndDate);
+    onBenchStartDateSelected(BenchstartDate);
+    onBenchEndDateSelected(BenchendDate);
     onCheck(age);
+    onDeviationChange(deviationPercentage);
+    onBenchmarkComputeChange(benchmarkCompute);
     handleClose();
   };
 
   return (
     <div style={{ position: "absolute", right: 60 }}>
-      <StyledButton onClick={handleClick}>Filter</StyledButton>
+      <IconButton
+        onClick={handleClick}
+        aria-label="filter"
+        sx={{ color: FilterColor }}
+      >
+        <FilterAltIcon fontSize="large"></FilterAltIcon>
+      </IconButton>
       <Popover
         keepMounted={true}
         id={id}
@@ -144,9 +176,9 @@ const GridFilter: React.FC<ChartFilterProps> = ({
           horizontal: "right",
         }}
       >
-        <StyledBox>
-          <Box sx={{ width: 300 }}>
-            <FormControl fullWidth>
+        <StyledBox style={{ height: "auto" }}>
+          <Box sx={{ width: 300, paddingLeft: "35px", paddingTop: "10px" }}>
+            <FormControl style={{ width: "475px" }}>
               <InputLabel id="demo-simple-select-label">
                 Select Filter Criteria
               </InputLabel>
@@ -159,14 +191,14 @@ const GridFilter: React.FC<ChartFilterProps> = ({
               >
                 <MenuItem value={10}>Filter By Chain</MenuItem>
                 <MenuItem value={20}>Filter By Task</MenuItem>
+                <MenuItem value={30}>All Chains & Tasks</MenuItem>
               </Select>
             </FormControl>
           </Box>
 
           <div>
             {age == "20" ? (
-              <div>
-                <StyledHeading>Select Task Name :</StyledHeading>
+              <div style={{ paddingTop: "10px" }}>
                 <SearchbarTask
                   fetchDataFunction={() => Tasknames({ chain_id: 0 })}
                   nameParam="task_name"
@@ -174,9 +206,8 @@ const GridFilter: React.FC<ChartFilterProps> = ({
                   onSearch={TaskhandleSearch}
                 />
               </div>
-            ) : (
-              <div>
-                <StyledHeading>Select Chain Name :</StyledHeading>
+            ) : age == "10" ? (
+              <div style={{ paddingTop: "10px" }}>
                 <SearchBar
                   fetchDataFunction={AllData}
                   nameParam="chain_name"
@@ -185,10 +216,11 @@ const GridFilter: React.FC<ChartFilterProps> = ({
                   idParam="chain_id"
                 />
               </div>
+            ) : (
+              <div></div>
             )}
           </div>
 
-          <StyledHeading>Select Duration :</StyledHeading>
           <StyledDatepickerContainer>
             <Datepicker
               name="Start Date"
@@ -202,22 +234,49 @@ const GridFilter: React.FC<ChartFilterProps> = ({
             />
           </StyledDatepickerContainer>
 
-          <StyledHeading>Select Benchmark Duration :</StyledHeading>
           <StyledDatepickerContainer>
             <Datepicker
-              name="Start Date"
+              name="Benchmark Start Date"
               selectedDate={BenchstartDate}
               onDateChange={handleBenchStartDateChange}
             />
             <Datepicker
-              name="End Date"
+              name="Benchmark End Date"
               selectedDate={BenchendDate}
               onDateChange={handleBenchendDateChange}
             />
           </StyledDatepickerContainer>
-          <StyledButton onClick={buttonHandler} style={{ marginRight: 10 }}>
-            SUBMIT
+          <StyledDatepickerContainer>
+            <div style={{paddingLeft:37,marginBottom:56}}>
+            <NumberField
+              name="Deviation % "
+              value={deviationPercentage}
+              onChange={handleDeviationChange}
+            ></NumberField>
+            </div>
+            <div style={{ paddingTop: 18, paddingRight: 36 }}>
+              <Dropdown
+                name="Benchmark Compute"
+                benchmarkComputeOptions={benchmarkComputeOptions}
+                onChange={onChange}
+              ></Dropdown>
+            </div>
+          </StyledDatepickerContainer>
+          <div
+            style={{
+              position: "absolute",
+              bottom: "10px",
+              right: "45px",
+              zIndex: 999,
+            }}
+          >
+            <StyledButton onClick={buttonHandler} style={{ marginRight: 5 }}>
+              SUBMIT
+            </StyledButton>
+            <StyledButton autoFocus onClick={handleClose}>
+            Cancel
           </StyledButton>
+          </div>
         </StyledBox>
       </Popover>
     </div>

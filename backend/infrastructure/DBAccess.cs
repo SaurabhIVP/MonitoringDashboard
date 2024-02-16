@@ -3,6 +3,7 @@ using System.Data;
 using System.Threading.Tasks;
 using Dapper;
 using domain;
+using System.Globalization;
 
 namespace infrastructure;
 public class DBAccess : IDBAccess
@@ -18,9 +19,19 @@ public class DBAccess : IDBAccess
     {
         return await _dbConnection.QueryAsync<Tasks>("SP_GetGanttDetails", commandType: CommandType.StoredProcedure);
     }
-    public async Task<IEnumerable<Tasks>> GetAllChainDetailsAsync1()
+    public async Task<IEnumerable<Tasks>> GetAllChainDetailsAsync1(DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null)
     {
-        return await _dbConnection.QueryAsync<Tasks>("SP_GetAllChainDetails1", commandType: CommandType.StoredProcedure);
+        var parameters = new
+        {
+            startDate = startDate,
+            endDate = endDate,
+            benchStartDate = benchStartDate,
+            benchEndDate = benchEndDate,
+            benchmarkCompute = benchmarkCompute,
+            deviationPercentage = deviationPercentage
+        };
+
+        return await _dbConnection.QueryAsync<Tasks>("SP_GetAllChainDetails1", parameters,commandType: CommandType.StoredProcedure);
     }
     public async Task<IEnumerable<Tasks>> GetAllChainNamesAsync()
     {
@@ -42,10 +53,22 @@ public class DBAccess : IDBAccess
         var parameters=new {taskname=taskname,chainname=chainname};
         return await _dbConnection.QueryAsync<Tasks>("SP_GetFlowIdByChainTaskNames",parameters, commandType: CommandType.StoredProcedure);
     }
-    public async Task<IEnumerable<Tasks>> GetGanttDetailsAsync(string chains=null ,string? start_time=null,string? end_time=null,DateTime? date=null)
+    public async Task<IEnumerable<GanttData>> GetGanttDetailsAsync(string chains=null ,string? start_time="00:00:00.0000000",string? end_time="23:59:59.9999999",string? date="2024-01-17",string? benchStartDate = "2024-01-17", string? benchEndDate = "2024-01-24")
     {
-        var parameters = new { chains = chains, starttime = start_time, endtime = end_time,date=date };
-        return await _dbConnection.QueryAsync<Tasks>("SP_GetGanttDetails", parameters, commandType: CommandType.StoredProcedure);
+        DateTime pardsedDate=DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+        DateTime parsedStartDate = DateTime.ParseExact(benchStartDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+DateTime parsedEndDate = DateTime.ParseExact(benchEndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+    var parameters = new
+    {
+        chains = chains,
+        
+        date = pardsedDate,
+        benstartdate = parsedStartDate,
+        benenddate = parsedEndDate
+    };
+
+    return await _dbConnection.QueryAsync<GanttData>("SP_GetGanttDetails", parameters, commandType: CommandType.StoredProcedure);
     }
     public async Task<IEnumerable<Tasks>> GetChainTimeDetailsAsync(int chain_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null)
     {
@@ -60,7 +83,7 @@ public class DBAccess : IDBAccess
 
         return await _dbConnection.QueryAsync<Tasks>("SP_GetChainTimeDetails", parameters, commandType: CommandType.StoredProcedure);
     }
-    public async Task<IEnumerable<Tasks>> GetChainDetailsAsync(int chain_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null)
+    public async Task<IEnumerable<Tasks>> GetChainDetailsAsync(int chain_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null)
     {
         var parameters = new
         {
@@ -68,12 +91,14 @@ public class DBAccess : IDBAccess
             startDate = startDate,
             endDate = endDate,
             benchStartDate = benchStartDate,
-            benchEndDate = benchEndDate
+            benchEndDate = benchEndDate,
+            benchmarkCompute = benchmarkCompute,
+            deviationPercentage = deviationPercentage
         };
 
         return await _dbConnection.QueryAsync<Tasks>("SP_GetChainDetails", parameters, commandType: CommandType.StoredProcedure);
     }
-     public async Task<IEnumerable<Tasks>> GetChainDetailsByTasknamesAsync(string tasknames, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null)
+     public async Task<IEnumerable<Tasks>> GetChainDetailsByTasknamesAsync(string tasknames, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null)
     {
         var parameters = new
         {
@@ -81,7 +106,9 @@ public class DBAccess : IDBAccess
             startDate = startDate,
             endDate = endDate,
             benchStartDate = benchStartDate,
-            benchEndDate = benchEndDate
+            benchEndDate = benchEndDate,
+            benchmarkCompute = benchmarkCompute,
+            deviationPercentage = deviationPercentage
         };
 
         return await _dbConnection.QueryAsync<Tasks>("SP_GetChainDetailsByTaskNames", parameters, commandType: CommandType.StoredProcedure);
@@ -99,14 +126,17 @@ public class DBAccess : IDBAccess
 
         return await _dbConnection.QueryAsync<Tasks>("SP_GetTaskTimeDetails", parameters, commandType: CommandType.StoredProcedure);
     }
-    public async Task<IEnumerable<Tasks>> GetTaskDetailsAsync(int chain_id, DateTime? startTime = null, DateTime? endTime = null)
+    public async Task<IEnumerable<Tasks>> GetTaskDetailsAsync(int chain_id,DateTime? startTime = null,DateTime? endTime=null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null)
     {
         var parameters = new
         {
             chainId = chain_id,
             starttime = startTime,
-            endtime=endTime
-            
+            endtime=endTime,
+            benchStartDate = benchStartDate,
+            benchEndDate = benchEndDate,
+            benchmarkCompute = benchmarkCompute,
+            deviationPercentage = deviationPercentage
         };
 
         return await _dbConnection.QueryAsync<Tasks>("SP_GetTaskDetails", parameters, commandType: CommandType.StoredProcedure);

@@ -62,7 +62,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
             },
           }}
         >
-          Monitoring Dashboard
+          TASKMASTER
         </Typography>
         <Tabs value={selectedTab} onChange={handleTabChange}>
           <Tab
@@ -70,15 +70,15 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
             value={0}
             component={Link}
             to="/"
-            style={{ color: tabColors[0] ,fontFamily :'sans-serif'}}
+            style={{ color: tabColors[0] ,fontFamily :'sans-serif',fontWeight:'bold'}}
             onClick={()=>handleTabClick(0)}
           />
           <Tab
-            label="Gantt Chart"
+            label="Daily Gantt"
             value={1}
             component={Link}
             to="/gantt"
-            style={{ color: tabColors[1] ,fontFamily :'sans-serif' }}
+            style={{ color: tabColors[1] ,fontFamily :'sans-serif' ,fontWeight:'bold'}}
             onClick={()=>handleTabClick(1)}
           />
           <Tab
@@ -86,7 +86,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
             value={2}
             component={Link}
             to="/charts"
-            style={{ color: tabColors[2] ,fontFamily :'sans-serif' }}
+            style={{ color: tabColors[2] ,fontFamily :'sans-serif' ,fontWeight:'bold'}}
             onClick={()=>handleTabClick(2)}
           />
         </Tabs>

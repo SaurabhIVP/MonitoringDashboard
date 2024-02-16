@@ -7,7 +7,9 @@ import {
   StyledDatepickerContainer,
   StyledHeading,
 } from "../../utils/StyledComponents";
-
+import { IconButton } from "@mui/material";
+import { FilterColor, SecondaryColor } from "../../utils/Colors";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 type ChartFilterProps = {
   onStartDateSelected: (startdate: Date | null) => void;
   onEndDateSelected: (enddate: Date | null) => void;
@@ -48,26 +50,35 @@ const DateFilters: React.FC<ChartFilterProps> = ({
 
   const handleEndDateChange = (newDate: Date | null) => {
     setEndDate(newDate);
-    onEndDateSelected(newDate);
   };
 
   const handleStartDateChange = (newDate: Date | null) => {
     setStartDate(newDate);
-    onStartDateSelected(newDate);
   };
 
   const handleBenchStartDateChange = (newDate: Date | null) => {
     setBenchStartDate(newDate);
-    onBenchStartDateSelected(newDate);
   };
 
   const handleBenchendDateChange = (newDate: Date | null) => {
     setBenchEndDate(newDate);
-    onBenchEndDateSelected(newDate);
+  };
+  const buttonHandler = () => {
+    onStartDateSelected(startDate);
+    onEndDateSelected(EndDate);
+    onBenchStartDateSelected(BenchstartDate);
+    onBenchEndDateSelected(BenchendDate);
+    handleClose();
   };
   return (
     <div style={{ position: "absolute", right: 60 }}>
-      <StyledButton onClick={handleClick}>Filter</StyledButton>
+      <IconButton
+        onClick={handleClick}
+        aria-label="filter"
+        sx={{ color: FilterColor }}
+      >
+        <FilterAltIcon fontSize="large"></FilterAltIcon>
+      </IconButton>
       <Popover
         id={id}
         open={open}
@@ -82,8 +93,7 @@ const DateFilters: React.FC<ChartFilterProps> = ({
           horizontal: "right",
         }}
       >
-        <StyledBox>
-          <StyledHeading>Select Duration :</StyledHeading>
+        <StyledBox height={"215px"}>
           <StyledDatepickerContainer>
             <Datepicker
               name="Start Date"
@@ -96,19 +106,31 @@ const DateFilters: React.FC<ChartFilterProps> = ({
               onDateChange={handleEndDateChange}
             />
           </StyledDatepickerContainer>
-          <StyledHeading>Select Benchmark Duration :</StyledHeading>
+
           <StyledDatepickerContainer>
             <Datepicker
-              name="Start Date"
+              name="Benchmark Start Date"
               selectedDate={BenchstartDate}
               onDateChange={handleBenchStartDateChange}
             />
             <Datepicker
-              name="End Date"
+              name="Benchmark End Date"
               selectedDate={BenchendDate}
               onDateChange={handleBenchendDateChange}
             />
           </StyledDatepickerContainer>
+          <div
+            style={{
+              position: "absolute",
+              bottom: "5px",
+              right: "45px",
+              zIndex: 999,
+            }}
+          >
+            <StyledButton onClick={buttonHandler} style={{ marginRight: 0 }}>
+              SUBMIT
+            </StyledButton>
+          </div>
         </StyledBox>
       </Popover>
     </div>

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-
+import NavigationIcon from "@mui/icons-material/Navigation";
+import { IconButton } from "@mui/material";
+import { SecondaryColor } from "../../utils/Colors";
 interface ScrollTopProps {
   targetClass: string; // Class of the target element
 }
@@ -44,22 +46,39 @@ const ScrollTop: React.FC<ScrollTopProps> = ({ targetClass }) => {
   return (
     <>
       {isVisible && (
-        <div
+        // <div
+        //   onClick={scrollToTop}
+        // style={{
+        //   position: "fixed",
+        //   bottom: "20px",
+        //   right: "20px",
+        //   cursor: "pointer",
+        //   backgroundColor: "#778899",
+        //   color: "white",
+        //   borderRadius: "10px",
+        //   padding: "10px",
+        //   zIndex: 1000,
+        // }}
+        // >
+        //   Scroll Top
+        // </div>
+        <IconButton
           onClick={scrollToTop}
-          style={{
+          aria-label="filter"
+          sx={{
             position: "fixed",
             bottom: "20px",
             right: "20px",
             cursor: "pointer",
-            backgroundColor: "#778899",
+            backgroundColor: SecondaryColor,
             color: "white",
-            borderRadius: "10px",
+            borderRadius: "40px",
             padding: "10px",
             zIndex: 1000,
           }}
         >
-          Scroll Top
-        </div>
+          <NavigationIcon></NavigationIcon>
+        </IconButton>
       )}
     </>
   );

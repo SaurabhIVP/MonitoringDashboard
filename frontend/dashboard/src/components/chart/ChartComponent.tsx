@@ -54,6 +54,7 @@ const ChainChart: React.FC<BasicLineChartProps> = ({
         fill: false,
         borderColor: PrimaryColor,
         tension: 0.1,
+        pointRadius: 2
       },
       {
         label: "Benchmark Time",
@@ -61,6 +62,8 @@ const ChainChart: React.FC<BasicLineChartProps> = ({
         fill: false,
         borderColor: "blue",
         tension: 0.1,
+        pointRadius: 0
+        
       },
     ],
   };
@@ -72,6 +75,11 @@ const ChainChart: React.FC<BasicLineChartProps> = ({
         options={{
           layout: {},
           maintainAspectRatio: false,
+          // elements:{
+          //   point:{
+          //     radius:2
+          //   }
+          // },
           scales: {
             x: {
               type:'time',

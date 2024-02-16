@@ -12,7 +12,9 @@ import {
   StyledButton,
   StyledHeading,
 } from "../../utils/StyledComponents";
-
+import { IconButton } from "@mui/material";
+import { FilterColor, SecondaryColor } from "../../utils/Colors";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 type ChartFilterProps = {
   onTaskSelected: (id: number, key: string) => void;
   onStartDateSelected: (startdate: Date | null) => void;
@@ -73,22 +75,22 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
   );
   const handleEndDateChange = (newDate: Date | null) => {
     setEndDate(newDate);
-    onEndDateSelected(newDate);
+    
   };
 
   const handleStartDateChange = (newDate: Date | null) => {
     setStartDate(newDate);
-    onStartDateSelected(newDate);
+    
   };
 
   const handleBenchStartDateChange = (newDate: Date | null) => {
     setBenchStartDate(newDate);
-    onBenchStartDateSelected(newDate);
+    
   };
 
   const handleBenchendDateChange = (newDate: Date | null) => {
     setBenchEndDate(newDate);
-    onBenchEndDateSelected(newDate);
+    
   };
 
   const [flowId, setFlowId] = React.useState(0);
@@ -114,12 +116,22 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
 
   const buttonHandler = () => {
     onTaskSelected(flowId, selectedChainValue?.key);
+    onStartDateSelected(startDate);
+    onEndDateSelected(EndDate);
+    onBenchStartDateSelected(BenchstartDate);
+    onBenchEndDateSelected(BenchendDate);
     handleClose();
   };
 
   return (
     <div style={{}}>
-      <StyledButton onClick={handleClick}>Filter</StyledButton>
+      <IconButton
+        onClick={handleClick}
+        aria-label="filter"
+        sx={{ color: FilterColor }}
+      >
+        <FilterAltIcon fontSize="large"></FilterAltIcon>
+      </IconButton>
       <Popover
         id={id}
         keepMounted={true}
@@ -135,7 +147,7 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
           horizontal: "right",
         }}
       >
-        <StyledBox>
+        <StyledBox height={"540px"}>
           <StyledHeading>Select Task Name:</StyledHeading>
           <SearchBar
             fetchDataFunction={() => Tasknames({ chain_id: 0 })}
@@ -198,7 +210,7 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
               onDateChange={handleBenchendDateChange}
             />
           </div>
-          <Button
+          {/* <Button
             onClick={buttonHandler}
             style={{
               fontWeight: "bold",
@@ -208,8 +220,25 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
             }}
           >
             SUBMIT
-          </Button>
+          </Button> */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "5px",
+              right: "45px",
+              zIndex: 999,
+            }}
+          >
+          <StyledButton onClick={buttonHandler} style={{ marginRight: 5 }}>
+              SUBMIT
+            </StyledButton>
+            <StyledButton autoFocus onClick={handleClose}>
+            Cancel
+          </StyledButton>
+            </div>
+            
         </StyledBox>
+        
       </Popover>
     </div>
   );

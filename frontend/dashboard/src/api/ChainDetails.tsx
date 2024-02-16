@@ -6,6 +6,8 @@ interface ChainDetailsProps {
   endDate?: any | null;
   benchStartDate?: any | null;
   benchEndDate?: any | null;
+  benchmarkCompute?:any |null;
+  deviationPercentage?:any |null;
 }
 const API_URL = process.env.REACT_APP_API_BASE_URL;
 async function ChainDetails({
@@ -14,12 +16,18 @@ async function ChainDetails({
   endDate,
   benchStartDate,
   benchEndDate,
+  benchmarkCompute,
+  deviationPercentage
 }: ChainDetailsProps) {
   try {
     const startInProperFormat = DateConversion(startDate);
     const endInProperFormat = DateConversion(endDate);
     const benchmarkStartInProperFormat = DateConversion(benchStartDate);
     const benchmarkEndInProperFormat = DateConversion(benchEndDate);
+    if (deviationPercentage == undefined || deviationPercentage == "" || deviationPercentage == null )
+    {
+      deviationPercentage=0;
+    }
     const url = `${API_URL}/chaindetails/${chain_id}`;
     const params = {
       
@@ -27,6 +35,8 @@ async function ChainDetails({
       endDate: endInProperFormat,
       benchStartDate: benchmarkStartInProperFormat,
       benchEndDate: benchmarkEndInProperFormat,
+      benchmarkCompute: benchmarkCompute,
+      deviationPercentage: deviationPercentage
     };
     console.log(params);
     const response = await axios.get(url, { params });

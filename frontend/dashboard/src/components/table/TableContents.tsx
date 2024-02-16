@@ -9,10 +9,10 @@ export const chainLabels = [
   
   export const chainHeaders = [
     "Chain Name",
-    "Chain Start Time",
-    "Chain End Time",
-    "Chain Instance Duration",
-    "Benchmark Duration",
+    "Start Time",
+    "End Time",
+    "Total Time",
+    "Benchmark Time",
     "Deviation",
     
   ];
@@ -28,10 +28,10 @@ export const chainLabels = [
   ]
   export const TaskHeaders=[
     "Task Name",
-    "Task Start Time",
-    "Task End Time",
-    "Task Instance Duration",
-    "Benchmark Duration",
+    "Start Time",
+    "End Time",
+    "Total Time",
+    "Benchmark Time",
     "Deviation",
     
     

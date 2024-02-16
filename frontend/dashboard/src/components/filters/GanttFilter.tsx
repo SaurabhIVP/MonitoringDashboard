@@ -2,11 +2,13 @@ import * as React from "react";
 import Popover from "@mui/material/Popover";
 import AllData from "../../api/GetAllChainNames";
 import Datepicker from "../generics/Datepicker";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import MultiSelect from "../generics/MultiSelect";
-import { LocalizationProvider } from "@mui/x-date-pickers";
+import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+
+
 import {
   StyledBox,
   StyledButton,
@@ -14,6 +16,10 @@ import {
   StyledHeading,
 } from "../../utils/StyledComponents";
 import TimeFormatter from "../../utils/HHMMSSConverter";
+import { IconButton } from "@mui/material";
+import { FilterColor, SecondaryColor } from "../../utils/Colors";
+import dayjs from "dayjs";
+import { useState } from "react";
 
 type ChartFilterProps = {
   onFilter: (val: boolean) => void;
@@ -45,10 +51,11 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
   const [startDate, setStartDate] = React.useState<Date | null>(
-    new Date(2024, 0, 17)
+    new Date(2024, 0, 24)
   );
+  const [value, onChange] = useState<any | null>("10:00");
   const [startTime, setStartTime] = React.useState<any | null>("00:00:00");
-  const [endTime, setEndTime] = React.useState<any | null>("23:59:59");
+  const [endTime, setEndTime] = React.useState<any | null>("24:00:00");
   const [BenchstartDate, setBenchStartDate] = React.useState<Date | null>(
     new Date(2024, 0, 17)
   );
@@ -85,7 +92,13 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
   };
   return (
     <div style={{ position: "absolute", right: 60 }}>
-      <StyledButton onClick={handleClick}>Filter</StyledButton>
+      <IconButton
+        onClick={handleClick}
+        aria-label="filter"
+        sx={{ color: FilterColor }}
+      >
+        <FilterAltIcon fontSize="large"></FilterAltIcon>
+      </IconButton>
       <Popover
         keepMounted={true}
         id={id}
@@ -101,9 +114,15 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
           horizontal: "right",
         }}
       >
-        <StyledBox>
-          <StyledHeading>Select Chain Name :</StyledHeading>
-          <div>
+        <StyledBox style={{height:'360px'}}>
+        <StyledDatepickerContainer>
+            <Datepicker
+              name="Date"
+              selectedDate={startDate}
+              onDateChange={handleStartDateChange}
+            />
+          </StyledDatepickerContainer>
+          <div style={{marginBottom:'10px',paddingLeft:'40px'}}>
             <MultiSelect
               fetchDataFunction={AllData}
               NameParam="chain_name"
@@ -112,36 +131,34 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
             ></MultiSelect>
           </div>
 
-          <StyledHeading>Select Date :</StyledHeading>
-          <StyledDatepickerContainer>
-            <Datepicker
-              name="Date"
-              selectedDate={startDate}
-              onDateChange={handleStartDateChange}
-            />
-          </StyledDatepickerContainer>
-          <StyledHeading>Select Duration :</StyledHeading>
-          <StyledDatepickerContainer>
+          
+          
+          
+          <StyledDatepickerContainer style={{paddingLeft:'40px',paddingRight:'40px'}}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={["TimePicker"]}>
-                <TimePicker
+              <DemoContainer components={["TimePicker"]} sx={{width:'200px'}}>
+                 <TimePicker
                   label="Start Time"
-                  value={startTime}
+                  value={startTime }
+                  format="HH:mm:ss"
+                  
                   onChange={handleStartTimeChange}
                   
                 />
               </DemoContainer>
-              <DemoContainer components={["TimePicker"]}>
+              <DemoContainer components={["TimePicker"]} sx={{width:'200px'}}>
                 <TimePicker
                   label="End Time"
+                  format="HH:mm:ss"
                   value={endTime}
                   onChange={handleEndTimeChange}
                 />
-              </DemoContainer>
+              </DemoContainer> 
+              
             </LocalizationProvider>
           </StyledDatepickerContainer>
 
-          <StyledHeading>Select Benchmark Duration :</StyledHeading>
+          
           <StyledDatepickerContainer>
             <Datepicker
               name="Start Date"
@@ -154,10 +171,14 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
               onDateChange={handleBenchendDateChange}
             />
           </StyledDatepickerContainer>
-
-          <StyledButton onClick={buttonHandler} style={{ marginRight: 10 }}>
+          <div style={{ position: "absolute", bottom: "5px", right: "45px", zIndex: 999}}>
+          <StyledButton  onClick={buttonHandler} style={{ marginRight: 5 }}>
             SUBMIT
           </StyledButton>
+          <StyledButton autoFocus onClick={handleClose}>
+            Cancel
+          </StyledButton>
+          </div>
         </StyledBox>
       </Popover>
     </div>

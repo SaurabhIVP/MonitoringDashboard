@@ -59,7 +59,7 @@ const SearchbarTask: React.ForwardRefRenderFunction<SearchBarRef,SearchBarProps>
   return (
     <>
     <div onClick={handleClick} onKeyDown={handleClick}>
-    <Stack spacing={2} width={"500px"} >
+    <Stack spacing={2}  width={"475px"} paddingLeft={"35px"} >
         {data && (
            <Autocomplete
            options={data}

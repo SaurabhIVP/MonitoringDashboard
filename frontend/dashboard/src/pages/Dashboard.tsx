@@ -6,7 +6,7 @@ import CurrentData from "../api/CurrentData";
 import TaskDetails from "../api/TaskDetails";
 import GridFilter from "../components/filters/GridFilter";
 import ChainDetailsByTaskname from "../api/ChainDetailsByTaskname";
-
+import { Paper } from "@mui/material";
 
 function Dashboard() {
   const [selectedChainValue, setSelectedChainValue] = useState<{
@@ -17,9 +17,16 @@ function Dashboard() {
     [key: string]: any;
   } | null>(null);
   const [startDate, setStartDate] = useState<Date | null>(
-    new Date(2024, 0, 20)
+    new Date(2024, 0, 10)
   );
-  const [EndDate, setEndDate] = useState<Date | null>(new Date(2024, 0, 27));
+  const [deviationPercentage, setDeviationPercentage] = useState<string | null>(
+    "0"
+  );
+  const handleDeviationChange = (value: string | null) => {
+    setDeviationPercentage(value);
+    console.log(deviationPercentage);
+  };
+  const [EndDate, setEndDate] = useState<Date | null>(new Date(2024, 0, 10));
   const [BenchstartDate, setBenchStartDate] = useState<Date | null>(
     new Date(2024, 0, 20)
   );
@@ -49,17 +56,24 @@ function Dashboard() {
     setSelectedChainValue(chainData);
     console.log(selectedChainValue?.key);
   };
+  const [benchmarkCompute, setBenchmarkCompute] = useState("Average");
+  const handleBenchmarkCompute = (value: string) => {
+    setBenchmarkCompute(value);
+    console.log(benchmarkCompute);
+  };
   return (
     <>
+    <Paper elevation={3} style={{ padding: 20, marginBottom: 20 }}>
       <div
         style={{
           paddingBottom: "2%",
-          paddingTop: "4%",
+          paddingTop: "5%",
           right: 0,
           // display: "flex",
           // justifyContent: "flex-end",
         }}
       >
+        
         <GridFilter
           onChainSelected={handleChainSelected}
           onStartDateSelected={handleStartDateChange}
@@ -67,6 +81,8 @@ function Dashboard() {
           onBenchStartDateSelected={handleBenchStartDateChange}
           onBenchEndDateSelected={handleBenchendDateChange}
           onCheck={handleAgeChange}
+          onDeviationChange={handleDeviationChange}
+          onBenchmarkComputeChange={handleBenchmarkCompute}
         ></GridFilter>
       </div>
 
@@ -81,6 +97,8 @@ function Dashboard() {
                 endDate: EndDate,
                 benchStartDate: BenchstartDate,
                 benchEndDate: BenchendDate,
+                benchmarkCompute: benchmarkCompute,
+                deviationPercentage: deviationPercentage,
               });
             } else if (age == "20" && selectedChainValue?.key) {
               return ChainDetailsByTaskname({
@@ -89,9 +107,18 @@ function Dashboard() {
                 endDate: EndDate,
                 benchStartDate: BenchstartDate,
                 benchEndDate: BenchendDate,
+                benchmarkCompute:benchmarkCompute,
+                deviationPercentage:deviationPercentage
               });
             } else {
-              return CurrentData();
+              return CurrentData({
+                startDate: startDate,
+                endDate: EndDate,
+                benchStartDate: BenchstartDate,
+                benchEndDate: BenchendDate,
+                benchmarkCompute: benchmarkCompute,
+                deviationPercentage: deviationPercentage,
+              });
             }
           }}
           taskDetailsFunction={async (params) =>
@@ -99,10 +126,16 @@ function Dashboard() {
               chain_id: params.chain_id,
               startTime: params.startTime,
               endTime: params.endTime,
+              benchStartDate: BenchstartDate,
+              benchEndDate: BenchendDate,
+              benchmarkCompute: benchmarkCompute,
+              deviationPercentage: deviationPercentage,
             })
           }
         ></CollapsibleTable>
+        
       </div>
+      </Paper>
     </>
   );
 }

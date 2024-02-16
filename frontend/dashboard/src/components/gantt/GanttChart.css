@@ -1,11 +1,11 @@
 .legend{
-    width: 40px;
+    width: 20px;
     height: 10px;
-    margin-right:10px;
-    border-radius:10px
+    margin-right:5px;
+    border-radius:5px
 }
 .legend-title{
-    margin-right: 10%;
+    margin-right: 5%;
 }
 .legend-box{
     display: flex;
@@ -23,7 +23,7 @@
     padding-bottom: 1%
 }
 .chartCard{
-    height: 475px;
+    height: 470px;
      overflow-y: scroll;
       position: relative
 }
