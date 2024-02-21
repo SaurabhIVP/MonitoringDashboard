@@ -32,8 +32,8 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
   };
   return (
     <AppBar position="fixed" style={{ backgroundColor: PrimaryColor }}>
-      <Toolbar variant="dense">
-        <Link to="/" style={{ color: "white" }}>
+      <Toolbar variant="dense"  sx={{ justifyContent: "space-between" }}>
+      <Link to="/" style={{ display: "flex", alignItems: "center", color: "white", textDecoration: "none" }}>
           <IconButton
             size="large"
             edge="start"
@@ -42,28 +42,25 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
           >
             <AnalyticsIcon sx={{ fontSize: "3rem" }} />
           </IconButton>
+          <Typography
+            variant="h6"
+            color="white"
+            sx={{
+              fontSize: "1.5rem",
+              fontWeight: "bold",
+              textTransform: "uppercase",
+              letterSpacing: "0.1em",
+              margin: "0.5rem",
+              textAlign: "left",
+              transition: "color 0.3s ease",
+              "&:hover": {
+                color: "#F2CE72",
+              },
+            }}
+          >
+            TASKMASTER
+          </Typography>
         </Link>
-
-        <Typography
-          variant="h6"
-          color="white"
-          sx={{
-            flexGrow: 1,
-            paddingLeft: 4,
-            fontSize: "1.5rem",
-            fontWeight: "bold",
-            textTransform: "uppercase",
-            letterSpacing: "0.1em",
-            margin: "0.5rem",
-            textAlign: "left",
-            transition: "color 0.3s ease",
-            "&:hover": {
-              color: "#388087",
-            },
-          }}
-        >
-          TASKMASTER
-        </Typography>
         <Tabs value={selectedTab} onChange={handleTabChange}>
           <Tab
             label="Home"

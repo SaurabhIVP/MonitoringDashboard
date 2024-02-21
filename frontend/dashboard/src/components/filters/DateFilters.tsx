@@ -10,6 +10,7 @@ import {
 import { IconButton } from "@mui/material";
 import { FilterColor, SecondaryColor } from "../../utils/Colors";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import { FilterButton } from "../generics/FilterButton";
 type ChartFilterProps = {
   onStartDateSelected: (startdate: Date | null) => void;
   onEndDateSelected: (enddate: Date | null) => void;
@@ -70,15 +71,17 @@ const DateFilters: React.FC<ChartFilterProps> = ({
     onBenchEndDateSelected(BenchendDate);
     handleClose();
   };
+  const isEndDateValid =
+    startDate === null ||
+    EndDate === null ||
+    (startDate !== null && EndDate !== null && EndDate >= startDate);
+  const isBenchEndDateValid =
+  BenchstartDate === null ||
+  BenchendDate === null ||
+  (BenchstartDate !== null && BenchendDate !== null && BenchendDate >= BenchstartDate);
   return (
     <div style={{ position: "absolute", right: 60 }}>
-      <IconButton
-        onClick={handleClick}
-        aria-label="filter"
-        sx={{ color: FilterColor }}
-      >
-        <FilterAltIcon fontSize="large"></FilterAltIcon>
-      </IconButton>
+      <FilterButton ariaLabel="" onClick={handleClick}></FilterButton>
       <Popover
         id={id}
         open={open}
@@ -93,30 +96,34 @@ const DateFilters: React.FC<ChartFilterProps> = ({
           horizontal: "right",
         }}
       >
-        <StyledBox height={"215px"}>
+        <StyledBox height={"auto"}>
           <StyledDatepickerContainer>
             <Datepicker
               name="Start Date"
               selectedDate={startDate}
               onDateChange={handleStartDateChange}
+              flag={isEndDateValid}
             />
             <Datepicker
               name="End Date"
               selectedDate={EndDate}
               onDateChange={handleEndDateChange}
+              flag={isEndDateValid}
             />
           </StyledDatepickerContainer>
 
-          <StyledDatepickerContainer>
+          <StyledDatepickerContainer style={{paddingBottom:40}}>
             <Datepicker
               name="Benchmark Start Date"
               selectedDate={BenchstartDate}
               onDateChange={handleBenchStartDateChange}
+              flag={isBenchEndDateValid}
             />
             <Datepicker
               name="Benchmark End Date"
               selectedDate={BenchendDate}
               onDateChange={handleBenchendDateChange}
+              flag={isBenchEndDateValid}
             />
           </StyledDatepickerContainer>
           <div

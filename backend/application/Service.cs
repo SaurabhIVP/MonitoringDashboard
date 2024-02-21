@@ -44,6 +44,9 @@ public class Service : IService
     public async Task<IEnumerable<Tasks>> GetChainDetailsAsync(int chain_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null){
         return await _dbAccess.GetChainDetailsAsync(chain_id,startDate,endDate, benchStartDate, benchEndDate,benchmarkCompute,deviationPercentage);
     }
+    public async Task<IEnumerable<Tasks>> GetChainDetailsNewAsync(int chain_id=0, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null){
+        return await _dbAccess.GetChainDetailsNewAsync(chain_id,startDate,endDate, benchStartDate, benchEndDate,benchmarkCompute,deviationPercentage);
+    }
     public async Task<IEnumerable<Tasks>> GetChainDetailsByTasknamesAsync(string tasknames, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null){
         return await _dbAccess.GetChainDetailsByTasknamesAsync(tasknames,startDate,endDate, benchStartDate, benchEndDate, benchmarkCompute,deviationPercentage);
     }

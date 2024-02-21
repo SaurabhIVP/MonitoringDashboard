@@ -20,6 +20,7 @@ public class Tasks
     public string chain_guid { get; set; }
     public string total_times { get; set; }
     public string avg_total_time { get; set; }
+    public string deviation_in_time { get; set; }
 
 
 }

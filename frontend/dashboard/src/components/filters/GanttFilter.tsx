@@ -20,6 +20,7 @@ import { IconButton } from "@mui/material";
 import { FilterColor, SecondaryColor } from "../../utils/Colors";
 import dayjs from "dayjs";
 import { useState } from "react";
+import { FilterButton } from "../generics/FilterButton";
 
 type ChartFilterProps = {
   onFilter: (val: boolean) => void;
@@ -53,11 +54,13 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
   const [startDate, setStartDate] = React.useState<Date | null>(
     new Date(2024, 0, 24)
   );
+  const minTime = dayjs().startOf('day');
+  const maxTime = dayjs().endOf('day');
   const [value, onChange] = useState<any | null>("10:00");
-  const [startTime, setStartTime] = React.useState<any | null>("00:00:00");
-  const [endTime, setEndTime] = React.useState<any | null>("24:00:00");
+  const [startTime, setStartTime] = React.useState<any | null>(minTime);
+  const [endTime, setEndTime] = React.useState<any | null>(maxTime);
   const [BenchstartDate, setBenchStartDate] = React.useState<Date | null>(
-    new Date(2024, 0, 17)
+    new Date(2024, 0, 1)
   );
   const [BenchendDate, setBenchEndDate] = React.useState<Date | null>(
     new Date(2024, 0, 24)
@@ -77,6 +80,10 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
   const handleBenchendDateChange = (newDate: Date | null) => {
     setBenchEndDate(newDate);
   };
+  const isBenchEndDateValid =
+  BenchstartDate === null ||
+  BenchendDate === null ||
+  (BenchstartDate !== null && BenchendDate !== null && BenchendDate >= BenchstartDate);
   const buttonHandler = () => {
     onFilter(true);
     onStartTimeSelected(startTime);
@@ -91,14 +98,8 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
     setMultichains(values);
   };
   return (
-    <div style={{ position: "absolute", right: 60 }}>
-      <IconButton
-        onClick={handleClick}
-        aria-label="filter"
-        sx={{ color: FilterColor }}
-      >
-        <FilterAltIcon fontSize="large"></FilterAltIcon>
-      </IconButton>
+    <div style={{ position: "absolute", left:40,paddingTop:'5px' }}>
+      <FilterButton ariaLabel="" onClick={handleClick}></FilterButton>
       <Popover
         keepMounted={true}
         id={id}
@@ -114,12 +115,13 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
           horizontal: "right",
         }}
       >
-        <StyledBox style={{height:'360px'}}>
+        <StyledBox style={{height:"auto"}}>
         <StyledDatepickerContainer>
             <Datepicker
               name="Date"
               selectedDate={startDate}
               onDateChange={handleStartDateChange}
+              flag={true}
             />
           </StyledDatepickerContainer>
           <div style={{marginBottom:'10px',paddingLeft:'40px'}}>
@@ -134,7 +136,7 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
           
           
           
-          <StyledDatepickerContainer style={{paddingLeft:'40px',paddingRight:'40px'}}>
+          <StyledDatepickerContainer style={{paddingLeft:'40px',paddingRight:'40px',paddingTop:10}}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["TimePicker"]} sx={{width:'200px'}}>
                  <TimePicker
@@ -159,20 +161,26 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
           </StyledDatepickerContainer>
 
           
-          <StyledDatepickerContainer>
+          <StyledDatepickerContainer style={{paddingBottom:40}}>
             <Datepicker
-              name="Start Date"
+              name="Benchmark Start Date"
               selectedDate={BenchstartDate}
               onDateChange={handleBenchStartDateChange}
+              flag={isBenchEndDateValid}
             />
             <Datepicker
-              name="End Date"
+              name="Benchmark End Date"
               selectedDate={BenchendDate}
               onDateChange={handleBenchendDateChange}
+              flag={isBenchEndDateValid}
             />
           </StyledDatepickerContainer>
-          <div style={{ position: "absolute", bottom: "5px", right: "45px", zIndex: 999}}>
-          <StyledButton  onClick={buttonHandler} style={{ marginRight: 5 }}>
+          <div style={{position: "absolute",
+          
+              bottom: "10px",
+              right: "45px",
+              zIndex: 999,}}>
+          <StyledButton  onClick={buttonHandler} style={{ marginRight: 15 }}>
             SUBMIT
           </StyledButton>
           <StyledButton autoFocus onClick={handleClose}>

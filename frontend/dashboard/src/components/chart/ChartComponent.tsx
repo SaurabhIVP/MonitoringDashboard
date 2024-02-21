@@ -53,6 +53,7 @@ const ChainChart: React.FC<BasicLineChartProps> = ({
         data: data.map((item) => item.total_times),
         fill: false,
         borderColor: PrimaryColor,
+        backgroundColor:PrimaryColor,
         tension: 0.1,
         pointRadius: 2
       },
@@ -60,7 +61,8 @@ const ChainChart: React.FC<BasicLineChartProps> = ({
         label: "Benchmark Time",
         data: data.map((item) => item.avg_total_time),
         fill: false,
-        borderColor: "blue",
+        borderColor: "#b4b4b8",
+        backgroundColor:"#b4b4b8",
         tension: 0.1,
         pointRadius: 0
         
@@ -73,6 +75,13 @@ const ChainChart: React.FC<BasicLineChartProps> = ({
       <Line
         data={chartData}
         options={{
+          plugins:{
+            legend:{
+              labels:{
+                boxWidth:20
+              }
+            }
+          },
           layout: {},
           maintainAspectRatio: false,
           // elements:{
@@ -81,6 +90,7 @@ const ChainChart: React.FC<BasicLineChartProps> = ({
           //   }
           // },
           scales: {
+            
             x: {
               type:'time',
               time: {

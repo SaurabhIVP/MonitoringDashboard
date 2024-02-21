@@ -69,6 +69,13 @@ public async Task<IActionResult> GetChainDetails(int chain_id, DateTime? startDa
     return Ok(chainDetails);
 }
 [HttpGet]
+[Route("chaindetailsnew")]
+public async Task<IActionResult> GetChainDetailsNew(int chain_id=0, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null)
+{
+    var chainDetails = await _objService.GetChainDetailsNewAsync(chain_id, startDate, endDate, benchStartDate, benchEndDate,benchmarkCompute,deviationPercentage);
+    return Ok(chainDetails);
+}
+[HttpGet]
 [Route("chainDetailsByTaskname")]
 public async Task<IActionResult> GetChainDetailsByTasknames(string tasknames, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null)
 {

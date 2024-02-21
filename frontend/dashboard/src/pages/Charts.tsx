@@ -178,9 +178,9 @@ const Charts: React.FC = () => {
             <StyledDatepickerContainer>
               <StyledButton
                 onClick={handleClickOpen}
-                style={{ marginTop: "10px", marginRight: "10px" }}
+                style={{ marginTop: "5px",marginBottom:'5px', marginRight: "15px" }}
               >
-                Show Tasks
+                Child Tasks
               </StyledButton>
               <ChartFilter
                 onChainSelected={handleChainSelected}
@@ -260,22 +260,27 @@ const Charts: React.FC = () => {
           PaperComponent={PaperComponent}
           aria-labelledby="draggable-dialog-title"
         >
+          <div style={{paddingTop:10}}>
           <DialogTitle
             style={{
               cursor: "move",
               color: PrimaryColor,
                 fontFamily: 'sans-serif',
+                height:50,
+                paddingTop:0
             }}
             id="draggable-dialog-title"
           >
-            <h3>{`${selectedChainValue?.key || "Risk Metrics Analytics"}`}</h3>
+            <h4>{`${selectedChainValue?.key || "Risk Metrics Analytics"}`}</h4>
           </DialogTitle>
+          
           <DateFilters
             onStartDateSelected={handleChildStartDateChange}
             onEndDateSelected={handleChildEndDateChange}
             onBenchStartDateSelected={handleBenchChildStartDateChange}
             onBenchEndDateSelected={handleBenchChildendDateChange}
           />
+          </div>
           <DialogContent>
             {data.map((item: any) => (
               <div

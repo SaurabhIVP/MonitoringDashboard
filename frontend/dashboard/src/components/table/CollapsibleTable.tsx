@@ -158,7 +158,7 @@ function Row(props: { row: any | null; childDataFunction: () => void | null }) {
                           fontSize: "13px",
                           fontWeight: "bold",
                           color: "white",
-                          backgroundColor: SecondaryColor,
+                          backgroundColor: '#b4b4b8',
                         }}
                       >
                         {x}
@@ -209,8 +209,8 @@ function Row(props: { row: any | null; childDataFunction: () => void | null }) {
                             >
                               {item.performance + " %"}
                               {getDeviationIconStyling(
-                                row.total_times,
-                                row.avg_total_time
+                                item.total_times,
+                                item.avg_total_time
                               )}
                             </TableCell>
                           ) : index == 0 ? (
@@ -277,9 +277,9 @@ const CollapsibleTable: React.FC<BasicLineChartProps> = ({
   }, [fetchDataFunction]);
 
   return (
-    <div style={{ paddingTop: 30 ,}}>
+    <div style={{ paddingTop: 10 ,paddingBottom:10}}>
       <TableContainer
-        style={{ maxHeight: "650px", overflowY: "auto",boxShadow:'5px 5px 5px lightgray' }}
+        style={{ maxHeight: "580px", overflowY: "auto" }}
         component={Paper}
         className="tableclass"
       >

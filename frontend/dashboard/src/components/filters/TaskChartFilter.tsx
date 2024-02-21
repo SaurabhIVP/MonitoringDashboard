@@ -15,6 +15,7 @@ import {
 import { IconButton } from "@mui/material";
 import { FilterColor, SecondaryColor } from "../../utils/Colors";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import { FilterButton } from "../generics/FilterButton";
 type ChartFilterProps = {
   onTaskSelected: (id: number, key: string) => void;
   onStartDateSelected: (startdate: Date | null) => void;
@@ -109,7 +110,14 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
       console.error("Error fetching data:", error);
     }
   };
-
+  const isEndDateValid =
+  startDate === null ||
+  EndDate === null ||
+  (startDate !== null && EndDate !== null && EndDate >= startDate);
+const isBenchEndDateValid =
+BenchstartDate === null ||
+BenchendDate === null ||
+(BenchstartDate !== null && BenchendDate !== null && BenchendDate >= BenchstartDate);
   useEffect(() => {
     fetchData();
   }, [selectedChainValue, selectedTaskValue]);
@@ -125,13 +133,7 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
 
   return (
     <div style={{}}>
-      <IconButton
-        onClick={handleClick}
-        aria-label="filter"
-        sx={{ color: FilterColor }}
-      >
-        <FilterAltIcon fontSize="large"></FilterAltIcon>
-      </IconButton>
+       <FilterButton ariaLabel="" onClick={handleClick}></FilterButton>
       <Popover
         id={id}
         keepMounted={true}
@@ -147,8 +149,8 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
           horizontal: "right",
         }}
       >
-        <StyledBox height={"540px"}>
-          <StyledHeading>Select Task Name:</StyledHeading>
+        <StyledBox height={"auto"}>
+          <div style={{marginBottom:15}}>
           <SearchBar
             fetchDataFunction={() => Tasknames({ chain_id: 0 })}
             nameParam="task_name"
@@ -156,8 +158,8 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
             onSearch={ChainhandleSearch}
             idParam="flow_id"
           />
-
-          <h4 style={{ paddingLeft: "10px" }}>Select Chain Name:</h4>
+</div>
+         
           <SearchBar
             fetchDataFunction={() =>
               ChainNames({ taskname: selectedChainValue?.key })
@@ -168,7 +170,7 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
             idParam="flow_id"
           />
 
-          <h4 style={{ paddingLeft: "10px" }}>Select Duration:</h4>
+         
           <div
             style={{
               display: "flex",
@@ -181,33 +183,38 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
               name="Start Date"
               selectedDate={startDate}
               onDateChange={handleStartDateChange}
+              flag={isEndDateValid}
             />
             {/* End Datepicker */}
             <Datepicker
               name="End Date"
               selectedDate={EndDate}
               onDateChange={handleEndDateChange}
+              flag={isEndDateValid}
             />
           </div>
-          <h4 style={{ paddingLeft: "10px" }}>Select Benchmark Duration:</h4>
+        
           <div
             style={{
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
+              paddingBottom:60
             }}
           >
             {/* Start Datepicker */}
             <Datepicker
-              name="Start Date"
+              name="Benchmark Start Date"
               selectedDate={BenchstartDate}
               onDateChange={handleBenchStartDateChange}
+              flag={isBenchEndDateValid}
             />
             {/* End Datepicker */}
             <Datepicker
-              name="End Date"
+              name="Benchmark End Date"
               selectedDate={BenchendDate}
               onDateChange={handleBenchendDateChange}
+              flag={isBenchEndDateValid}
             />
           </div>
           {/* <Button
@@ -229,7 +236,7 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
               zIndex: 999,
             }}
           >
-          <StyledButton onClick={buttonHandler} style={{ marginRight: 5 }}>
+          <StyledButton onClick={buttonHandler} style={{ marginRight: 15 }}>
               SUBMIT
             </StyledButton>
             <StyledButton autoFocus onClick={handleClose}>

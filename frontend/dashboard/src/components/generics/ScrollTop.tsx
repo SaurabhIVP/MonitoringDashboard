@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import NavigationIcon from "@mui/icons-material/Navigation";
 import { IconButton } from "@mui/material";
-import { SecondaryColor } from "../../utils/Colors";
+import { FilterColor, SecondaryColor } from "../../utils/Colors";
 interface ScrollTopProps {
   targetClass: string; // Class of the target element
 }
@@ -67,14 +67,17 @@ const ScrollTop: React.FC<ScrollTopProps> = ({ targetClass }) => {
           aria-label="filter"
           sx={{
             position: "fixed",
-            bottom: "20px",
-            right: "20px",
+            bottom: "30px",
+            right: "30px",
             cursor: "pointer",
-            backgroundColor: SecondaryColor,
+            backgroundColor: FilterColor,
             color: "white",
             borderRadius: "40px",
             padding: "10px",
             zIndex: 1000,
+            "&:hover": {
+              backgroundColor: FilterColor, // Same color as background color
+            },
           }}
         >
           <NavigationIcon></NavigationIcon>

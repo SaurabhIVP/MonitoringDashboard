@@ -64,7 +64,7 @@ const GanttChartHandle = () => {
   return (
     <div>
       <div>
-        <div>
+        <div style={{paddingTop:10}}>
           <GanttFilter
             onFilter={filterHandler}
             onChainSelected={HandleMultichains}

@@ -2,19 +2,25 @@
     width: 20px;
     height: 10px;
     margin-right:5px;
+    margin-left: 10%;
     border-radius:5px
 }
 .legend-title{
-    margin-right: 5%;
+    margin-right: 0%;
+    
+    
 }
 .legend-box{
     display: flex;
           flex-direction:row;
           align-items:center;
-          margin-left: 30%;
+          margin-left: 15%;
+          width: 50%;
+          
 }
 .chart-box{
     border-style: ridge;
+    padding-bottom: 30px;
 }
 .fixed-axis{
     padding-left: 100px;
@@ -23,7 +29,8 @@
     padding-bottom: 1%
 }
 .chartCard{
-    height: 470px;
+    height: 475px;
      overflow-y: scroll;
-      position: relative
+      position: relative;
+      
 }

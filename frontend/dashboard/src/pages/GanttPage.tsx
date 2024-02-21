@@ -1,4 +1,14 @@
 import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Paper,
+  PaperProps,
+} from "@mui/material";
 import "../App.css";
 import {
   Link,
@@ -23,7 +33,11 @@ function GanttPage() {
   return (
     <>
       <div className="Gantt-container">
+      <Paper elevation={8} style={{ padding: 0,margin:20 }}>
+        <div style={{paddingBottom:10}}>
         <GanttChartHandle></GanttChartHandle>
+        </div>
+        </Paper>
       </div>
     </>
   );

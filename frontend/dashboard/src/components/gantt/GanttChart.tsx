@@ -5,7 +5,7 @@ import "chartjs-adapter-date-fns";
 import { format } from "date-fns-tz";
 import ScrollTop from "../generics/ScrollTop";
 import "./GanttChart.css";
-import { PrimaryColor, SecondaryColor } from "../../utils/Colors";
+import { FilterColor, PrimaryColor, SecondaryColor } from "../../utils/Colors";
 import { DateConversioninddMMMMyyyy } from "../../utils/DateConversion";
 
 interface ganttProps {
@@ -231,6 +231,7 @@ const GanttChart: React.FC<ganttProps> = ({
   return (
     <div
       style={{
+        
         marginLeft: 10,
         marginRight: 10,
         paddingLeft: 10,
@@ -238,18 +239,24 @@ const GanttChart: React.FC<ganttProps> = ({
       }}
     >
       
-      <div className="legend-box" >
+      
+      <div style={{display:'flex',width:"1600px"}}>
       <h3
         style={{
-          color: "black",
+          color: PrimaryColor,
           fontFamily: "sans-serif",
-          fontSize: 15,
+          fontSize: 20,
           fontWeight: "bold",
           textAlign: "left",
+          paddingTop:'0px',
+          paddingLeft:'80px',
+          marginBottom:'10px'
         }}
       >
         {TitleDate}
       </h3>
+      <div className="legend-box" >
+      
         <div className="legend" style={{ backgroundColor: "#E31837" }}></div>
         <h5 className="legend-title">Crossed Benchmark</h5>
         <div
@@ -262,12 +269,12 @@ const GanttChart: React.FC<ganttProps> = ({
         <div
           className="legend"
           style={{
-            backgroundColor: "black",
+            backgroundColor: "gray",
           }}
         ></div>
         <h5 className="legend-title">Failed </h5>
       </div>
-
+      </div>
       <div className="chart-box">
         <div className="fixed-axis">
           <canvas id="myChart1"></canvas>

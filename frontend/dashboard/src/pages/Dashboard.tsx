@@ -7,6 +7,9 @@ import TaskDetails from "../api/TaskDetails";
 import GridFilter from "../components/filters/GridFilter";
 import ChainDetailsByTaskname from "../api/ChainDetailsByTaskname";
 import { Paper } from "@mui/material";
+import { StyledDatepickerContainer } from "../utils/StyledComponents";
+import { PrimaryColor } from "../utils/Colors";
+import ChainDetailsNew from "../api/ChainDetailsNew";
 
 function Dashboard() {
   const [selectedChainValue, setSelectedChainValue] = useState<{
@@ -63,79 +66,134 @@ function Dashboard() {
   };
   return (
     <>
-    <Paper elevation={3} style={{ padding: 20, marginBottom: 20 }}>
-      <div
-        style={{
-          paddingBottom: "2%",
-          paddingTop: "5%",
-          right: 0,
-          // display: "flex",
-          // justifyContent: "flex-end",
-        }}
-      >
-        
-        <GridFilter
-          onChainSelected={handleChainSelected}
-          onStartDateSelected={handleStartDateChange}
-          onEndDateSelected={handleEndDateChange}
-          onBenchStartDateSelected={handleBenchStartDateChange}
-          onBenchEndDateSelected={handleBenchendDateChange}
-          onCheck={handleAgeChange}
-          onDeviationChange={handleDeviationChange}
-          onBenchmarkComputeChange={handleBenchmarkCompute}
-        ></GridFilter>
-      </div>
+      <div style={{ paddingTop: 60 }}>
+        <Paper elevation={8} style={{ padding: 0, margin: 20 }}>
+          <StyledDatepickerContainer
+            style={{
+              marginBottom: "0px",
+              paddingBottom: "0px",
+              paddingTop: "0px",
+              marginRight: "100px",
+            }}
+          >
+            <h2
+              style={{
+                paddingBottom: "0px",
+                paddingLeft: "100px",
+                color: PrimaryColor,
+              }}
+            >
+              Task Performance Status
+            </h2>
+            <div
+              style={{
+                paddingBottom: "1%",
+                paddingTop: "1%",
 
-      <div style={{ paddingLeft: 50, paddingRight: 50 }}>
-        {" "}
-        <CollapsibleTable
-          fetchDataFunction={() => {
-            if (age == "10" && selectedChainValue) {
-              return ChainDetails({
-                chain_id: selectedChainValue.id,
-                startDate: startDate,
-                endDate: EndDate,
-                benchStartDate: BenchstartDate,
-                benchEndDate: BenchendDate,
-                benchmarkCompute: benchmarkCompute,
-                deviationPercentage: deviationPercentage,
-              });
-            } else if (age == "20" && selectedChainValue?.key) {
-              return ChainDetailsByTaskname({
-                tasknames: selectedChainValue.key,
-                startDate: startDate,
-                endDate: EndDate,
-                benchStartDate: BenchstartDate,
-                benchEndDate: BenchendDate,
-                benchmarkCompute:benchmarkCompute,
-                deviationPercentage:deviationPercentage
-              });
-            } else {
-              return CurrentData({
-                startDate: startDate,
-                endDate: EndDate,
-                benchStartDate: BenchstartDate,
-                benchEndDate: BenchendDate,
-                benchmarkCompute: benchmarkCompute,
-                deviationPercentage: deviationPercentage,
-              });
-            }
-          }}
-          taskDetailsFunction={async (params) =>
-            await TaskDetails({
-              chain_id: params.chain_id,
-              startTime: params.startTime,
-              endTime: params.endTime,
-              benchStartDate: BenchstartDate,
-              benchEndDate: BenchendDate,
-              benchmarkCompute: benchmarkCompute,
-              deviationPercentage: deviationPercentage,
-            })
-          }
-        ></CollapsibleTable>
-        
+                // display: "flex",
+                // justifyContent: "flex-end",
+              }}
+            >
+              <GridFilter
+                onChainSelected={handleChainSelected}
+                onStartDateSelected={handleStartDateChange}
+                onEndDateSelected={handleEndDateChange}
+                onBenchStartDateSelected={handleBenchStartDateChange}
+                onBenchEndDateSelected={handleBenchendDateChange}
+                onCheck={handleAgeChange}
+                onDeviationChange={handleDeviationChange}
+                onBenchmarkComputeChange={handleBenchmarkCompute}
+              ></GridFilter>
+            </div>
+          </StyledDatepickerContainer>
+
+          <div style={{ paddingLeft: 50, paddingRight: 50 }}>
+            {" "}
+            <CollapsibleTable
+              fetchDataFunction={() => {
+                if (age == "20" && selectedChainValue?.key) {
+                  return ChainDetailsByTaskname({
+                    tasknames: selectedChainValue.key,
+                    startDate: startDate,
+                    endDate: EndDate,
+                    benchStartDate: BenchstartDate,
+                    benchEndDate: BenchendDate,
+                    benchmarkCompute: benchmarkCompute,
+                    deviationPercentage: deviationPercentage,
+                  });
+                } else {
+                  return ChainDetailsNew({
+                    chain_id: selectedChainValue?.id,
+                    startDate: startDate,
+                    endDate: EndDate,
+                    benchStartDate: BenchstartDate,
+                    benchEndDate: BenchendDate,
+                    benchmarkCompute: benchmarkCompute,
+                    deviationPercentage: deviationPercentage,
+                  });
+                }
+              }}
+              taskDetailsFunction={async (params) =>
+                await TaskDetails({
+                  chain_id: params.chain_id,
+                  startTime: params.startTime,
+                  endTime: params.endTime,
+                  benchStartDate: BenchstartDate,
+                  benchEndDate: BenchendDate,
+                  benchmarkCompute: benchmarkCompute,
+                  deviationPercentage: deviationPercentage,
+                })
+              }
+            ></CollapsibleTable>
+            {/* <CollapsibleTable
+              fetchDataFunction={() => {
+                if (age == "10" && selectedChainValue) {
+                  return ChainDetails({
+                    chain_id: selectedChainValue.id,
+                    startDate: startDate,
+                    endDate: EndDate,
+                    benchStartDate: BenchstartDate,
+                    benchEndDate: BenchendDate,
+                    benchmarkCompute: benchmarkCompute,
+                    deviationPercentage: deviationPercentage,
+                  });
+                } else if (age == "20" && selectedChainValue?.key) {
+                  return ChainDetailsByTaskname({
+                    tasknames: selectedChainValue.key,
+                    startDate: startDate,
+                    endDate: EndDate,
+                    benchStartDate: BenchstartDate,
+                    benchEndDate: BenchendDate,
+                    benchmarkCompute: benchmarkCompute,
+                    deviationPercentage: deviationPercentage,
+                  });
+                } else {
+                  return CurrentData({
+                    
+                    startDate: startDate,
+                    endDate: EndDate,
+                    benchStartDate: BenchstartDate,
+                    benchEndDate: BenchendDate,
+                    benchmarkCompute: benchmarkCompute,
+                    deviationPercentage: deviationPercentage,
+                  });
+                }
+              }}
+              taskDetailsFunction={async (params) =>
+                await TaskDetails({
+                  chain_id: params.chain_id,
+                  startTime: params.startTime,
+                  endTime: params.endTime,
+                  benchStartDate: BenchstartDate,
+                  benchEndDate: BenchendDate,
+                  benchmarkCompute: benchmarkCompute,
+                  deviationPercentage: deviationPercentage,
+                })
+              }
+            ></CollapsibleTable> */}
+          </div>
+        </Paper>
       </div>
-      </Paper>
     </>
   );
 }

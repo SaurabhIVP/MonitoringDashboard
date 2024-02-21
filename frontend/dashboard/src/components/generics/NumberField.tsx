@@ -18,7 +18,7 @@ function NumberField({ name, value, onChange }: Props) {
           label={name}
           type="number"
           value={value}
-          InputProps={{ inputProps: { min: 0 } }}
+          // InputProps={{ inputProps: { min: 0 } }}
           onChange={(event) => onChange(event.target.value)}
           InputLabelProps={{
             shrink: true,

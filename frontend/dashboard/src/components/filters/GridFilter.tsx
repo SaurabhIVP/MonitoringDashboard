@@ -6,6 +6,7 @@ import Popover from "@mui/material/Popover";
 import SearchBar from "../generics/SearchBar";
 import AllData from "../../api/GetAllChainNames";
 import Datepicker from "../generics/Datepicker";
+import Stack from '@mui/material/Stack';
 import {
   FormControl,
   InputBase,
@@ -27,7 +28,8 @@ import { FilterColor, SecondaryColor } from "../../utils/Colors";
 import NumberField from "../generics/NumberField";
 import { useState } from "react";
 import Dropdown from "../generics/Dropdown";
-
+import { FilterButton } from "../generics/FilterButton";
+import Alert from "@mui/material/Alert";
 type ChartFilterProps = {
   onChainSelected: (chainData: {
     id: number | null;
@@ -127,7 +129,14 @@ const GridFilter: React.FC<ChartFilterProps> = ({
   const handleBenchendDateChange = (newDate: Date | null) => {
     setBenchEndDate(newDate);
   };
-
+  const isEndDateValid =
+    startDate === null ||
+    EndDate === null ||
+    (startDate !== null && EndDate !== null && EndDate >= startDate);
+  const isBenchEndDateValid =
+  BenchstartDate === null ||
+  BenchendDate === null ||
+  (BenchstartDate !== null && BenchendDate !== null && BenchendDate >= BenchstartDate);
   const buttonHandler = () => {
     const id = selectedChainValueRef.current?.id;
     const key = selectedChainValueRef.current?.key;
@@ -153,14 +162,8 @@ const GridFilter: React.FC<ChartFilterProps> = ({
   };
 
   return (
-    <div style={{ position: "absolute", right: 60 }}>
-      <IconButton
-        onClick={handleClick}
-        aria-label="filter"
-        sx={{ color: FilterColor }}
-      >
-        <FilterAltIcon fontSize="large"></FilterAltIcon>
-      </IconButton>
+    <div style={{ position: "absolute", right: 100 }}>
+      <FilterButton ariaLabel="" onClick={handleClick}></FilterButton>
       <Popover
         keepMounted={true}
         id={id}
@@ -221,16 +224,18 @@ const GridFilter: React.FC<ChartFilterProps> = ({
             )}
           </div>
 
-          <StyledDatepickerContainer>
+          <StyledDatepickerContainer style={{ paddingTop: 10 }}>
             <Datepicker
               name="Start Date"
               selectedDate={startDate}
               onDateChange={handleStartDateChange}
+              flag={isEndDateValid}
             />
             <Datepicker
               name="End Date"
               selectedDate={EndDate}
               onDateChange={handleEndDateChange}
+              flag={isEndDateValid}
             />
           </StyledDatepickerContainer>
 
@@ -239,20 +244,22 @@ const GridFilter: React.FC<ChartFilterProps> = ({
               name="Benchmark Start Date"
               selectedDate={BenchstartDate}
               onDateChange={handleBenchStartDateChange}
+              flag={isBenchEndDateValid}
             />
             <Datepicker
               name="Benchmark End Date"
               selectedDate={BenchendDate}
               onDateChange={handleBenchendDateChange}
+              flag={isBenchEndDateValid}
             />
           </StyledDatepickerContainer>
           <StyledDatepickerContainer>
-            <div style={{paddingLeft:37,marginBottom:56}}>
-            <NumberField
-              name="Deviation % "
-              value={deviationPercentage}
-              onChange={handleDeviationChange}
-            ></NumberField>
+            <div style={{ paddingLeft: 37, marginBottom: 56 }}>
+              <NumberField
+                name="Deviation % "
+                value={deviationPercentage}
+                onChange={handleDeviationChange}
+              ></NumberField>
             </div>
             <div style={{ paddingTop: 18, paddingRight: 36 }}>
               <Dropdown
@@ -270,15 +277,16 @@ const GridFilter: React.FC<ChartFilterProps> = ({
               zIndex: 999,
             }}
           >
-            <StyledButton onClick={buttonHandler} style={{ marginRight: 5 }}>
+            <StyledButton onClick={buttonHandler} style={{ marginRight: 16 }}>
               SUBMIT
             </StyledButton>
             <StyledButton autoFocus onClick={handleClose}>
-            Cancel
-          </StyledButton>
+              Cancel
+            </StyledButton>
           </div>
         </StyledBox>
       </Popover>
+     
     </div>
   );
 };
