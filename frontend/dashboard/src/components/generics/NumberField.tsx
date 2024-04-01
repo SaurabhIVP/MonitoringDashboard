@@ -1,4 +1,5 @@
 import { TextField } from "@mui/material";
+import "./datepicker/Datepicker.css"
 
 interface Props {
   name: string;
@@ -11,7 +12,8 @@ function NumberField({ name, value, onChange }: Props) {
     <>
       <form
         noValidate
-        style={{ width: "200px", margin: "auto", marginTop: "20px" }}
+        style={{width:'260px',paddingTop:'0px'}}
+        className="form"
       >
         <TextField
           id="number"
@@ -19,7 +21,7 @@ function NumberField({ name, value, onChange }: Props) {
           type="number"
           value={value}
           // InputProps={{ inputProps: { min: 0 } }}
-          onChange={(event) => onChange(event.target.value)}
+          onChange={(event:any) => onChange(event.target.value)}
           InputLabelProps={{
             shrink: true,
           }}

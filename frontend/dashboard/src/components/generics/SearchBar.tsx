@@ -1,43 +1,40 @@
-import React, { useEffect, useImperativeHandle, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Stack, TextField, Autocomplete } from "@mui/material";
 
-type SearchBarProps= {
+type SearchBarProps = {
   fetchDataFunction: () => Promise<any>;
   nameParam: string;
   label: string;
   onSearch: (id: number | null, key: string | null) => void;
   idParam: string;
-}
-type SearchBarRef = {
-  reset: () => void;
+  keyProp: string; // Add keyProp to props
 };
-const SearchBar: React.ForwardRefRenderFunction<SearchBarRef,SearchBarProps> = ({
+
+const SearchBar: React.FC<SearchBarProps> = ({
   fetchDataFunction,
   nameParam,
   label,
   onSearch,
   idParam,
-},ref) => {
+  keyProp, // Destructure keyProp
+}) => {
   const [data, setData] = useState<any[]>([]);
-  
   const [selectedValue, setSelectedValue] = useState<{
     id: number;
     [key: string]: any;
   } | null>(null);
- 
-  const handleClick = (event:any) => {
+  const [key, setKey] = useState(keyProp); // Initialize key state with keyProp
+
+  const handleClick = (event: any) => {
     // Stop the event propagation to prevent it from reaching the parent components
     // event.stopPropagation();
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetchDataFunction();
-
         setData(response);
-
-        console.log(response);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -50,8 +47,7 @@ const SearchBar: React.ForwardRefRenderFunction<SearchBarRef,SearchBarProps> = (
     value: { [key: string]: any } | null
   ) => {
     if (value) {
-      setSelectedValue({ id: value[idParam], ...value }); // Include all properties from the selected option
-      // Pass both name and id back to the parent component
+      setSelectedValue({ id: value[idParam], ...value });
       onSearch(value[idParam], value[nameParam]);
     } else {
       setSelectedValue(null);
@@ -59,22 +55,28 @@ const SearchBar: React.ForwardRefRenderFunction<SearchBarRef,SearchBarProps> = (
     }
   };
 
+  useEffect(() => {
+    setKey(keyProp); // Update key state when keyProp changes
+  }, [keyProp]);
+
   return (
     <>
-    <div onClick={handleClick} onKeyDown={handleClick}>
-    <Stack spacing={2} width={"475px"} paddingLeft={"35px"}>
-        {data && (
-           <Autocomplete
-           options={data}
-           getOptionLabel={(option) => option[nameParam]}
-           isOptionEqualToValue={(option, value) => option[nameParam] === value[nameParam]}
-           renderInput={(params) => <TextField {...params} label={label} />}
-           onChange={handleOnChange}
-         />
-        )}
-      </Stack>
-    </div>
-      
+      <div onClick={handleClick} onKeyDown={handleClick}>
+        <Stack spacing={2} width={"550px"} >
+          {data && (
+            <Autocomplete
+              key={key} // Use key for re-rendering
+              options={data}
+              getOptionLabel={(option) => option[nameParam]}
+              isOptionEqualToValue={(option, value) =>
+                option[nameParam] === value[nameParam]
+              }
+              renderInput={(params) => <TextField {...params} label={label} />}
+              onChange={handleOnChange}
+            />
+          )}
+        </Stack>
+      </div>
     </>
   );
 };

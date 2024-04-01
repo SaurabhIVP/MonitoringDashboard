@@ -31,29 +31,24 @@ import NumberField from "../generics/NumberField";
 
 type ChartFilterProps = {
   onFilter: (val: boolean) => void;
-  onChainSelected: (chains: string[]) => void;
   onStartDateSelected: (c: Date | null) => void;
   onStartTimeSelected: (c: any | null) => void;
   onEndTimeSelected: (c: any | null) => void;
   onBenchStartDateSelected: (c: Date | null) => void;
   onBenchEndDateSelected: (c: Date | null) => void;
-  onBenchmarkComputeChange: (val: any | null) => void;
   onDeviationChange: (val: any | null) => void;
 };
 
-const GanttFilter: React.FC<ChartFilterProps> = ({
+const ChildGanttFilter: React.FC<ChartFilterProps> = ({
   onFilter,
-  onChainSelected,
   onStartDateSelected,
   onStartTimeSelected,
   onBenchEndDateSelected,
   onBenchStartDateSelected,
   onEndTimeSelected,
-  onBenchmarkComputeChange,
   onDeviationChange,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [multichains, setMultichains] = React.useState<string[]>([]);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -67,7 +62,6 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
   );
   const minTime = dayjs(startDate).startOf("day");
   const maxTime = dayjs(startDate).endOf("day");
-  const [value, onChange] = useState<any | null>("10:00");
   const [startTime, setStartTime] = React.useState<any | null>(minTime);
   const [endTime, setEndTime] = React.useState<any | null>(maxTime);
   const [BenchstartDate, setBenchStartDate] = React.useState<Date | null>(
@@ -76,14 +70,15 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
   const [BenchendDate, setBenchEndDate] = React.useState<Date | null>(
     new Date(2024, 0, 24)
   );
+  let start = false;
+  let end = false;
   const handleStartTimeChange = (val: any | null) => {
     setStartTime(TimeFormatter(val));
+    start = true;
   };
   const handleEndTimeChange = (val: any | null) => {
     setEndTime(TimeFormatter(val));
-  };
-  const handleStartDateChange = (newDate: Date | null) => {
-    setStartDate(newDate);
+    end = true;
   };
   const handleBenchStartDateChange = (newDate: Date | null) => {
     setBenchStartDate(newDate);
@@ -93,15 +88,15 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
   };
   const [key, setKey] = useState("1");
   const resetButtonHandler = () => {
-    setStartDate(new Date(2024, 0, 24));
-    setBenchmarkCompute("Average");
     setDeviationPercentage("0");
-    setMultichains([]);
     setKey(key === "1" ? "2" : "1");
     setStartTime(dayjs(startDate).startOf("day"));
     setEndTime(dayjs(startDate).endOf("day"));
     setBenchStartDate(new Date(2024, 0, 1));
-    setBenchEndDate(new Date(2024, 0, 24));
+    setBenchEndDate(new Date(2024, 0, 31));
+  };
+  const handleStartDateChange = (newDate: Date | null) => {
+    setStartDate(newDate);
   };
   const isBenchEndDateValid =
     BenchstartDate === null ||
@@ -110,41 +105,32 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
       BenchendDate !== null &&
       BenchendDate >= BenchstartDate);
   const buttonHandler = () => {
-    onFilter(true);
-    onStartTimeSelected(startTime);
-    onEndTimeSelected(endTime);
+   
+      onStartTimeSelected(startTime);
+   
+   
+      onEndTimeSelected(endTime);
+   
+
     onStartDateSelected(startDate);
     onBenchEndDateSelected(BenchendDate);
     onBenchStartDateSelected(BenchstartDate);
-    onChainSelected(multichains);
-    onBenchmarkComputeChange(benchmarkCompute);
     onDeviationChange(deviationPercentage);
     console.log(startTime);
+    onFilter(true);
+    // start=false;
+    // end=false;
     handleClose();
-  };
-  const HandleMultichains = (values: string[]) => {
-    setMultichains(values);
   };
   const [deviationPercentage, setDeviationPercentage] = useState<string | null>(
     "0"
   );
-  const benchmarkComputeOptions = [
-    {
-      text: "Average",
-      value: "Average",
-    },
-  ];
   const handleDeviationChange = (value: string | null) => {
     setDeviationPercentage(value);
     console.log(deviationPercentage);
   };
-  const [benchmarkCompute, setBenchmarkCompute] = useState("Average");
-  const BenchonChange = (value: string) => {
-    setBenchmarkCompute(value);
-    console.log(benchmarkCompute);
-  };
   return (
-    <div style={{ position: "absolute", right: 130, paddingTop: "25px" }}>
+    <div style={{}}>
       <FilterButton ariaLabel="" onClick={handleClick}></FilterButton>
       <Popover
         keepMounted={true}
@@ -181,15 +167,6 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
               flag={true}
             />
           </StyledDatepickerContainer>
-          <div style={{ marginBottom: "10px" }}>
-            <MultiSelect
-              keyProp={key}
-              fetchDataFunction={AllData}
-              NameParam="chain_name"
-              Label="Search chains"
-              onSearch={HandleMultichains}
-            ></MultiSelect>
-          </div>
 
           <StyledDatepickerContainer
             style={{
@@ -244,13 +221,6 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
                 onChange={handleDeviationChange}
               ></NumberField>
             </div>
-            <div style={{ paddingTop: 20 }}>
-              <Dropdown
-                name="Benchmark Compute Type"
-                benchmarkComputeOptions={benchmarkComputeOptions}
-                onChange={BenchonChange}
-              ></Dropdown>
-            </div>
           </StyledDatepickerContainer>
           <div
             style={{
@@ -277,4 +247,4 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
   );
 };
 
-export default GanttFilter;
+export default ChildGanttFilter;

@@ -6,6 +6,7 @@ type SearchBarProps= {
   nameParam: string;
   label: string;
   onSearch: (key: string | null) => void;
+  keyProp: string;
 }
 type SearchBarRef = {
   reset: () => void;
@@ -15,17 +16,21 @@ const SearchbarTask: React.ForwardRefRenderFunction<SearchBarRef,SearchBarProps>
   nameParam,
   label,
   onSearch,
+  keyProp
 },ref) => {
   const [data, setData] = useState<any[]>([]);
   
   const [selectedValue, setSelectedValue] = useState<{
     [key: string]: any;
   } | null>(null);
- 
+  const [key, setKey] = useState(keyProp);
   const handleClick = (event:any) => {
     // Stop the event propagation to prevent it from reaching the parent components
     // event.stopPropagation();
   };
+  useEffect(() => {
+    setKey(keyProp); // Update key state when keyProp changes
+  }, [keyProp]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -59,9 +64,10 @@ const SearchbarTask: React.ForwardRefRenderFunction<SearchBarRef,SearchBarProps>
   return (
     <>
     <div onClick={handleClick} onKeyDown={handleClick}>
-    <Stack spacing={2}  width={"475px"} paddingLeft={"35px"} >
+    <Stack spacing={2}  width={"550px"}  >
         {data && (
            <Autocomplete
+           key={key}
            options={data}
            getOptionLabel={(option) => option[nameParam]}
            isOptionEqualToValue={(option, value) => option[nameParam] === value[nameParam]}

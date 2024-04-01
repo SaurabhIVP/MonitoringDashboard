@@ -1,6 +1,7 @@
 import * as React from "react";
 import Popover from "@mui/material/Popover";
-import Datepicker from "../generics/Datepicker";
+import Datepicker from "../generics/datepicker/Datepicker";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   StyledBox,
   StyledButton,
@@ -52,7 +53,12 @@ const DateFilters: React.FC<ChartFilterProps> = ({
   const handleEndDateChange = (newDate: Date | null) => {
     setEndDate(newDate);
   };
-
+  const resetButtonHandler = () => {
+    setStartDate(new Date(2024, 0, 17));
+    setEndDate(new Date(2024, 0, 30));
+    setBenchStartDate(new Date(2024, 0, 17));
+    setBenchEndDate(new Date(2024, 0, 30));
+  };
   const handleStartDateChange = (newDate: Date | null) => {
     setStartDate(newDate);
   };
@@ -76,11 +82,13 @@ const DateFilters: React.FC<ChartFilterProps> = ({
     EndDate === null ||
     (startDate !== null && EndDate !== null && EndDate >= startDate);
   const isBenchEndDateValid =
-  BenchstartDate === null ||
-  BenchendDate === null ||
-  (BenchstartDate !== null && BenchendDate !== null && BenchendDate >= BenchstartDate);
+    BenchstartDate === null ||
+    BenchendDate === null ||
+    (BenchstartDate !== null &&
+      BenchendDate !== null &&
+      BenchendDate >= BenchstartDate);
   return (
-    <div style={{ position: "absolute", right: 60 }}>
+    <div style={{ position: "absolute", right: 60,top:35 }}>
       <FilterButton ariaLabel="" onClick={handleClick}></FilterButton>
       <Popover
         id={id}
@@ -97,22 +105,25 @@ const DateFilters: React.FC<ChartFilterProps> = ({
         }}
       >
         <StyledBox height={"auto"}>
-          <StyledDatepickerContainer>
+        <IconButton onClick={handleClose} style={{ position: "absolute", top: "5px", right: "5px", color: "red" }}>
+  <CloseIcon />
+</IconButton>
+          <StyledDatepickerContainer style={{paddingTop:'35px'}}>
             <Datepicker
-              name="Start Date"
+              name="Task Start Date"
               selectedDate={startDate}
               onDateChange={handleStartDateChange}
               flag={isEndDateValid}
             />
             <Datepicker
-              name="End Date"
+              name="Task End Date"
               selectedDate={EndDate}
               onDateChange={handleEndDateChange}
               flag={isEndDateValid}
             />
           </StyledDatepickerContainer>
 
-          <StyledDatepickerContainer style={{paddingBottom:40}}>
+          <StyledDatepickerContainer style={{ paddingBottom: 40 }}>
             <Datepicker
               name="Benchmark Start Date"
               selectedDate={BenchstartDate}
@@ -134,8 +145,11 @@ const DateFilters: React.FC<ChartFilterProps> = ({
               zIndex: 999,
             }}
           >
-            <StyledButton onClick={buttonHandler} style={{ marginRight: 0 }}>
+            <StyledButton onClick={buttonHandler} style={{ marginRight: 10 }}>
               SUBMIT
+            </StyledButton>
+            <StyledButton onClick={resetButtonHandler} style={{ marginRight: 0,backgroundColor:"gray" }}>
+              Reset
             </StyledButton>
           </div>
         </StyledBox>

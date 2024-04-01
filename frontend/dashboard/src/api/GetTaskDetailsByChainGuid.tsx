@@ -2,19 +2,16 @@ import { apiService } from "./configurations/ApiService";
 import { DateConversion } from "../utils/DateConversion";
 
 interface GanttProps {
-  chains: string[] | null;
-  starttime: any | null;
-  endtime: any | null;
+chain_id:any|null;
   date: any | null;
   benchStartDate: any | null;
   benchEndDate: any | null;
   benchmarkCompute?: any | null;
   deviationPercentage?: any | null;
 }
-async function GanttData({
-  chains = null,
-  starttime = null,
-  endtime = null,
+async function GetTaskDetailsByChainGuid({
+  chain_id=null,
+ 
   date = null,
   benchStartDate = null,
   benchEndDate = null,
@@ -28,9 +25,8 @@ async function GanttData({
     let url = `/tasks`;
     let params = {};
 
-    if (chains != null && starttime != null && endtime != null) {
-      url = `/tasks/${selectedDate}/${benstartdate}/${benenddate}/${benchmarkCompute}/${deviationPercentage}/${chains}`;
-    }
+      url = `/tasksdetailsbyChainguid/${chain_id}/${selectedDate}/${benstartdate}/${benenddate}/${benchmarkCompute}/${deviationPercentage}`;
+    
 
     console.log("API URL:", url);
     console.log("Params:", params);
@@ -44,4 +40,4 @@ async function GanttData({
   }
 }
 
-export default GanttData;
+export default GetTaskDetailsByChainGuid;

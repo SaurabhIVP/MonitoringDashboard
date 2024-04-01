@@ -10,10 +10,12 @@ public class Tasks
     public DateTime Current_Time { get; set; }
     public string Chain_Time { get; set; }
     public string status { get; set; }
+    public string name { get; set; }
     public int delay { get; set; }
     public DateTime expected_endtime { get; set; }
     public DateTime benchmarktime { get; set; }
     public int chain_id { get; set; }
+     public int id { get; set; }
     public int flow_id { get; set; }
     public double performance { get; set; }
     public DateTime date { get; set; }

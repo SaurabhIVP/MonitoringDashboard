@@ -12,6 +12,7 @@ import {
 } from "chart.js";
 import { DateConversion } from "../../utils/DateConversion";
 import { PrimaryColor, SecondaryColor } from "../../utils/Colors";
+import { random } from "lodash";
 
 ChartJS.register(
   CategoryScale,
@@ -26,13 +27,17 @@ ChartJS.register(
 interface BasicLineChartProps {
   fetchDataFunction: () => Promise<any>;
   title: string;
+  axisname:string
 }
 
 const ChainChart: React.FC<BasicLineChartProps> = ({
   fetchDataFunction,
   title,
+  axisname
 }) => {
   const [data, setData] = useState<any[]>([]);
+  const [alert,setAlert]=useState<boolean|null>(false);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -44,7 +49,12 @@ const ChainChart: React.FC<BasicLineChartProps> = ({
       }
     };
     fetchData();
+    const hasNullAvgTotalTime = data.some((item) => item.avg_total_time == null);
+  setAlert(hasNullAvgTotalTime);
+  console.log('flag is'+ hasNullAvgTotalTime);
   }, [fetchDataFunction]);
+  
+  
   const chartData = {
     labels: data.map((item) => DateConversion(item.date)),
     datasets: [
@@ -72,7 +82,10 @@ const ChainChart: React.FC<BasicLineChartProps> = ({
 
   return (
     <div style={{ height: 250 }}>
+      {
+      alert==true?<div style={{float:'right',color:'red'}}>*Selected benchmark duration has no data</div>:<div></div>}
       <Line
+     
         data={chartData}
         options={{
           plugins:{
@@ -84,11 +97,6 @@ const ChainChart: React.FC<BasicLineChartProps> = ({
           },
           layout: {},
           maintainAspectRatio: false,
-          // elements:{
-          //   point:{
-          //     radius:2
-          //   }
-          // },
           scales: {
             
             x: {
@@ -96,12 +104,12 @@ const ChainChart: React.FC<BasicLineChartProps> = ({
               time: {
                 unit: 'day', // Display one day per tick
                 displayFormats: {
-                    day: 'MMM dd' // Format for the tick labels
+                    day: 'dd MMM yyyy' // Format for the tick labels
                 }
             },
               title: {
                 display: true,
-                text: "Date",
+                text: axisname,
               },
             },
             y: {

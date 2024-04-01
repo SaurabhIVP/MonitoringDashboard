@@ -9,7 +9,9 @@ public class GanttData
     public DateTime end_time { get; set; }
     public DateTime Current_Time { get; set; }
     public string Chain_Time { get; set; }
+    public int id { get; set; }
     public string status { get; set; }
+    public string name { get; set; }
     public int delay { get; set; }
     public DateTime expected_endtime { get; set; }
     public DateTime benchmarktime { get; set; }
@@ -18,7 +20,7 @@ public class GanttData
     public int performance { get; set; }
     public DateTime date { get; set; }
     public string chain_guid { get; set; }
-    public string total_times { get; set; }
+    public int total_times { get; set; }
     public string avg_total_time { get; set; }
 
 

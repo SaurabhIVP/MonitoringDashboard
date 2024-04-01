@@ -8,6 +8,7 @@ interface SearchBarProps {
   NameParam: string;
   Label: string;
   onSearch: (selectedValue: string[]) => void;
+  keyProp: string;
 }
 
 const MultiSelect: React.FC<SearchBarProps> = ({
@@ -15,10 +16,11 @@ const MultiSelect: React.FC<SearchBarProps> = ({
   NameParam,
   Label,
   onSearch,
+  keyProp
 }) => {
   const [data, setData] = useState<any[]>([]);
   const [selectedValue, setSelectedValue] = useState<string[]>([]);
-
+  const [key, setKey] = useState(keyProp);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -36,17 +38,21 @@ const MultiSelect: React.FC<SearchBarProps> = ({
     // Pass the selected value back to the parent component
     onSearch(value);
   };
-
+  
+  useEffect(() => {
+    setKey(keyProp); // Update key state when keyProp changes
+  }, [keyProp]);
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
   return (
-    <Stack spacing={2} width={"470px"}>
+    <Stack spacing={2} width={"550px"}>
       {data && (
         <Autocomplete
           multiple
           options={data.map((item) => item[NameParam])}
           disableCloseOnSelect
+          key={key}
           renderOption={(props, option, { selected }) => (
             <li {...props}>
               <Checkbox
@@ -58,7 +64,7 @@ const MultiSelect: React.FC<SearchBarProps> = ({
             </li>
           )}
           renderInput={(params) => <TextField {...params} label={Label} />}
-          value={selectedValue}
+          // value={selectedValue}
           onChange={handleOnChange}
         />
       )}

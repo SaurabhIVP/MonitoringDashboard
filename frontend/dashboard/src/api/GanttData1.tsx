@@ -11,7 +11,7 @@ interface GanttProps {
   benchmarkCompute?: any | null;
   deviationPercentage?: any | null;
 }
-async function GanttData({
+async function GanttData1({
   chains = null,
   starttime = null,
   endtime = null,
@@ -29,7 +29,7 @@ async function GanttData({
     let params = {};
 
     if (chains != null && starttime != null && endtime != null) {
-      url = `/tasks/${selectedDate}/${benstartdate}/${benenddate}/${benchmarkCompute}/${deviationPercentage}/${chains}`;
+      url = `/tasks1/${selectedDate}/${benstartdate}/${benenddate}/${benchmarkCompute}/${deviationPercentage}/${chains}`;
     }
 
     console.log("API URL:", url);
@@ -44,4 +44,4 @@ async function GanttData({
   }
 }
 
-export default GanttData;
+export default GanttData1;

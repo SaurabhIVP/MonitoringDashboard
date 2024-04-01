@@ -1,27 +1,34 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
+import CloseIcon from "@mui/icons-material/Close";
+
 import Popover from "@mui/material/Popover";
 import SearchBar from "../generics/SearchBar";
-import Datepicker from "../generics/Datepicker";
+import Datepicker from "../generics/datepicker/Datepicker";
 import Tasknames from "../../api/Tasknames";
 import ChainNames from "../../api/ChainNamesByTaskname";
 import FlowIdGetter from "../../api/FlowIdGetter";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   StyledBox,
   StyledButton,
+  StyledDatepickerContainer,
   StyledHeading,
 } from "../../utils/StyledComponents";
 import { IconButton } from "@mui/material";
 import { FilterColor, SecondaryColor } from "../../utils/Colors";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { FilterButton } from "../generics/FilterButton";
+import NumberField from "../generics/NumberField";
+import Dropdown from "../generics/Dropdown";
 type ChartFilterProps = {
   onTaskSelected: (id: number, key: string) => void;
   onStartDateSelected: (startdate: Date | null) => void;
   onEndDateSelected: (enddate: Date | null) => void;
   onBenchStartDateSelected: (sdate: Date | null) => void;
   onBenchEndDateSelected: (edate: Date | null) => void;
+  onDeviationChange: (val: any | null) => void;
+  onBenchmarkComputeChange: (val: any | null) => void;
 };
 
 const TaskChartFilter: React.FC<ChartFilterProps> = ({
@@ -30,6 +37,8 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
   onEndDateSelected,
   onBenchStartDateSelected,
   onBenchEndDateSelected,
+  onBenchmarkComputeChange,
+  onDeviationChange
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -76,22 +85,18 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
   );
   const handleEndDateChange = (newDate: Date | null) => {
     setEndDate(newDate);
-    
   };
 
   const handleStartDateChange = (newDate: Date | null) => {
     setStartDate(newDate);
-    
   };
 
   const handleBenchStartDateChange = (newDate: Date | null) => {
     setBenchStartDate(newDate);
-    
   };
 
   const handleBenchendDateChange = (newDate: Date | null) => {
     setBenchEndDate(newDate);
-    
   };
 
   const [flowId, setFlowId] = React.useState(0);
@@ -111,13 +116,25 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
     }
   };
   const isEndDateValid =
-  startDate === null ||
-  EndDate === null ||
-  (startDate !== null && EndDate !== null && EndDate >= startDate);
-const isBenchEndDateValid =
-BenchstartDate === null ||
-BenchendDate === null ||
-(BenchstartDate !== null && BenchendDate !== null && BenchendDate >= BenchstartDate);
+    startDate === null ||
+    EndDate === null ||
+    (startDate !== null && EndDate !== null && EndDate >= startDate);
+  const [key, setKey] = useState("1");
+  const resetButtonHandler = () => {
+    setStartDate(new Date(2024, 0, 17));
+    setEndDate(new Date(2024, 0, 24));
+    setBenchStartDate(new Date(2024, 0, 17));
+    setBenchEndDate(new Date(2024, 0, 24));
+    setSelectedChainValue(null);
+    setKey(key === "1" ? "2" : "1");
+    setSelectedTaskValue(null);
+  };
+  const isBenchEndDateValid =
+    BenchstartDate === null ||
+    BenchendDate === null ||
+    (BenchstartDate !== null &&
+      BenchendDate !== null &&
+      BenchendDate >= BenchstartDate);
   useEffect(() => {
     fetchData();
   }, [selectedChainValue, selectedTaskValue]);
@@ -128,12 +145,28 @@ BenchendDate === null ||
     onEndDateSelected(EndDate);
     onBenchStartDateSelected(BenchstartDate);
     onBenchEndDateSelected(BenchendDate);
+    onDeviationChange(deviationPercentage);
+    onBenchmarkComputeChange(benchmarkCompute)
     handleClose();
   };
-
+  
+  const [deviationPercentage, setDeviationPercentage] = useState<string | null>(
+    "0"
+  );
+  const handleDeviationChange = (value: string | null) => {
+    setDeviationPercentage(value);
+    console.log(deviationPercentage);
+  };
+  const benchmarkComputeOptions = [
+    {
+      text: "Average",
+      value: "Average",
+    },
+  ];
+  const [benchmarkCompute, setBenchmarkCompute] = useState("Average");
   return (
     <div style={{}}>
-       <FilterButton ariaLabel="" onClick={handleClick}></FilterButton>
+      <FilterButton ariaLabel="" onClick={handleClick}></FilterButton>
       <Popover
         id={id}
         keepMounted={true}
@@ -150,16 +183,28 @@ BenchendDate === null ||
         }}
       >
         <StyledBox height={"auto"}>
-          <div style={{marginBottom:15}}>
-          <SearchBar
-            fetchDataFunction={() => Tasknames({ chain_id: 0 })}
-            nameParam="task_name"
-            label="Search Task Name"
-            onSearch={ChainhandleSearch}
-            idParam="flow_id"
-          />
-</div>
-         
+          <IconButton
+            onClick={handleClose}
+            style={{
+              position: "absolute",
+              top: "5px",
+              right: "5px",
+              color: "red",
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <div style={{ marginBottom: 15,paddingTop:'35px' }}>
+            <SearchBar
+              fetchDataFunction={() => Tasknames({ chain_id: 0 })}
+              nameParam="task_name"
+              label="Search Task Name"
+              onSearch={ChainhandleSearch}
+              idParam="flow_id"
+              keyProp={key}
+            />
+          </div>
+
           <SearchBar
             fetchDataFunction={() =>
               ChainNames({ taskname: selectedChainValue?.key })
@@ -168,38 +213,40 @@ BenchendDate === null ||
             label="Search Chain Name"
             onSearch={TaskhandleSearch}
             idParam="flow_id"
+            keyProp={key}
           />
 
-         
           <div
             style={{
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
+              paddingTop:'10px'
             }}
           >
             {/* Start Datepicker */}
             <Datepicker
-              name="Start Date"
+              name="Task Start Date"
               selectedDate={startDate}
               onDateChange={handleStartDateChange}
               flag={isEndDateValid}
             />
             {/* End Datepicker */}
             <Datepicker
-              name="End Date"
+              name="Task End Date"
               selectedDate={EndDate}
               onDateChange={handleEndDateChange}
               flag={isEndDateValid}
             />
           </div>
-        
+
           <div
             style={{
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
-              paddingBottom:60
+              paddingBottom: 0,
+              paddingTop:'10px'
             }}
           >
             {/* Start Datepicker */}
@@ -217,6 +264,22 @@ BenchendDate === null ||
               flag={isBenchEndDateValid}
             />
           </div>
+          <StyledDatepickerContainer style={{marginBottom:'40px'}}>
+            <div >
+              <NumberField
+                name="Deviation % Threshold"
+                value={deviationPercentage}
+                onChange={handleDeviationChange}
+              ></NumberField>
+            </div>
+            <div style={{paddingTop:'19px'}}>
+              <Dropdown
+                name="Benchmark Compute Type"
+                benchmarkComputeOptions={benchmarkComputeOptions}
+                onChange={()=>{}}
+              ></Dropdown>
+            </div>
+          </StyledDatepickerContainer>
           {/* <Button
             onClick={buttonHandler}
             style={{
@@ -236,16 +299,17 @@ BenchendDate === null ||
               zIndex: 999,
             }}
           >
-          <StyledButton onClick={buttonHandler} style={{ marginRight: 15 }}>
+            <StyledButton onClick={buttonHandler} style={{ marginRight: 15 }}>
               SUBMIT
             </StyledButton>
-            <StyledButton autoFocus onClick={handleClose}>
-            Cancel
-          </StyledButton>
-            </div>
-            
+            <StyledButton
+              onClick={resetButtonHandler}
+              style={{ backgroundColor: "gray" }}
+            >
+              Reset
+            </StyledButton>
+          </div>
         </StyledBox>
-        
       </Popover>
     </div>
   );

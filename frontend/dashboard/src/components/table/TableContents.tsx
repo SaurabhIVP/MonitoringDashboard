@@ -1,12 +1,15 @@
+import { GridColDef } from "@mui/x-data-grid";
+
+// consider below array as [chain_label,is_deviation,is_collapsable,alignment,isDateTime]
 export const chainLabels = [
-  "chain_name",
-  "start_time",
-  "end_time",
-  "status",
-  "total_times",
-  "avg_total_time",
-  "deviation_in_time",
-  "performance",
+  ["chain_name",false,true,"left",false],
+  ["start_time",false,false,"center",true],
+  ["end_time",false,false,"center",true],
+  ["status",false,false,"center",false],
+  ["total_times",false,false,"center",false],
+  ["avg_total_time",false,false,"center",false],
+  ["deviation_in_time",false,false,"center",false],
+  ["performance",true,false,"center",false],
 ] as any;
 
 export const chainHeaders = [
@@ -17,18 +20,18 @@ export const chainHeaders = [
   "Total Time",
   "Benchmark Time","Deviation Time",
   "Deviation",
-];
+] ;
 
 export const TaskLabels = [
-  "task_name",
-  "start_time",
-  "end_time",
-  "status",
-  "total_times",
-  "avg_total_time",
-  "deviation_in_time",
-  "performance",
-];
+  ["task_name",false,true,"left",false],
+  ["start_time",false,false,"center",true],
+  ["end_time",false,false,"center",true],
+  ["status",false,false,"center",false],
+  ["total_times",false,false,"center",false],
+  ["avg_total_time",false,false,"center",false],
+  ["deviation_in_time",false,false,"center",false],
+  ["performance",true,false,"center",false],
+] as any;
 export const TaskHeaders = [
   "Task Name",
   "Start Time",

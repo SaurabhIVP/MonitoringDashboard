@@ -26,7 +26,7 @@ function Dropdown({ name, benchmarkComputeOptions, onChange }: dropprops) {
   };
 
   return (
-    <FormControl sx={{ minWidth: 200 }}>
+    <FormControl sx={{width:'260px' }}>
       <InputLabel id="demo-simple-select-autowidth-label">{name}</InputLabel>
       <Select
         labelId="demo-simple-select-autowidth-label"

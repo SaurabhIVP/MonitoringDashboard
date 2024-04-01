@@ -11,6 +11,8 @@ interface TaskProps {
   endDate?: any | null;
   benchStartDate?: any | null;
   benchEndDate?: any | null;
+  benchmarkCompute?: any | null;
+  deviationPercentage?: any | null;
 }
 
 async function ChartChain({
@@ -19,6 +21,8 @@ async function ChartChain({
   endDate,
   benchStartDate,
   benchEndDate,
+  benchmarkCompute,
+  deviationPercentage
 }: TaskProps) {
   try {
     const startInProperFormat = DateConversion(startDate);
@@ -32,6 +36,8 @@ async function ChartChain({
       endDate: endInProperFormat,
       benchStartDate: benchmarkStartInProperFormat,
       benchEndDate: benchmarkEndInProperFormat,
+      benchmarkCompute: benchmarkCompute,
+      deviationPercentage: deviationPercentage,
     };
     const response = await axios.get(url, { params });
     console.log(response);
