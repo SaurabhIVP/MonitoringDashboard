@@ -19,6 +19,7 @@ interface GanttProps {
   benchCompute: any | null;
   deviation: any | null;
   object: any;
+  is_pm:boolean
 }
 const ChildGantt: React.FC<GanttProps> = ({
   // chain_id = 3,
@@ -28,6 +29,7 @@ const ChildGantt: React.FC<GanttProps> = ({
   benchend = "2024-01-24",
   deviation = "0",
   object = null,
+  is_pm=false
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -125,6 +127,7 @@ const ChildGantt: React.FC<GanttProps> = ({
         benchEndDate: benchend,
         benchmarkCompute: benchCompute,
         deviationPercentage: deviation,
+        is_pm:is_pm
       });
       setData(response as any[]);
       
@@ -283,6 +286,7 @@ const ChildGantt: React.FC<GanttProps> = ({
             onBenchStartDateSelected={handleBenchStartDateChange}
             onBenchEndDateSelected={handleBenchendDateChange}
             onDeviationChange={handleDeviationChange}
+            
           ></ChildGanttFilter>
         </div>
         <div style={{display:'flex',fontFamily:'roboto',fontSize:'small',fontWeight:'bold',marginTop:'20px',marginLeft:'10px'}}>

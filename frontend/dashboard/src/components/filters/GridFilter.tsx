@@ -43,6 +43,7 @@ type ChartFilterProps = {
   onDeviationChange: (val: any | null) => void;
   onBenchmarkComputeChange: (val: any | null) => void;
   onCheck: (flag: any | null) => void;
+  onPmChange:(val:string)=>void;
 };
 
 const GridFilter: React.FC<ChartFilterProps> = ({
@@ -54,6 +55,7 @@ const GridFilter: React.FC<ChartFilterProps> = ({
   onDeviationChange,
   onCheck,
   onBenchmarkComputeChange,
+  onPmChange
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [deviationPercentage, setDeviationPercentage] = useState<string | null>(
@@ -84,7 +86,7 @@ const GridFilter: React.FC<ChartFilterProps> = ({
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const [isPm,setIsPm]=useState<string>("false");
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
@@ -130,7 +132,7 @@ const GridFilter: React.FC<ChartFilterProps> = ({
   const handleBenchendDateChange = (newDate: Date | null) => {
     setBenchEndDate(newDate);
   };
-  
+
   const isEndDateValid =
     startDate === null ||
     EndDate === null ||
@@ -142,6 +144,9 @@ const GridFilter: React.FC<ChartFilterProps> = ({
     (BenchstartDate !== null &&
       BenchendDate !== null &&
       BenchendDate >= BenchstartDate);
+      const handlePMChange = (event: SelectChangeEvent) => {
+        setIsPm(event.target.value as string);
+      };
   const resetButtonHandler = () => {
     setStartDate(new Date(2024, 0, 10));
     setEndDate(new Date(2024, 0, 10));
@@ -154,6 +159,13 @@ const GridFilter: React.FC<ChartFilterProps> = ({
     selectedChainValueRef.current = null;
     selectedTaskValueRef.current = null;
   };
+  const getboolean=(val:string)=>{
+    if(val=="true"){
+      return true;
+    }else{
+      return false;
+    }
+  }
   const buttonHandler = () => {
     const id = selectedChainValueRef.current?.id;
     const key = selectedChainValueRef.current?.key;
@@ -175,6 +187,8 @@ const GridFilter: React.FC<ChartFilterProps> = ({
     onCheck(age);
     onDeviationChange(deviationPercentage);
     onBenchmarkComputeChange(benchmarkCompute);
+    onPmChange(isPm)
+    console.log(isPm);
     handleClose();
   };
 
@@ -211,6 +225,22 @@ const GridFilter: React.FC<ChartFilterProps> = ({
             >
               <CloseIcon />
             </IconButton>
+            <div >
+              <FormControl  sx={{width:'550px',paddingBottom:'15px' }}>
+                <InputLabel id="demo-simple-select-label">System</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={isPm}
+                  label="System"
+                  onChange={handlePMChange}
+                >
+                  <MenuItem value={"false"}>SecMaster</MenuItem>
+                  <MenuItem value={"true"}>PriceMaster</MenuItem>
+                  
+                </Select>
+              </FormControl>
+            </div>
             <FormControl style={{ width: "550px" }}>
               <InputLabel id="demo-simple-select-label">
                 Select Filter Criteria
@@ -233,7 +263,7 @@ const GridFilter: React.FC<ChartFilterProps> = ({
             {age == "20" ? (
               <div style={{ paddingTop: "10px" }}>
                 <SearchbarTask
-                  fetchDataFunction={() => Tasknames({ chain_id: 0 })}
+                  fetchDataFunction={() => Tasknames({ chain_id: 0 ,is_pm:getboolean(isPm)})}
                   nameParam="task_name"
                   label="Search Task Name"
                   onSearch={TaskhandleSearch}
@@ -243,7 +273,7 @@ const GridFilter: React.FC<ChartFilterProps> = ({
             ) : age == "10" ? (
               <div style={{ paddingTop: "10px" }}>
                 <SearchBar
-                  fetchDataFunction={AllData}
+                  fetchDataFunction={()=>AllData({is_pm:getboolean(isPm)})}
                   nameParam="chain_name"
                   label="Search Chain Name"
                   onSearch={ChainhandleSearch}
@@ -271,7 +301,7 @@ const GridFilter: React.FC<ChartFilterProps> = ({
             />
           </StyledDatepickerContainer>
 
-          <StyledDatepickerContainer style={{paddingBottom:'0px'}}>
+          <StyledDatepickerContainer style={{ paddingBottom: "0px" }}>
             <Datepicker
               name="Benchmark Start Date"
               selectedDate={BenchstartDate}
@@ -285,7 +315,7 @@ const GridFilter: React.FC<ChartFilterProps> = ({
               flag={isBenchEndDateValid}
             />
           </StyledDatepickerContainer>
-          <StyledDatepickerContainer>
+          <StyledDatepickerContainer style={{marginBottom:'0px'}}>
             {/* <div style={{  marginBottom: 56 }}>
               <NumberField
                 name="Deviation % Threshold"
@@ -293,22 +323,24 @@ const GridFilter: React.FC<ChartFilterProps> = ({
                 onChange={handleDeviationChange}
               ></NumberField>
             </div> */}
-            <div style={{ paddingTop:20 }}>
+            <div >
               <Dropdown
                 name="Benchmark Compute Type"
                 benchmarkComputeOptions={benchmarkComputeOptions}
                 onChange={onChange}
               ></Dropdown>
             </div>
+            
           </StyledDatepickerContainer>
           <div
             style={{
               position: "absolute",
-              bottom: "15px",
+              bottom: "10px",
+              paddingTop:'0px',
               right: "45px",
               zIndex: 999,
               marginTop: "0px",
-              marginBottom: "20px",
+              
             }}
           >
             <StyledButton onClick={buttonHandler} style={{ marginRight: 16 }}>

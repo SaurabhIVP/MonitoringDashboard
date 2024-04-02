@@ -13,6 +13,7 @@ import {
   ListItem,
   Paper,
   Typography,
+  SelectChangeEvent
 } from "@mui/material";
 import Tasknames from "../../api/Tasknames";
 import DateFilters from "../../components/filters/DateFilters";
@@ -137,6 +138,14 @@ const Charts: React.FC = () => {
     setBenchmarkCompute(value);
     console.log(benchmarkCompute);
   };
+  const [isPm,setIsPm]=useState<string>("false");
+      const handlePMChange = (event: any) => {
+        setIsPm(event as string);
+      };
+      const [istaskPm,settaskIsPm]=useState<string>("false");
+      const handlePMtaskChange = (event: any) => {
+        settaskIsPm(event as string);
+      };
   //child task benchmark handlers
   const handleBenchChildStartDateChange = (newDate: Date | null) => {
     setBenchChildStartDate(newDate);
@@ -144,6 +153,13 @@ const Charts: React.FC = () => {
   const handleBenchChildendDateChange = (newDate: Date | null) => {
     setBenchChildEndDate(newDate);
   };
+  const getboolean=(val:string)=>{
+    if(val=="true"){
+      return true;
+    }else{
+      return false;
+    }
+  }
   //Data for Child charts (Task charts) for selected chain
   const [data, setData] = useState([]);
   const fetchData = async () => {
@@ -151,6 +167,7 @@ const Charts: React.FC = () => {
       setData([]);
       const response = (await Tasknames({
         chain_id: selectedChainValue?.id || 2775,
+        is_pm:getboolean(isPm)
       })) as any;
       console.log(response);
       setData(response || []);
@@ -210,6 +227,7 @@ const Charts: React.FC = () => {
                   onBenchEndDateSelected={handleBenchendDateChange}
                   onBenchmarkComputeChange={onChange}
                   onDeviationChange={handleDeviationChange}
+                  onPmChange={handlePMChange}
                 />
               </div>
             </StyledDatepickerContainer>
@@ -280,6 +298,7 @@ const Charts: React.FC = () => {
                   benchEndDate: BenchendDate,
                   benchmarkCompute: benchmarkCompute,
                   deviationPercentage: deviationPercentage,
+                  is_pm:getboolean(isPm)
                 })
               }
               title="Chain Time"
@@ -314,6 +333,7 @@ const Charts: React.FC = () => {
               onBenchEndDateSelected={handleTaskBenchendDateChange}
               onDeviationChange={handletaskDeviationChange}
               onBenchmarkComputeChange={onChange}
+              onPmChange={handlePMtaskChange}
             />
           </div>
           {/* <ListItem>
@@ -375,13 +395,14 @@ const Charts: React.FC = () => {
             <ChainChart
               fetchDataFunction={() =>
                 ChartTask({
-                  flow_id: selectedTaskValue?.id || 2919,
+                  flow_id: selectedTaskValue?.id || 1,
                   startDate: taskStartDate,
                   endDate: taskEndDate,
                   benchStartDate: BenchTaskstartDate,
                   benchEndDate: BenchTaskendDate,
                   deviationPercentage: taskdeviationPercentage,
                   benchmarkCompute: benchmarkCompute,
+                  is_pm:getboolean(istaskPm)
                 })
               }
               title="Task Time"
@@ -515,6 +536,7 @@ const Charts: React.FC = () => {
                           benchEndDate: BenchChildendDate,
                           deviationPercentage: deviationPercentage,
                           benchmarkCompute: onchange,
+                          is_pm:getboolean(isPm)
                         })
                       }
                       title="Task Time"

@@ -28,7 +28,8 @@ async function ChainDetails({
     {
       deviationPercentage=0;
     }
-    const url = `${API_URL}/chaindetails/${chain_id}`;
+    let is_pm=false;
+    const url = `${API_URL}/chaindetails/${chain_id}/${is_pm}`;
     const params = {
       
       startDate: startInProperFormat,
@@ -36,7 +37,8 @@ async function ChainDetails({
       benchStartDate: benchmarkStartInProperFormat,
       benchEndDate: benchmarkEndInProperFormat,
       benchmarkCompute: benchmarkCompute,
-      deviationPercentage: deviationPercentage
+      deviationPercentage: deviationPercentage,
+      
     };
     console.log(params);
     const response = await axios.get(url, { params });

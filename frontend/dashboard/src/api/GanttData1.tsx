@@ -10,6 +10,7 @@ interface GanttProps {
   benchEndDate: any | null;
   benchmarkCompute?: any | null;
   deviationPercentage?: any | null;
+  is_pm:boolean
 }
 async function GanttData1({
   chains = null,
@@ -20,16 +21,18 @@ async function GanttData1({
   benchEndDate = null,
   benchmarkCompute = null,
   deviationPercentage = null,
+  is_pm=false
 }: GanttProps) {
   try {
     const selectedDate = DateConversion(date);
     const benstartdate = DateConversion(benchStartDate);
     const benenddate = DateConversion(benchEndDate);
-    let url = `/tasks`;
+    // let is_pm=false;
+    let url = `/tasks/${is_pm}`;
     let params = {};
 
     if (chains != null && starttime != null && endtime != null) {
-      url = `/tasks1/${selectedDate}/${benstartdate}/${benenddate}/${benchmarkCompute}/${deviationPercentage}/${chains}`;
+      url = `/tasks1/${selectedDate}/${benstartdate}/${benenddate}/${benchmarkCompute}/${deviationPercentage}/${is_pm}/${chains}`;
     }
 
     console.log("API URL:", url);

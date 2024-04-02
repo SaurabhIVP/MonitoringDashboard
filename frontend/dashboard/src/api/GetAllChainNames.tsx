@@ -1,8 +1,10 @@
 import { apiService } from "./configurations/ApiService";
-
-async function GetAllChainNames() {
+interface props{
+  is_pm:boolean
+}
+async function GetAllChainNames({is_pm}:props) {
   try {
-    const response = await apiService.get("/chains");
+    const response = await apiService.get(`/chains/${is_pm}`);
     console.log(response);
     return response;
   } catch (error) {

@@ -74,7 +74,18 @@ const GridTable: React.FC<ExampleProps> = ({
   const handleBenchendDateChange = (newDate: Date | null) => {
     setBenchEndDate(newDate);
   };
-
+  const getboolean=(val:any)=>{
+    if(val=="true" || val==true){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  const [isPm,setIsPm]=useState<string>("false");
+      const handlePMChange = (event: any) => {
+        console.log(event);
+        setIsPm(event as string);
+      };
   const handleChainSelected = (
     chainData: { id: number | null; key: string } | any
   ) => {
@@ -99,6 +110,7 @@ const GridTable: React.FC<ExampleProps> = ({
           benchEndDate: BenchendDate,
           benchmarkCompute: "Average",
           deviationPercentage: "0",
+          is_pm:getboolean(isPm)
         });
         const chainsWithData = await Promise.all(
           response.map(async (chain: any) => {
@@ -110,6 +122,7 @@ const GridTable: React.FC<ExampleProps> = ({
               benchEndDate: new Date(2024, 0, 3),
               benchmarkCompute: "Average",
               deviationPercentage: "0",
+              is_pm:getboolean(isPm)
             });
             chain.tasks = tasksResponse || [];
             return { ...chain, showTasks: false }; // Initialize showTasks property
@@ -126,6 +139,7 @@ const GridTable: React.FC<ExampleProps> = ({
           benchEndDate: BenchendDate,
           benchmarkCompute: benchmarkCompute,
           deviationPercentage: deviationPercentage,
+          is_pm:getboolean(isPm)
         });
         const chainsWithData = await Promise.all(
           response.map(async (chain: any) => {
@@ -137,6 +151,7 @@ const GridTable: React.FC<ExampleProps> = ({
               benchEndDate: new Date(2024, 0, 3),
               benchmarkCompute: "Average",
               deviationPercentage: "0",
+              is_pm:getboolean(isPm)
             });
             chain.tasks = tasksResponse || [];
             return { ...chain, showTasks: false }; // Initialize showTasks property
@@ -153,6 +168,7 @@ const GridTable: React.FC<ExampleProps> = ({
           benchEndDate: BenchendDate,
           benchmarkCompute: "Average",
           deviationPercentage: "0",
+          is_pm:getboolean(isPm)
         });
         const chainsWithData = await Promise.all(
           response.map(async (chain: any) => {
@@ -164,6 +180,7 @@ const GridTable: React.FC<ExampleProps> = ({
               benchEndDate: new Date(2024, 0, 3),
               benchmarkCompute: "Average",
               deviationPercentage: "0",
+              is_pm:getboolean(isPm)
             });
             chain.tasks = tasksResponse || [];
             return { ...chain, showTasks: false }; // Initialize showTasks property
@@ -190,6 +207,7 @@ const GridTable: React.FC<ExampleProps> = ({
     BenchendDate,
     selectedChainValue,
     age,
+    isPm
     
   ]);
 
@@ -285,6 +303,7 @@ const GridTable: React.FC<ExampleProps> = ({
           },
         },
         accessorKey: "performance",
+        
         header: "Deviation %",
         filterFn: "greaterThanOrEqualTo",
         muiTableBodyCellProps: {
@@ -295,6 +314,7 @@ const GridTable: React.FC<ExampleProps> = ({
             component="div"
             sx={(theme: any) => ({
               textAlign: "center",
+              
               width: "20px",
               backgroundColor:
                 cell.getValue<string>() < "0"
@@ -412,6 +432,7 @@ const GridTable: React.FC<ExampleProps> = ({
             onCheck={handleAgeChange}
             onDeviationChange={handleDeviationChange}
             onBenchmarkComputeChange={handleBenchmarkCompute}
+            onPmChange={handlePMChange}
           ></GridFilter>
         </div>
         {/* 

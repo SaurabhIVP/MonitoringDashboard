@@ -23,16 +23,18 @@ async function CurrentData({
     const endInProperFormat = DateConversion(endDate);
     const benchmarkStartInProperFormat = DateConversion(benchStartDate);
     const benchmarkEndInProperFormat = DateConversion(benchEndDate);
+    let is_pm=false;
     const params = {
       startDate: startInProperFormat,
       endDate: endInProperFormat,
       benchStartDate: benchmarkStartInProperFormat,
       benchEndDate: benchmarkEndInProperFormat,
       benchmarkCompute: benchmarkCompute,
-      deviationPercentage: deviationPercentage
+      deviationPercentage: deviationPercentage,
+     
     };
     console.log(params);
-    const url = `${API_URL}/currentData`;
+    const url = `${API_URL}/currentData/${is_pm}`;
     const response = await axios.get(url, { params });
     console.log(response);
     return response.data;

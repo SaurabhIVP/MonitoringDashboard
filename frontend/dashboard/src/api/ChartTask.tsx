@@ -10,6 +10,7 @@ interface TaskProps {
   benchEndDate?: any | null;
   benchmarkCompute?: any | null;
   deviationPercentage?: any | null;
+  is_pm:boolean
 }
 
 async function ChartTask({
@@ -19,14 +20,17 @@ async function ChartTask({
   benchStartDate,
   benchEndDate,
   benchmarkCompute,
-  deviationPercentage
+  deviationPercentage,
+  is_pm
 }: TaskProps) {
   try {
     const startInProperFormat = DateConversion(startDate);
     const endInProperFormat = DateConversion(endDate);
     const benchmarkStartInProperFormat = DateConversion(benchStartDate);
     const benchmarkEndInProperFormat = DateConversion(benchEndDate);
-    const url = `${API_URL}/chartTimes`;
+    // let is_pm=false;
+    const url = `${API_URL}/chartTimes/${is_pm}`;
+    
     const params = {
       flow_id: flow_id,
       startDate: startInProperFormat,
@@ -35,9 +39,12 @@ async function ChartTask({
       benchEndDate: benchmarkEndInProperFormat,
       benchmarkCompute: benchmarkCompute,
       deviationPercentage: deviationPercentage,
-    };
+      // is_pm:false
+    } as any;
 
     const response = await axios.get(url, { params });
+    const fullUrl = `${url}?${new URLSearchParams(params).toString()}`;
+console.log("Full URL:", fullUrl);
     console.log(response);
     return response.data; // Assuming you want to return the data property of the response
   } catch (error) {

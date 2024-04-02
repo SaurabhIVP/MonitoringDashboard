@@ -53,6 +53,9 @@ const ChainChart: React.FC<BasicLineChartProps> = ({
   setAlert(hasNullAvgTotalTime);
   console.log('flag is'+ hasNullAvgTotalTime);
   }, [fetchDataFunction]);
+  useEffect(()=>{
+    console.log(data);
+  },[data])
   
   
   const chartData = {

@@ -65,7 +65,7 @@ function Dashboard() {
   return (
     <>
       <div style={{ paddingTop: 60 }}>
-        <Paper elevation={8} style={{ padding: 0, margin: 20 }}>
+        {/* <Paper elevation={8} style={{ padding: 0, margin: 20 }}>
           <StyledDatepickerContainer
             style={{
               marginRight: "100px",
@@ -152,7 +152,7 @@ function Dashboard() {
               name={selectedChainValue?.key}
               ></CollapsibleTable>
           </div>
-        </Paper>
+        </Paper> */}
       </div>
     </>
   );

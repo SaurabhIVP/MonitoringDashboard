@@ -37,6 +37,7 @@ type ChartFilterProps = {
   onBenchStartDateSelected: (c: Date | null) => void;
   onBenchEndDateSelected: (c: Date | null) => void;
   onDeviationChange: (val: any | null) => void;
+
 };
 
 const ChildGanttFilter: React.FC<ChartFilterProps> = ({
@@ -47,6 +48,7 @@ const ChildGanttFilter: React.FC<ChartFilterProps> = ({
   onBenchStartDateSelected,
   onEndTimeSelected,
   onDeviationChange,
+
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -117,6 +119,7 @@ const ChildGanttFilter: React.FC<ChartFilterProps> = ({
     onBenchStartDateSelected(BenchstartDate);
     onDeviationChange(deviationPercentage);
     console.log(startTime);
+
     onFilter(true);
     // start=false;
     // end=false;

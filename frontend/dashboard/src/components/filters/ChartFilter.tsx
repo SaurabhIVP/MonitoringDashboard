@@ -8,6 +8,14 @@ import SearchBar from "../generics/SearchBar";
 import Datepicker from "../generics/datepicker/Datepicker";
 import GetAllChainNames from "../../api/GetAllChainNames";
 import {
+  FormControl,
+  InputBase,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
+import {
   StyledBox,
   StyledButton,
   StyledDatepickerContainer,
@@ -29,6 +37,7 @@ type ChartFilterProps = {
   onBenchEndDateSelected: (edate: Date | null) => void;
   onDeviationChange: (val: any | null) => void;
   onBenchmarkComputeChange: (val: any | null) => void;
+  onPmChange:(val:string)=>void;
 };
 
 const ChartFilter: React.FC<ChartFilterProps> = ({
@@ -38,7 +47,8 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
   onBenchStartDateSelected,
   onBenchEndDateSelected,
   onDeviationChange,
-  onBenchmarkComputeChange
+  onBenchmarkComputeChange,
+  onPmChange
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -115,6 +125,10 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
     (BenchstartDate !== null &&
       BenchendDate !== null &&
       BenchendDate >= BenchstartDate);
+      const [isPm,setIsPm]=useState<string>("false");
+      const handlePMChange = (event: SelectChangeEvent) => {
+        setIsPm(event.target.value as string);
+      };
   const buttonHandler = () => {
     const id = selectedChainValueRef.current?.id;
     const key = selectedChainValueRef.current?.key;
@@ -126,7 +140,8 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
     onBenchStartDateSelected(BenchstartDate);
     onBenchEndDateSelected(BenchendDate);
     onDeviationChange(deviationPercentage);
-    onBenchmarkComputeChange(benchmarkCompute)
+    onBenchmarkComputeChange(benchmarkCompute);
+    onPmChange(isPm);
     handleClose();
   };
   const resetButtonHandler = () => {
@@ -139,6 +154,13 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
     setKey(key === "1" ? "2" : "1");
     selectedChainValueRef.current = null;
   };
+  const getboolean=(val:string)=>{
+    if(val=="true"){
+      return true;
+    }else{
+      return false;
+    }
+  }
   return (
     <div style={{}}>
       <FilterButton ariaLabel="" onClick={handleClick}></FilterButton>
@@ -169,9 +191,23 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
           >
             <CloseIcon />
           </IconButton>
-          <div style={{paddingTop:'35px'}}>
+          <FormControl  sx={{width:'550px',marginTop:'25px' }}>
+                <InputLabel id="demo-simple-select-label">System</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={isPm}
+                  label="System"
+                  onChange={handlePMChange}
+                >
+                  <MenuItem value={"false"}>SecMaster</MenuItem>
+                  <MenuItem value={"true"}>PriceMaster</MenuItem>
+                  
+                </Select>
+              </FormControl>
+          <div style={{paddingTop:'15px'}}>
             <SearchBar
-              fetchDataFunction={GetAllChainNames}
+              fetchDataFunction={()=>GetAllChainNames({is_pm:getboolean(isPm)})}
               nameParam="chain_name"
               label="Search Chain Name"
               onSearch={ChainhandleSearch}

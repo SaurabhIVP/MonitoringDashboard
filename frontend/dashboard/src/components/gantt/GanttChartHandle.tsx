@@ -44,6 +44,18 @@ const GanttChartHandle = () => {
     setBenchmarkCompute(value);
     console.log(benchmarkCompute);
   };
+  const getboolean=(val:any)=>{
+    if(val=="true" || val==true){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  const [isPm,setIsPm]=useState<string>("false");
+      const handlePMChange = (event: any) => {
+        console.log(event);
+        setIsPm(event as string);
+      };
   useEffect(() => {
     fetchData();
   }, [filter]);
@@ -65,6 +77,7 @@ const GanttChartHandle = () => {
         benchEndDate: BenchendDate,
         benchmarkCompute: benchmarkCompute,
         deviationPercentage: deviationPercentage,
+        is_pm:getboolean(isPm)
       });
       setFilteredData(response as any[]);
       console.log(filteredData);
@@ -92,6 +105,7 @@ const GanttChartHandle = () => {
             onBenchEndDateSelected={handlebenEndTimeChange}
             onBenchmarkComputeChange={BenchonChange}
             onDeviationChange={handleDeviationChange}
+            onPmChange={handlePMChange}
           ></GanttFilter>
         </div>
         {/* <ListItem>
@@ -153,6 +167,7 @@ const GanttChartHandle = () => {
           date={ganttstartTime}
           benchstart={BenchstartDate}
           benchend={BenchendDate}
+          is_pm={getboolean(isPm)}
         ></GanttChart>
       </div>
     </div>

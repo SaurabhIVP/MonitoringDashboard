@@ -1,7 +1,14 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
-
+import {
+  FormControl,
+  InputBase,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
 import Popover from "@mui/material/Popover";
 import SearchBar from "../generics/SearchBar";
 import Datepicker from "../generics/datepicker/Datepicker";
@@ -29,6 +36,7 @@ type ChartFilterProps = {
   onBenchEndDateSelected: (edate: Date | null) => void;
   onDeviationChange: (val: any | null) => void;
   onBenchmarkComputeChange: (val: any | null) => void;
+  onPmChange:(val:string)=>void;
 };
 
 const TaskChartFilter: React.FC<ChartFilterProps> = ({
@@ -38,7 +46,8 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
   onBenchStartDateSelected,
   onBenchEndDateSelected,
   onBenchmarkComputeChange,
-  onDeviationChange
+  onDeviationChange,
+  onPmChange
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -51,7 +60,17 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
     id: number;
     [key: string]: any;
   } | null>(null);
-
+  const [isPm, setIsPm] = useState<string>("false");
+  const handlePMChange = (event: SelectChangeEvent) => {
+    setIsPm(event.target.value as string);
+  };
+  const getboolean = (val: string) => {
+    if (val == "true") {
+      return true;
+    } else {
+      return false;
+    }
+  };
   const ChainhandleSearch = async (id: number | null, key: string | null) => {
     setSelectedChainValue(id !== null ? { id, key } : null);
   };
@@ -106,6 +125,7 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
       const response = (await FlowIdGetter({
         taskname: selectedChainValue?.key,
         chainname: selectedTaskValue?.key,
+        is_pm:getboolean(isPm)
       })) as any;
 
       const extractedFlowIds = response.map((item: any) => item.flow_id);
@@ -140,6 +160,7 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
   }, [selectedChainValue, selectedTaskValue]);
 
   const buttonHandler = () => {
+    console.log(flowId);
     onTaskSelected(flowId, selectedChainValue?.key);
     onStartDateSelected(startDate);
     onEndDateSelected(EndDate);
@@ -147,6 +168,7 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
     onBenchEndDateSelected(BenchendDate);
     onDeviationChange(deviationPercentage);
     onBenchmarkComputeChange(benchmarkCompute)
+    onPmChange(isPm)
     handleClose();
   };
   
@@ -194,9 +216,23 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
           >
             <CloseIcon />
           </IconButton>
-          <div style={{ marginBottom: 15,paddingTop:'35px' }}>
+          <FormControl  sx={{width:'550px',marginTop:'25px' }}>
+                <InputLabel id="demo-simple-select-label">System</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={isPm}
+                  label="System"
+                  onChange={handlePMChange}
+                >
+                  <MenuItem value={"false"}>SecMaster</MenuItem>
+                  <MenuItem value={"true"}>PriceMaster</MenuItem>
+                  
+                </Select>
+              </FormControl>
+          <div style={{ marginBottom: 15,paddingTop:'15px' }}>
             <SearchBar
-              fetchDataFunction={() => Tasknames({ chain_id: 0 })}
+              fetchDataFunction={() => Tasknames({ chain_id: 0,is_pm:getboolean(isPm) })}
               nameParam="task_name"
               label="Search Task Name"
               onSearch={ChainhandleSearch}
@@ -207,7 +243,7 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
 
           <SearchBar
             fetchDataFunction={() =>
-              ChainNames({ taskname: selectedChainValue?.key })
+              ChainNames({ taskname: selectedChainValue?.key,is_pm:getboolean(isPm) })
             }
             nameParam="chain_name"
             label="Search Chain Name"

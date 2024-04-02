@@ -8,6 +8,7 @@ chain_id:any|null;
   benchEndDate: any | null;
   benchmarkCompute?: any | null;
   deviationPercentage?: any | null;
+  is_pm:boolean
 }
 async function GetTaskDetailsByChainGuid({
   chain_id=null,
@@ -17,15 +18,17 @@ async function GetTaskDetailsByChainGuid({
   benchEndDate = null,
   benchmarkCompute = null,
   deviationPercentage = null,
+  is_pm=false
 }: GanttProps) {
   try {
     const selectedDate = DateConversion(date);
     const benstartdate = DateConversion(benchStartDate);
     const benenddate = DateConversion(benchEndDate);
-    let url = `/tasks`;
+    // let is_pm=false;
+    let url = `/tasks/${is_pm}`;
     let params = {};
 
-      url = `/tasksdetailsbyChainguid/${chain_id}/${selectedDate}/${benstartdate}/${benenddate}/${benchmarkCompute}/${deviationPercentage}`;
+      url = `/tasksdetailsbyChainguid/${chain_id}/${selectedDate}/${benstartdate}/${benenddate}/${benchmarkCompute}/${deviationPercentage}/${is_pm}`;
     
 
     console.log("API URL:", url);

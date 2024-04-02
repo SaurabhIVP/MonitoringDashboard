@@ -13,7 +13,14 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { TimePicker as MuiTimePicker } from "@mui/lab";
-import { TextField, InputAdornment } from "@mui/material";
+import {
+  FormControl,
+  InputBase,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
 import {
   StyledBox,
   StyledButton,
@@ -39,6 +46,7 @@ type ChartFilterProps = {
   onBenchEndDateSelected: (c: Date | null) => void;
   onBenchmarkComputeChange: (val: any | null) => void;
   onDeviationChange: (val: any | null) => void;
+  onPmChange:(val:string)=>void;
 };
 
 const GanttFilter: React.FC<ChartFilterProps> = ({
@@ -51,6 +59,7 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
   onEndTimeSelected,
   onBenchmarkComputeChange,
   onDeviationChange,
+  onPmChange
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [multichains, setMultichains] = React.useState<string[]>([]);
@@ -119,6 +128,7 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
     onChainSelected(multichains);
     onBenchmarkComputeChange(benchmarkCompute);
     onDeviationChange(deviationPercentage);
+    onPmChange(isPm)
     console.log(startTime);
     handleClose();
   };
@@ -137,6 +147,17 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
   const handleDeviationChange = (value: string | null) => {
     setDeviationPercentage(value);
     console.log(deviationPercentage);
+  };
+  const [isPm, setIsPm] = useState<string>("false");
+  const handlePMChange = (event: SelectChangeEvent) => {
+    setIsPm(event.target.value as string);
+  };
+  const getboolean = (val: string) => {
+    if (val == "true") {
+      return true;
+    } else {
+      return false;
+    }
   };
   const [benchmarkCompute, setBenchmarkCompute] = useState("Average");
   const BenchonChange = (value: string) => {
@@ -173,6 +194,20 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
           >
             <CloseIcon />
           </IconButton>
+          <FormControl  sx={{width:'550px',paddingBottom:'10px',marginTop:'28px' }}>
+                <InputLabel id="demo-simple-select-label">System</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={isPm}
+                  label="System"
+                  onChange={handlePMChange}
+                >
+                  <MenuItem value={"false"}>SecMaster</MenuItem>
+                  <MenuItem value={"true"}>PriceMaster</MenuItem>
+                  
+                </Select>
+              </FormControl>
           <StyledDatepickerContainer style={{ paddingLeft: "130px" }}>
             <Datepicker
               name="Chain Run Date"
@@ -184,7 +219,7 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
           <div style={{ marginBottom: "10px" }}>
             <MultiSelect
               keyProp={key}
-              fetchDataFunction={AllData}
+              fetchDataFunction={()=>AllData({is_pm:getboolean(isPm)})}
               NameParam="chain_name"
               Label="Search chains"
               onSearch={HandleMultichains}
@@ -236,7 +271,7 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
               flag={isBenchEndDateValid}
             />
           </StyledDatepickerContainer>
-          <StyledDatepickerContainer>
+          <StyledDatepickerContainer style={{marginBottom:'0px'}}>
             <div style={{ marginBottom: 56 }}>
               <NumberField
                 name="Deviation % Threshold"

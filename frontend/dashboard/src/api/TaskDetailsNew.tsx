@@ -18,11 +18,12 @@ async function TaskDetailsNew({  startTime, endTime,benchStartDate,benchEndDate,
     const endInProperFormat = DateConversion(endTime);
     const benchmarkStartInProperFormat = DateConversion(benchStartDate);
     const benchmarkEndInProperFormat = DateConversion(benchEndDate);
+    let is_pm=false;
     if (deviationPercentage == undefined || deviationPercentage == "" || deviationPercentage == null )
     {
       deviationPercentage=0;
     }
-    const url = `${API_URL}/taskdetails`;
+    const url = `${API_URL}/taskdetails/${is_pm}`;
     const params = {
       
       startTime: startInProperFormat,
@@ -30,7 +31,8 @@ async function TaskDetailsNew({  startTime, endTime,benchStartDate,benchEndDate,
       benchStartDate: benchmarkStartInProperFormat,
       benchEndDate: benchmarkEndInProperFormat,
       benchmarkCompute: benchmarkCompute,
-      deviationPercentage: deviationPercentage
+      deviationPercentage: deviationPercentage,
+    
     };
     console.log(params);
     const response = await axios.get(url, { params });

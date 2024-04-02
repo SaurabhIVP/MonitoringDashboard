@@ -26,6 +26,7 @@ interface ganttProps {
   date: any;
   benchstart: any;
   benchend: any;
+  is_pm:boolean
 }
 
 const GanttChart: React.FC<ganttProps> = ({
@@ -35,6 +36,7 @@ const GanttChart: React.FC<ganttProps> = ({
   date,
   benchstart,
   benchend,
+  is_pm
 }) => {
   let myChart: any | null = null;
 
@@ -514,6 +516,7 @@ const GanttChart: React.FC<ganttProps> = ({
                 benchend={benchend}
                 benchCompute={"Average"}
                 deviation={"0"}
+                is_pm={is_pm}
               ></ChildGantt>
             </div>
           </DialogContent>

@@ -10,9 +10,10 @@ interface TaskProps {
   benchEndDate?: any | null;
   benchmarkCompute?:any |null;
   deviationPercentage?:any |null;
+  is_pm:boolean
 }
 const API_URL = process.env.REACT_APP_API_BASE_URL;
-async function TaskDetails({ chain_id, startTime, endTime,benchStartDate,benchEndDate,benchmarkCompute,deviationPercentage }: TaskProps) {
+async function TaskDetails({ chain_id, startTime, endTime,benchStartDate,benchEndDate,benchmarkCompute,deviationPercentage,is_pm }: TaskProps) {
   try {
     const startInProperFormat = startTime;
     const endInProperFormat = endTime;
@@ -22,7 +23,8 @@ async function TaskDetails({ chain_id, startTime, endTime,benchStartDate,benchEn
     {
       deviationPercentage=0;
     }
-    const url = `${API_URL}/taskdetails/${chain_id}`;
+    // let is_pm=false;
+    const url = `${API_URL}/taskdetails/${chain_id}/${is_pm}`;
     const params = {
       
       startTime: startInProperFormat,
@@ -30,7 +32,8 @@ async function TaskDetails({ chain_id, startTime, endTime,benchStartDate,benchEn
       benchStartDate: benchmarkStartInProperFormat,
       benchEndDate: benchmarkEndInProperFormat,
       benchmarkCompute: benchmarkCompute,
-      deviationPercentage: deviationPercentage
+      deviationPercentage: deviationPercentage,
+      
     };
     console.log(params);
     const response = await axios.get(url, { params });

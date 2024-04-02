@@ -10,6 +10,7 @@ interface Props {
   benchEndDate?: any | null;
   benchmarkCompute?:any |null;
   deviationPercentage?:any |null;
+  is_pm:boolean
 }
 
 async function ChainDetailsByTaskname({
@@ -19,14 +20,16 @@ async function ChainDetailsByTaskname({
   benchStartDate,
   benchEndDate,
   benchmarkCompute,
-  deviationPercentage
+  deviationPercentage,
+  is_pm
 }: Props) {
   try {
     const startInProperFormat = DateConversion(startDate);
     const endInProperFormat = DateConversion(endDate);
     const benchmarkStartInProperFormat = DateConversion(benchStartDate);
     const benchmarkEndInProperFormat = DateConversion(benchEndDate);
-    const url = `${API_URL}/chainDetailsByTaskname`;
+    // let is_pm=false;
+    const url = `${API_URL}/chainDetailsByTaskname/${is_pm}`;
     const params = {
       tasknames: tasknames,
       startDate: startInProperFormat,
@@ -34,7 +37,8 @@ async function ChainDetailsByTaskname({
       benchStartDate: benchmarkStartInProperFormat,
       benchEndDate: benchmarkEndInProperFormat,
       benchmarkCompute: benchmarkCompute,
-      deviationPercentage: deviationPercentage
+      deviationPercentage: deviationPercentage,
+      
     };
     const response = await axios.get(url, { params });
     return response.data;
