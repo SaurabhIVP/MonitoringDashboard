@@ -143,9 +143,11 @@ const GanttChartHandle = () => {
           style={{
             display: "flex",
             fontSize: "small",
-            fontWeight: "bold",
+            fontWeight: "lighter",
             fontFamily: "roboto",
             marginLeft: "65px",
+            // color:'gray',
+            
           }}
         >
           <span>Benchmark Data Duration: </span>
@@ -153,7 +155,7 @@ const GanttChartHandle = () => {
             {" "}
             {DateConversioninddMMMMyyyy(BenchstartDate)} to{" "}
             {DateConversioninddMMMMyyyy(BenchendDate)}
-            {" | "}
+            &nbsp;{ " | "} &nbsp;
           </span>
           
           <span>Deviation % : </span>

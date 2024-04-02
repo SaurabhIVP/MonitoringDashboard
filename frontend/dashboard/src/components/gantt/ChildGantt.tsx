@@ -289,14 +289,14 @@ const ChildGantt: React.FC<GanttProps> = ({
             
           ></ChildGanttFilter>
         </div>
-        <div style={{display:'flex',fontFamily:'roboto',fontSize:'small',fontWeight:'bold',marginTop:'20px',marginLeft:'10px'}}>
+        <div style={{display:'flex',fontFamily:'roboto',fontSize:'small',fontWeight:'lighter',marginTop:'20px',marginLeft:'10px'}}>
           <span>Benchmark Duration: </span>
           <span>
             {" "}
             {DateConversioninddMMMMyyyy(BenchstartDate)} to{" "}
             {DateConversioninddMMMMyyyy(BenchendDate)}
           </span>
-          <span>{" | "}</span>
+          <span>&nbsp;{" | "}&nbsp;</span>
           <span>Deviation %:</span>
           <span>{deviationPercentage}</span>
         </div>

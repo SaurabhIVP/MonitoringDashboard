@@ -25,6 +25,7 @@ import { FilterColor, PrimaryColor } from "../../utils/Colors";
 import GridFilter from "../filters/GridFilter";
 import ChainDetailsByTaskname from "../../api/ChainDetailsByTaskname";
 import { DateConversioninddMMMMyyyy } from "../../utils/DateConversion";
+import { stubString } from "lodash";
 interface ExampleProps {
   chainDetailsApi: (params: any) => Promise<any[]>;
   taskDetailsApi: (params: any) => Promise<any[]>;
@@ -58,6 +59,7 @@ const GridTable: React.FC<ExampleProps> = ({
   const handleDeviationChange = (value: string | null) => {
     setDeviationPercentage(value);
   };
+  const [alert,setAlert]=useState<boolean>(false);
 
   const handleStartDateChange = (newDate: Date | null) => {
     setStartDate(newDate);
@@ -74,18 +76,19 @@ const GridTable: React.FC<ExampleProps> = ({
   const handleBenchendDateChange = (newDate: Date | null) => {
     setBenchEndDate(newDate);
   };
-  const getboolean=(val:any)=>{
-    if(val=="true" || val==true){
+  let flag = false;
+  const getboolean = (val: any) => {
+    if (val == "true" || val == true) {
       return true;
-    }else{
+    } else {
       return false;
     }
-  }
-  const [isPm,setIsPm]=useState<string>("false");
-      const handlePMChange = (event: any) => {
-        console.log(event);
-        setIsPm(event as string);
-      };
+  };
+  const [isPm, setIsPm] = useState<string>("false");
+  const handlePMChange = (event: any) => {
+    console.log(event);
+    setIsPm(event as string);
+  };
   const handleChainSelected = (
     chainData: { id: number | null; key: string } | any
   ) => {
@@ -110,7 +113,7 @@ const GridTable: React.FC<ExampleProps> = ({
           benchEndDate: BenchendDate,
           benchmarkCompute: "Average",
           deviationPercentage: "0",
-          is_pm:getboolean(isPm)
+          is_pm: getboolean(isPm),
         });
         const chainsWithData = await Promise.all(
           response.map(async (chain: any) => {
@@ -122,7 +125,7 @@ const GridTable: React.FC<ExampleProps> = ({
               benchEndDate: new Date(2024, 0, 3),
               benchmarkCompute: "Average",
               deviationPercentage: "0",
-              is_pm:getboolean(isPm)
+              is_pm: getboolean(isPm),
             });
             chain.tasks = tasksResponse || [];
             return { ...chain, showTasks: false }; // Initialize showTasks property
@@ -139,7 +142,7 @@ const GridTable: React.FC<ExampleProps> = ({
           benchEndDate: BenchendDate,
           benchmarkCompute: benchmarkCompute,
           deviationPercentage: deviationPercentage,
-          is_pm:getboolean(isPm)
+          is_pm: getboolean(isPm),
         });
         const chainsWithData = await Promise.all(
           response.map(async (chain: any) => {
@@ -151,7 +154,7 @@ const GridTable: React.FC<ExampleProps> = ({
               benchEndDate: new Date(2024, 0, 3),
               benchmarkCompute: "Average",
               deviationPercentage: "0",
-              is_pm:getboolean(isPm)
+              is_pm: getboolean(isPm),
             });
             chain.tasks = tasksResponse || [];
             return { ...chain, showTasks: false }; // Initialize showTasks property
@@ -168,7 +171,7 @@ const GridTable: React.FC<ExampleProps> = ({
           benchEndDate: BenchendDate,
           benchmarkCompute: "Average",
           deviationPercentage: "0",
-          is_pm:getboolean(isPm)
+          is_pm: getboolean(isPm),
         });
         const chainsWithData = await Promise.all(
           response.map(async (chain: any) => {
@@ -176,11 +179,11 @@ const GridTable: React.FC<ExampleProps> = ({
               chain_id: chain.id,
               startTime: chain.start_time,
               endTime: chain.end_time,
-              benchStartDate: new Date(2024, 0, 3),
-              benchEndDate: new Date(2024, 0, 3),
+              benchStartDate: BenchstartDate,
+              benchEndDate: BenchendDate,
               benchmarkCompute: "Average",
               deviationPercentage: "0",
-              is_pm:getboolean(isPm)
+              is_pm: getboolean(isPm),
             });
             chain.tasks = tasksResponse || [];
             return { ...chain, showTasks: false }; // Initialize showTasks property
@@ -207,33 +210,50 @@ const GridTable: React.FC<ExampleProps> = ({
     BenchendDate,
     selectedChainValue,
     age,
-    isPm
-    
+    isPm,
   ]);
+  data.map((item)=>{if(item.avg_total_time==null){
 
+  }})
   const columns = useMemo<MRT_ColumnDef<any>[]>(
     //column definitions...
     () => [
       {
         muiTableHeadCellProps: {
-          style: {
+          align: "center",
+          sx: {
             backgroundColor: PrimaryColor,
             color: "white",
-            // borderColor: "white",
-            fontWeight: "normal",
+            border: "none",
+            fontSize: "medium",
+            fontFamily: "roboto",
+            padding: "10px",
+            fontWeight: "500",
+            alignContent: "center",
+            "& .Mui-TableHeadCell-Content-Labels": {
+              padding: "0px",
+            },
           },
         },
+
         accessorKey: "name",
         header: "Name",
-        size: 300,
       },
       {
         muiTableHeadCellProps: {
-          style: {
+          align: "center",
+          sx: {
             backgroundColor: PrimaryColor,
             color: "white",
-            // borderColor: "white",
-            fontWeight: "normal",
+            border: "none",
+            fontSize: "medium",
+            fontFamily: "roboto",
+            padding: "10px",
+            fontWeight: "500",
+            alignContent: "center",
+            "& .Mui-TableHeadCell-Content-Labels": {
+              padding: "0px",
+            },
           },
         },
         accessorKey: "start_time",
@@ -245,11 +265,19 @@ const GridTable: React.FC<ExampleProps> = ({
 
       {
         muiTableHeadCellProps: {
-          style: {
+          align: "center",
+          sx: {
             backgroundColor: PrimaryColor,
             color: "white",
-            // borderColor: "white",
-            fontWeight: "normal",
+            border: "none",
+            fontSize: "medium",
+            fontFamily: "roboto",
+            padding: "10px",
+            fontWeight: "500",
+            alignContent: "center",
+            "& .Mui-TableHeadCell-Content-Labels": {
+              padding: "0px",
+            },
           },
         },
         accessorKey: "end_time",
@@ -260,11 +288,19 @@ const GridTable: React.FC<ExampleProps> = ({
       },
       {
         muiTableHeadCellProps: {
-          style: {
+          align: "center",
+          sx: {
             backgroundColor: PrimaryColor,
             color: "white",
-            // borderColor: "white",
-            fontWeight: "normal",
+            border: "none",
+            fontSize: "medium",
+            fontFamily: "roboto",
+            padding: "10px",
+            fontWeight: "500",
+            alignContent: "center",
+            "& .Mui-TableHeadCell-Content-Labels": {
+              padding: "0px",
+            },
           },
         },
         accessorKey: "total_times",
@@ -279,11 +315,19 @@ const GridTable: React.FC<ExampleProps> = ({
 
       {
         muiTableHeadCellProps: {
-          style: {
+          align: "center",
+          sx: {
             backgroundColor: PrimaryColor,
             color: "white",
-            // borderColor: "white",
-            fontWeight: "normal",
+            border: "none",
+            fontSize: "medium",
+            fontFamily: "roboto",
+            padding: "10px",
+            fontWeight: "500",
+            alignContent: "center",
+            "& .Mui-TableHeadCell-Content-Labels": {
+              padding: "0px",
+            },
           },
         },
         accessorKey: "avg_total_time",
@@ -292,46 +336,102 @@ const GridTable: React.FC<ExampleProps> = ({
         muiTableBodyCellProps: {
           align: "center",
         },
+        Cell: ({ cell }) => (
+          <div>
+            {cell.getValue<string>() == undefined ||
+            cell.getValue<string>() == null ? (
+              <div style={{ color: "red" }}>{"No Data"}</div>
+            ) : (
+              <div>{cell.getValue<String>()}</div>
+            )}
+          </div>
+        ),
       },
       {
         muiTableHeadCellProps: {
-          style: {
+          align: "center",
+          sx: {
             backgroundColor: PrimaryColor,
             color: "white",
-            // borderColor: "white",
-            fontWeight: "normal",
+            border: "none",
+            fontSize: "medium",
+            fontFamily: "roboto",
+            padding: "10px",
+            fontWeight: "500",
+            alignContent: "center",
+            "& .Mui-TableHeadCell-Content-Labels": {
+              padding: "0px",
+            },
           },
         },
         accessorKey: "performance",
-        
         header: "Deviation %",
         filterFn: "greaterThanOrEqualTo",
+
         muiTableBodyCellProps: {
-          align: "center",
+          // align:"center",
+          // margin:"auto",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         },
         Cell: ({ cell }) => (
-          <Box
-            component="div"
-            sx={(theme: any) => ({
+          <div
+            style={{
               textAlign: "center",
-              
-              width: "20px",
-              backgroundColor:
-                cell.getValue<string>() < "0"
-                  ? theme.palette.error.dark
-                  : cell.getValue<string>() >= "-10" &&
-                    cell.getValue<string>() < "10"
-                  ? theme.palette.warning.dark
-                  : theme.palette.success.dark,
-              borderRadius: "10%",
-              color: "#fff",
-              height: "15px", // Add this line to set the height
-              p: "10px",
-              fontSize: "small",
-            })}
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
-            {cell.getValue<string>()}
-          </Box>
+            {cell.getValue<number>() == undefined ||
+            cell.getValue<number>() == null ? (
+              <Box
+                component="div"
+                sx={(theme: any) => ({
+                  //textAlign: "center",
+                  width: "20px",
+                  backgroundColor:
+                    cell.getValue<string>() < "0"
+                      ? theme.palette.error.dark
+                      : cell.getValue<string>() >= "-10" &&
+                        cell.getValue<string>() < "10"
+                      ? theme.palette.warning.dark
+                      : theme.palette.success.dark,
+                  borderRadius: "10%",
+                  color: "#fff",
+                  //height: "15px", // Add this line to set the height
+                  p: "3px",
+                  fontSize: "small",
+                  //align:"center"
+                })}
+              >
+                {"No Data"}
+              </Box>
+            ) : (
+              <Box
+                component="div"
+                sx={(theme: any) => ({
+                  //textAlign: "center",
+                  width: "20px",
+                  backgroundColor:
+                    cell.getValue<string>() < "0"
+                      ? theme.palette.error.dark
+                      : cell.getValue<string>() >= "-10" &&
+                        cell.getValue<string>() < "10"
+                      ? theme.palette.warning.dark
+                      : theme.palette.success.dark,
+                  borderRadius: "10%",
+                  color: "#fff",
+                  //height: "15px", // Add this line to set the height
+                  p: "3px",
+                  fontSize: "small",
+                  //align:"center"
+                })}
+              >
+                {cell.getValue<string>()}
+              </Box>
+            )}
+          </div>
         ),
       },
     ],
@@ -356,9 +456,12 @@ const GridTable: React.FC<ExampleProps> = ({
     data,
     muiTableBodyCellProps: {
       style: {
-        border: "none",
+        borderBottom: "1px solid light-grey",
+        borderRight: "none",
+        borderLeft: "none",
         fontSize: "small",
         fontFamily: "roboto",
+        padding: "5px",
       },
     },
     enableExpandAll: true,
@@ -376,6 +479,8 @@ const GridTable: React.FC<ExampleProps> = ({
         backgroundColor: PrimaryColor,
         color: "white",
         fontFamily: "roboto",
+        border: "none",
+        padding: "0px",
       },
     },
     muiTablePaperProps: {
@@ -435,100 +540,14 @@ const GridTable: React.FC<ExampleProps> = ({
             onPmChange={handlePMChange}
           ></GridFilter>
         </div>
-        {/* 
-        <ListItem sx={{ paddingLeft: "0px" }}>
-          {age == "10" ? (
-            <Chip
-              label={
-                <Typography component="span">
-                  <span style={{ fontWeight: "bold", fontSize: "small" }}>
-                    Chain Name:
-                  </span>{" "}
-                  <span style={{ fontSize: "small" }}>
-                    {selectedChainValue?.key
-                      ? selectedChainValue?.key
-                      : "All Chains"}
-                  </span>{" "}
-                </Typography>
-              }
-              sx={{ marginRight: "10px", height: "24px", fontSize: "small" }} // Adjust the height and font size here
-            />
-          ) : (
-            <Chip
-              label={
-                <Typography component="span">
-                  <span style={{ fontWeight: "bold", fontSize: "small" }}>
-                    Chain Name:
-                  </span>{" "}
-                  <span style={{ fontSize: "small" }}>All Chains</span>{" "}
-                </Typography>
-              }
-              sx={{ marginRight: "10px", height: "24px", fontSize: "small" }} // Adjust the height and font size here
-            />
-          )}
-          {age == "20" ? (
-            <Chip
-              label={
-                <Typography component="span">
-                  <span style={{ fontWeight: "bold", fontSize: "small" }}>
-                    Task Name:
-                  </span>{" "}
-                  <span style={{ fontSize: "small" }}>
-                    {selectedChainValue?.key}
-                  </span>{" "}
-                </Typography>
-              }
-              sx={{ marginRight: "10px", height: "24px", fontSize: "small" }} // Adjust the height and font size here
-            />
-          ) : (
-            <Chip
-              label={
-                <Typography component="span">
-                  <span style={{ fontWeight: "bold", fontSize: "small" }}>
-                    Task Name:
-                  </span>{" "}
-                  <span style={{ fontSize: "small" }}>All Tasks</span>{" "}
-                </Typography>
-              }
-              sx={{ marginRight: "10px", height: "24px", fontSize: "small" }} // Adjust the height and font size here
-            />
-          )}
-          <Chip
-            label={
-              <Typography component="span">
-                <span style={{ fontWeight: "bold", fontSize: "small" }}>
-                  Data Duration:
-                </span>{" "}
-                <span style={{ fontSize: "small" }}>
-                  {DateConversioninddMMMMyyyy(startDate)} to{" "}
-                  {DateConversioninddMMMMyyyy(EndDate)}
-                </span>{" "}
-              </Typography>
-            }
-            sx={{ marginRight: "10px", height: "24px", fontSize: "small" }} // Adjust the height and font size here
-          />
-          <Chip
-            label={
-              <Typography component="span">
-                <span style={{ fontWeight: "bold", fontSize: "small" }}>
-                  Benchmark Duration:
-                </span>{" "}
-                <span style={{ fontSize: "small" }}>
-                  {DateConversioninddMMMMyyyy(BenchstartDate)} to{" "}
-                  {DateConversioninddMMMMyyyy(BenchendDate)}
-                </span>{" "}
-              </Typography>
-            }
-            sx={{ marginRight: "10px", height: "24px", fontSize: "small" }} // Adjust the height and font size here
-          />
-        </ListItem> */}
         <div
           style={{
             display: "flex",
             fontSize: "small",
-            fontWeight: "bold",
+            fontWeight: "lighter",
             fontFamily: "roboto",
-            marginTop:'10px'
+            marginTop: "10px",
+            color:'gray'
           }}
         >
           {age == "10" ? (
@@ -539,46 +558,49 @@ const GridTable: React.FC<ExampleProps> = ({
                   ? selectedChainValue?.key
                   : "All Chains"}
               </span>
-              <span> | </span>
+              <span>&nbsp; | &nbsp;</span>
             </div>
           ) : (
             <div>
               <span>Chain Name: </span>
               <span>All Chains</span>
-              <span> | </span>
+              <span>&nbsp; | &nbsp;</span>
             </div>
           )}
           {age == "20" ? (
             <div>
               <span>Task Name: </span>
               <span>{selectedChainValue?.key}</span>
-              <span> | </span>
+              <span> | &nbsp;</span>
             </div>
           ) : (
             <div>
               <span>Task Name: </span>
               <span>All Tasks</span>
-              <span> | </span>
+              <span>&nbsp; | &nbsp;</span>
             </div>
           )}
           <span>Data Duration: </span>
           <span>
             {DateConversioninddMMMMyyyy(startDate)} to{" "}
-            {DateConversioninddMMMMyyyy(EndDate)}
-            {" "}
+            {DateConversioninddMMMMyyyy(EndDate)}{" "}
           </span>
-          <span> | </span>
+          <span>&nbsp; | &nbsp;</span>
           <span> Benchmark Data Duration: </span>
           <span>
             {" "}
             {DateConversioninddMMMMyyyy(BenchstartDate)} to{" "}
             {DateConversioninddMMMMyyyy(BenchendDate)}
           </span>
+          <span>&nbsp;{" | "}&nbsp;</span>
+          {isPm == "true" ? (
+            <span>System: PriceMaster</span>
+          ) : (
+            <span>System: SecMaster</span>
+          )}
         </div>
       </Box>
     ),
-
-    //   expandOnFilter: true, // Enable expanding after filtering
   });
 
   return (

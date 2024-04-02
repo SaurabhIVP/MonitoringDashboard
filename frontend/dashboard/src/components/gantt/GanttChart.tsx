@@ -182,7 +182,7 @@ const GanttChart: React.FC<ganttProps> = ({
               font:{
                 family:'roboto',
                 weight:'bold',
-                size:'10px'
+                size:'12px'
               }
             },
             min: newstart,
@@ -213,29 +213,6 @@ const GanttChart: React.FC<ganttProps> = ({
       data,
 
       options: {
-        // onClick: (e: any) => {
-        //   const pt = myChart.getElementsAtEventForMode(
-        //     e,
-        //     "nearest",
-        //     { intersect: true },
-        //     true
-        //   );
-        //   if (pt.length) {
-        //     const dataValue =
-        //       myChart.data.datasets[pt[0].datasetIndex];
-        //     setClickedData([dataValue.data[pt[0].index]]);
-
-        //     cg=dataValue.data[pt[0].index].chain_guid;
-        //     chainId=dataValue.data[pt[0].index].chain_id;
-        //     startTime=dataValue.data[pt[0].index].x[0];
-        //     endTime=dataValue.data[pt[0].index].x[1];
-        //     // console.log(clickedData[0].chain_guid);
-        //     // console.log(cg);
-        //     // console.log(startTime);
-        //     setFilter(true);
-        //   }
-
-        // },
         maintainAspectRatio: false,
         layout: {
           padding: {
@@ -289,12 +266,10 @@ const GanttChart: React.FC<ganttProps> = ({
                 const expTime = new Date(dataItem.delay).toLocaleTimeString();
                 const newLine = [];
                 newLine.push(`Chain: ${dataItem.y}`);
-                newLine.push(`Task: ${dataItem.task_Name}`);
                 newLine.push(`Start Time: ${startTime}`);
                 newLine.push(`End Time: ${endTime}`);
                 newLine.push(`Expected End Time: ${expTime}`);
                 newLine.push(`Performance % : ${dataItem.performance}`);
-                newLine.push(`Status : ${dataItem.status}`);
                 return newLine;
               },
             },
@@ -443,19 +418,21 @@ const GanttChart: React.FC<ganttProps> = ({
 
             paddingTop: "0px",
             paddingLeft: "70px",
-            marginBottom: "10px",
+            // marginBottom: "10px",
           }}
         >
           {TitleDate}
         </h3>
       </div>
+      <div style={{paddingTop:'0px',paddingBottom:'15px'}}>
       {alert == true ? (
-        <div style={{ float: "right", color: "red" }}>
+        <div style={{ float: "right", color: "red",marginTop:'0px' }}>
           *Selected benchmark duration has no data
         </div>
       ) : (
         <div></div>
       )}
+      </div>
       <div className="chart-box">
         <div className="fixed-axis">
           <canvas id="myChart1"></canvas>

@@ -232,49 +232,16 @@ const Charts: React.FC = () => {
               </div>
             </StyledDatepickerContainer>
           </div>
-          {/* <ListItem>
-            <Chip
-              label={
-                <Typography component="span">
-                  <span style={{ fontWeight: "bold" }}>
-                    Benchmark Duration:
-                  </span>{" "}
-                  <span>
-                    {DateConversioninddMMMMyyyy(BenchstartDate)} to{" "}
-                    {DateConversioninddMMMMyyyy(BenchendDate)}
-                  </span>{" "}
-                </Typography>
-              }
-              style={{ marginRight: "10px", marginLeft: "30px" }}
-            />
-            <Chip
-              label={
-                <Typography component="span">
-                  <span style={{ fontWeight: "bold" }}>Deviation:</span>{" "}
-                  <span>{deviationPercentage} %</span>{" "}
-                </Typography>
-              }
-              style={{ marginRight: "10px" }}
-            />
-            <Chip
-              label={
-                <Typography component="span">
-                  <span style={{ fontWeight: "bold" }}>
-                    Benchmark Compute Type:
-                  </span>{" "}
-                  <span>Average</span>{" "}
-                </Typography>
-              }
-            />
-          </ListItem> */}
+          
           <div
             style={{
               display: "flex",
               fontFamily: "roboto",
               fontSize: "small",
-              fontWeight: "bold",
+              fontWeight: "lighter",
               marginTop: "0px",
               marginLeft: "10px",
+              color:'gray'
             }}
           >
             <span>Benchmark Duration: </span>
@@ -283,7 +250,7 @@ const Charts: React.FC = () => {
               {DateConversioninddMMMMyyyy(BenchstartDate)} to{" "}
               {DateConversioninddMMMMyyyy(BenchendDate)}
             </span>
-            <span>{" | "}</span>
+            <span>&nbsp;{" | "}&nbsp;</span>
             <span>Deviation %:</span>
             <span>{deviationPercentage}</span>
           </div>
@@ -376,7 +343,7 @@ const Charts: React.FC = () => {
               display: "flex",
               fontFamily: "roboto",
               fontSize: "small",
-              fontWeight: "bold",
+              fontWeight: "lighter",
               marginTop: "0px",
               marginLeft: "10px",
             }}
@@ -387,7 +354,7 @@ const Charts: React.FC = () => {
               {DateConversioninddMMMMyyyy(BenchTaskstartDate)} to{" "}
               {DateConversioninddMMMMyyyy(BenchTaskendDate)}
             </span>
-            <span>{" | "}</span>
+            <span>&nbsp;{" | "}&nbsp;</span>
             <span>Deviation %:</span>
             <span>{taskdeviationPercentage}</span>
           </div>
