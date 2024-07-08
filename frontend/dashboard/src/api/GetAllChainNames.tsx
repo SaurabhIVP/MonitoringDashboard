@@ -4,7 +4,7 @@ interface props{
 }
 async function GetAllChainNames({is_pm}:props) {
   try {
-    const response = await apiService.get(`/chains/${is_pm}`);
+    const response = await apiService.get(`/chainnames/${is_pm}`);
     console.log(response);
     return response;
   } catch (error) {

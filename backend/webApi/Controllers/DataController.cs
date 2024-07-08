@@ -24,13 +24,13 @@ public class DataController : ControllerBase
     
     [HttpGet]
     [Route("currentData/{is_pm?}")]
-    public async Task<IActionResult> GetAllChainDetails1(DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null,bool? is_pm=false)
+    public async Task<IActionResult> GetCurrentData(DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null,bool? is_pm=false)
     {
-        var chainDetails = await _objService.GetAllChainDetailsAsync1(startDate ,endDate ,benchStartDate ,  benchEndDate,benchmarkCompute,deviationPercentage,is_pm );
+        var chainDetails = await _objService.GetCurrentDataAsync(startDate ,endDate ,benchStartDate ,  benchEndDate,benchmarkCompute,deviationPercentage,is_pm );
         return Ok(chainDetails);
     }
     [HttpGet]
-    [Route("chains/{is_pm?}")]
+    [Route("chainnames/{is_pm?}")]
     public async Task<IActionResult> GetAllChainNames(bool? is_pm=false)
     {
         var chainDetails = await _objService.GetAllChainNamesAsync(is_pm);
@@ -38,7 +38,7 @@ public class DataController : ControllerBase
     }
 
     [HttpGet]
-    [Route("tasksss/{chain_id}/{is_pm?}")]
+    [Route("tasknames/{chain_id}/{is_pm?}")]
     public async Task<IActionResult> GetAllTaskNames(int chain_id,bool? is_pm=false)
     {
 
@@ -47,7 +47,7 @@ public class DataController : ControllerBase
     }
 
     [HttpGet]
-    [Route("tasks/{date?}/{benchStartDate?}/{benchEndDate?}/{benchmarkCompute?}/{deviationPercentage?}/{chains?}/{is_pm?}")]
+    [Route("defaultGanttData/{date?}/{benchStartDate?}/{benchEndDate?}/{benchmarkCompute?}/{deviationPercentage?}/{chains?}/{is_pm?}")]
     public async Task<IActionResult> GetGanttDetails(string chains=null ,string? start_time="00:00:00.0000000",string? end_time="23:59:59.9999999",string? date="2024-01-17",string? benchStartDate = "2024-01-17", string? benchEndDate = "2024-01-24", string? benchmarkCompute="Average",string? deviationPercentage="0",bool? is_pm=false)
     {
         var chainDetails = await _objService.GetGanttDetailsAsync(chains,start_time, end_time,date,benchStartDate,benchEndDate,benchmarkCompute,deviationPercentage,is_pm);
@@ -55,7 +55,7 @@ public class DataController : ControllerBase
     }
 
      [HttpGet]
-    [Route("tasks1/{date?}/{benchStartDate?}/{benchEndDate?}/{benchmarkCompute?}/{deviationPercentage?}/{is_pm?}/{chains?}")]
+    [Route("ganttData/{date?}/{benchStartDate?}/{benchEndDate?}/{benchmarkCompute?}/{deviationPercentage?}/{is_pm?}/{chains?}")]
     public async Task<IActionResult> GetGanttDetails1(string chains=null ,string? start_time="00:00:00.0000000",string? end_time="23:59:59.9999999",string? date="2024-01-17",string? benchStartDate = "2024-01-17", string? benchEndDate = "2024-01-24", string? benchmarkCompute="Average",string? deviationPercentage="0",bool? is_pm=false)
     {
         var chainDetails = await _objService.GetGanttDetails1Async(chains,start_time, end_time,date,benchStartDate,benchEndDate,benchmarkCompute,deviationPercentage,is_pm);
@@ -72,21 +72,14 @@ public class DataController : ControllerBase
 
 
    [HttpGet]
-[Route("chart/{is_pm?}")]
+[Route("chainChartTime/{is_pm?}")]
 public async Task<IActionResult> GetChainTimeDetails(int chain_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute="Average",int? deviationPercentage=null,bool? is_pm=false)
 {
     var chainDetails = await _objService.GetChainTimeDetailsAsync(chain_id, startDate, endDate, benchStartDate, benchEndDate,benchmarkCompute,deviationPercentage,is_pm);
     return Ok(chainDetails);
 }
 [HttpGet]
-[Route("chaindetails/{chain_id}/{is_pm?}")]
-public async Task<IActionResult> GetChainDetails(int chain_id, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null,bool? is_pm=false)
-{
-    var chainDetails = await _objService.GetChainDetailsAsync(chain_id, startDate, endDate, benchStartDate, benchEndDate,benchmarkCompute,deviationPercentage,is_pm);
-    return Ok(chainDetails);
-}
-[HttpGet]
-[Route("chaindetailsnew/{is_pm?}")]
+[Route("chainDetails/{is_pm?}")]
 public async Task<IActionResult> GetChainDetailsNew(int chain_id=0, DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null,bool? is_pm=false)
 {
     var chainDetails = await _objService.GetChainDetailsNewAsync(chain_id, startDate, endDate, benchStartDate, benchEndDate,benchmarkCompute,deviationPercentage,is_pm);
@@ -100,7 +93,7 @@ public async Task<IActionResult> GetChainDetailsByTasknames(string tasknames, Da
     return Ok(chainDetails);
 }
 [HttpGet]
-[Route("chart/tasks/{taskname}/{is_pm?}")]
+[Route("chainByTask/{taskname}/{is_pm?}")]
 public async Task<IActionResult> GetChainByTask(string taskname,bool? is_pm=false)
 {
     var chainDetails = await _objService.GetChainByTaskAsync(taskname,is_pm);
@@ -121,13 +114,6 @@ public async Task<IActionResult> GetTaskTimeDetails(int flow_id, DateTime? start
     var chainDetails = await _objService.GetTaskTimeDetailsAsync(flow_id, startDate, endDate, benchStartDate, benchEndDate,benchmarkCompute,deviationPercentage,is_pm);
     return Ok(chainDetails);
 }
-    [HttpGet]
-    [Route("getAllChainDetails/{chainID}/{taskID}/{benchmarkCompute}/{startDate}/{endDate}/{benchmarkStartDate}/{benchmarkEndDate}/{is_pm?}")]
-    public async Task<IActionResult> getAllChainDetails(int chainID,int taskID,string benchmarkCompute,string startDate,string endDate, string benchmarkStartDate, string benchmarkEndDate,bool? is_pm=false)
-    {
-        var chainDetails = await _objService.getChainDetails(chainID,taskID,benchmarkCompute,startDate,endDate,benchmarkStartDate,benchmarkEndDate,is_pm);
-        return Ok(chainDetails);
-    }
 
     [HttpGet]
     [Route("taskdetails/{chain_id}/{is_pm?}")]

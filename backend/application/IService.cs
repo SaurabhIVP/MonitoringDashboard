@@ -8,7 +8,7 @@ public interface IService
     
     Task<IEnumerable<Tasks>> GetAllChainDetailsAsync(bool? is_pm=false);   
     Task<IEnumerable<Tasks>> GetTaskDetailsNewAsync(DateTime? startTime = null,DateTime? endTime=null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null,bool? is_pm=false);
-    Task<IEnumerable<Tasks>> GetAllChainDetailsAsync1(DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null,bool? is_pm=false);
+    Task<IEnumerable<Tasks>> GetCurrentDataAsync(DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null,bool? is_pm=false);
     Task<IEnumerable<Tasks>> GetAllChainNamesAsync(bool? is_pm=false);
     Task<IEnumerable<Tasks>> GetAllTaskNamesAsync(int chain_id,bool? is_pm=false);   
     Task<IEnumerable<Tasks>> GetChainByTaskAsync(string taskname,bool? is_pm=false); 

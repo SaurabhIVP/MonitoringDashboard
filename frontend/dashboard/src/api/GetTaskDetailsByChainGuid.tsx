@@ -25,7 +25,7 @@ async function GetTaskDetailsByChainGuid({
     const benstartdate = DateConversion(benchStartDate);
     const benenddate = DateConversion(benchEndDate);
     // let is_pm=false;
-    let url = `/tasks/${is_pm}`;
+    let url = `/defaultGanttData/${is_pm}`;
     let params = {};
 
       url = `/tasksdetailsbyChainguid/${chain_id}/${selectedDate}/${benstartdate}/${benenddate}/${benchmarkCompute}/${deviationPercentage}/${is_pm}`;

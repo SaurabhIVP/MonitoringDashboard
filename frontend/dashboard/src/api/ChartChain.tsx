@@ -32,7 +32,7 @@ async function ChartChain({
     const benchmarkStartInProperFormat = DateConversion(benchStartDate);
     const benchmarkEndInProperFormat = DateConversion(benchEndDate);
     // let is_pm=false;
-    const url = `${API_URL}/chart/${is_pm}`;
+    const url = `${API_URL}/chainChartTime/${is_pm}`;
     const params = {
       chain_id: chain_id,
       startDate: startInProperFormat,
