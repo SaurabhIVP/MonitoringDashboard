@@ -1,31 +1,56 @@
 import { useEffect, useState } from "react";
+import { throttle } from "lodash";
 import {
   Box,
   Button,
+  Card,
   Chip,
   CircularProgress,
+  Divider,
+  FormControl,
+  IconButton,
+  InputLabel,
   ListItem,
+  MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
   Typography,
   useMediaQuery,
 } from "@mui/material";
-
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useMemo } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnDef,
   MRT_Row,
+  MRT_TableOptions,
+  MRT_RowData,
+  MRT_ToggleDensePaddingButton,
+  MRT_ToggleFullScreenButton,
+  MRT_TablePagination,
+  MRT_ToolbarAlertBanner,
+  MRT_GlobalFilterTextField,
 } from "material-react-table";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { CSVLink } from "react-csv";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { FilterColor, PrimaryColor } from "../../utils/Colors";
+import {
+  FilterColor,
+  NormalFontSize,
+  PrimaryColor,
+  SecondaryColor,
+} from "../../utils/Colors";
 import GridFilter from "../filters/GridFilter";
 import ChainDetailsByTaskname from "../../api/ChainDetailsByTaskname";
 import { DateConversioninddMMMMyyyy } from "../../utils/DateConversion";
 import { stubString } from "lodash";
+import { TableLabels } from "./TableContents";
+import { StyledDatepickerContainer } from "../../utils/StyledComponents";
+import Datepicker from "../generics/datepicker/Datepicker";
 interface ExampleProps {
   chainDetailsApi: (params: any) => Promise<any[]>;
   taskDetailsApi: (params: any) => Promise<any[]>;
@@ -41,17 +66,22 @@ const GridTable: React.FC<ExampleProps> = ({
     id: number;
     [key: string]: any;
   } | null>(null);
-  const [startDate, setStartDate] = useState<Date | null>(
-    new Date(2024, 0, 10)
-  );
-  const [EndDate, setEndDate] = useState<Date | null>(new Date(2024, 0, 10));
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 15, //customize the default page size
+  });
+  const [startDate, setStartDate] = useState<Date | null>(new Date(2024, 1, 7));
+  const [EndDate, setEndDate] = useState<Date | null>(new Date(2024, 1, 7));
   const [BenchstartDate, setBenchStartDate] = useState<Date | null>(
-    new Date(2024, 0, 1)
+    new Date(2024, 1, 1)
   );
   const [BenchendDate, setBenchEndDate] = useState<Date | null>(
-    new Date(2024, 0, 31)
+    new Date(2024, 1, 7)
   );
-
+  const isEndDateValid =
+    startDate === null ||
+    EndDate === null ||
+    (startDate !== null && EndDate !== null && EndDate >= startDate);
   const [age, setAge] = useState("10");
   const [deviationPercentage, setDeviationPercentage] = useState<string | null>(
     "0"
@@ -59,13 +89,19 @@ const GridTable: React.FC<ExampleProps> = ({
   const handleDeviationChange = (value: string | null) => {
     setDeviationPercentage(value);
   };
-  const [alert,setAlert]=useState<boolean>(false);
+  const [alert, setAlert] = useState<boolean>(false);
 
   const handleStartDateChange = (newDate: Date | null) => {
     setStartDate(newDate);
   };
   const handleAgeChange = (flag: any | null) => {
     setAge(flag);
+  };
+  const [pge, setpge] = useState("false");
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setAge("30");
+    setpge(event.target.value);
   };
   const handleEndDateChange = (newDate: Date | null) => {
     setEndDate(newDate);
@@ -87,7 +123,7 @@ const GridTable: React.FC<ExampleProps> = ({
   const [isPm, setIsPm] = useState<string>("false");
   const handlePMChange = (event: any) => {
     console.log(event);
-    setIsPm(event as string);
+    setIsPm(event);
   };
   const handleChainSelected = (
     chainData: { id: number | null; key: string } | any
@@ -100,6 +136,8 @@ const GridTable: React.FC<ExampleProps> = ({
   };
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  // 1000 milliseconds (1 second) throttle
+
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -113,7 +151,7 @@ const GridTable: React.FC<ExampleProps> = ({
           benchEndDate: BenchendDate,
           benchmarkCompute: "Average",
           deviationPercentage: "0",
-          is_pm: getboolean(isPm),
+          is_pm: getboolean(pge),
         });
         const chainsWithData = await Promise.all(
           response.map(async (chain: any) => {
@@ -121,11 +159,11 @@ const GridTable: React.FC<ExampleProps> = ({
               chain_id: chain.id,
               startTime: chain.start_time,
               endTime: chain.end_time,
-              benchStartDate: new Date(2024, 0, 3),
-              benchEndDate: new Date(2024, 0, 3),
+              benchStartDate: BenchstartDate,
+              benchEndDate: BenchendDate,
               benchmarkCompute: "Average",
               deviationPercentage: "0",
-              is_pm: getboolean(isPm),
+              is_pm: getboolean(pge),
             });
             chain.tasks = tasksResponse || [];
             return { ...chain, showTasks: false }; // Initialize showTasks property
@@ -142,7 +180,7 @@ const GridTable: React.FC<ExampleProps> = ({
           benchEndDate: BenchendDate,
           benchmarkCompute: benchmarkCompute,
           deviationPercentage: deviationPercentage,
-          is_pm: getboolean(isPm),
+          is_pm: getboolean(pge),
         });
         const chainsWithData = await Promise.all(
           response.map(async (chain: any) => {
@@ -150,11 +188,11 @@ const GridTable: React.FC<ExampleProps> = ({
               chain_id: chain.id,
               startTime: chain.start_time,
               endTime: chain.end_time,
-              benchStartDate: new Date(2024, 0, 3),
-              benchEndDate: new Date(2024, 0, 3),
+              benchStartDate: BenchstartDate,
+              benchEndDate: BenchendDate,
               benchmarkCompute: "Average",
               deviationPercentage: "0",
-              is_pm: getboolean(isPm),
+              is_pm: getboolean(pge),
             });
             chain.tasks = tasksResponse || [];
             return { ...chain, showTasks: false }; // Initialize showTasks property
@@ -171,7 +209,7 @@ const GridTable: React.FC<ExampleProps> = ({
           benchEndDate: BenchendDate,
           benchmarkCompute: "Average",
           deviationPercentage: "0",
-          is_pm: getboolean(isPm),
+          is_pm: getboolean(pge),
         });
         const chainsWithData = await Promise.all(
           response.map(async (chain: any) => {
@@ -183,7 +221,7 @@ const GridTable: React.FC<ExampleProps> = ({
               benchEndDate: BenchendDate,
               benchmarkCompute: "Average",
               deviationPercentage: "0",
-              is_pm: getboolean(isPm),
+              is_pm: getboolean(pge),
             });
             chain.tasks = tasksResponse || [];
             return { ...chain, showTasks: false }; // Initialize showTasks property
@@ -198,6 +236,7 @@ const GridTable: React.FC<ExampleProps> = ({
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchData();
   }, [
@@ -210,234 +249,206 @@ const GridTable: React.FC<ExampleProps> = ({
     BenchendDate,
     selectedChainValue,
     age,
-    isPm,
+    pge,
   ]);
-  data.map((item)=>{if(item.avg_total_time==null){
-
-  }})
-  const columns = useMemo<MRT_ColumnDef<any>[]>(
-    //column definitions...
-    () => [
-      {
-        muiTableHeadCellProps: {
-          align: "center",
+  data.map((item) => {
+    if (item.avg_total_time == null) {
+    }
+  });
+  const columns1 = useMemo<MRT_ColumnDef<any>[]>(
+    () =>
+      TableLabels.map(([acc, head, is_deviation, is_name, al]) => ({
+        muiTableHeadCellProps: ({ column }) => ({
+          align: "left",
+          size: "small",
           sx: {
+            // backgroundColor: PrimaryColor,
+            ".css-fv3lde": {
+              fontSize: NormalFontSize,
+            },
             backgroundColor: PrimaryColor,
-            color: "white",
-            border: "none",
-            fontSize: "medium",
+            color: SecondaryColor,
+            maxHeight: "10px",
+            // border: "none",
+            borderSpacing: "1px",
+            borderColor: "#5F9EA0",
+            fontSize: NormalFontSize,
             fontFamily: "roboto",
-            padding: "10px",
-            fontWeight: "500",
-            alignContent: "center",
+            marginLeft: "0px",
+            paddingTop: "0px",
+            paddingBottom: "0px",
+            fontWeight: "6px",
+            // alignContent: "center",
+            ".css-lapokc": {
+              minWidth: "4ch",
+            },
+            "& .Mui-TableHeadCell-Content": {
+              justifyContent: "flex-end",
+            },
+            ".css-i4bv87-MuiSvgIcon-root": {
+              color: SecondaryColor,
+            },
             "& .Mui-TableHeadCell-Content-Labels": {
               padding: "0px",
+              margin: "auto",
             },
+            ".css-118d58w-MuiButtonBase-root-MuiTableSortLabel-root.Mui-active .MuiTableSortLabel-icon":
+              {
+                color: SecondaryColor,
+              },
           },
-        },
-
-        accessorKey: "name",
-        header: "Name",
-      },
-      {
-        muiTableHeadCellProps: {
-          align: "center",
-          sx: {
-            backgroundColor: PrimaryColor,
-            color: "white",
-            border: "none",
-            fontSize: "medium",
-            fontFamily: "roboto",
-            padding: "10px",
-            fontWeight: "500",
-            alignContent: "center",
-            "& .Mui-TableHeadCell-Content-Labels": {
-              padding: "0px",
-            },
-          },
-        },
-        accessorKey: "start_time",
-        header: "Start Time",
+        }),
         muiTableBodyCellProps: {
-          align: "center",
-        },
-      },
+          align:
+            al.toString() === "center"
+              ? "center"
+              : al.toString() === "left"
+              ? "left"
+              : "right",
 
-      {
-        muiTableHeadCellProps: {
-          align: "center",
-          sx: {
-            backgroundColor: PrimaryColor,
-            color: "white",
-            border: "none",
-            fontSize: "medium",
+          style: {
             fontFamily: "roboto",
-            padding: "10px",
-            fontWeight: "500",
-            alignContent: "center",
-            "& .Mui-TableHeadCell-Content-Labels": {
-              padding: "0px",
+            fontSize: NormalFontSize,
+            border: "none",
+            marginLeft: "0px",
+            ".css-y6rp3m-MuiButton-startIcon>*:nth-of-type(1)": {
+              color: "black",
             },
           },
         },
-        accessorKey: "end_time",
-        header: "End Time",
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-      },
-      {
-        muiTableHeadCellProps: {
-          align: "center",
-          sx: {
-            backgroundColor: PrimaryColor,
-            color: "white",
-            border: "none",
-            fontSize: "medium",
-            fontFamily: "roboto",
-            padding: "10px",
-            fontWeight: "500",
-            alignContent: "center",
-            "& .Mui-TableHeadCell-Content-Labels": {
-              padding: "0px",
-            },
-          },
-        },
-        accessorKey: "total_times",
-        header: "Total Time",
-
-        size: 50,
-        grow: false,
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-      },
-
-      {
-        muiTableHeadCellProps: {
-          align: "center",
-          sx: {
-            backgroundColor: PrimaryColor,
-            color: "white",
-            border: "none",
-            fontSize: "medium",
-            fontFamily: "roboto",
-            padding: "10px",
-            fontWeight: "500",
-            alignContent: "center",
-            "& .Mui-TableHeadCell-Content-Labels": {
-              padding: "0px",
-            },
-          },
-        },
-        accessorKey: "avg_total_time",
-        // enableColumnOrdering: false,
-        header: "Benchmark Time",
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        Cell: ({ cell }) => (
+        size: 20,
+        accessorKey: acc.toString(),
+        filterFn: "contains",
+        columnFilterModeOptions: !is_deviation
+          ? []
+          : [
+              "between",
+              "betweenInclusive",
+              "contains",
+              "greaterThan",
+              "greaterThanOrEqualTo",
+              "inNumberRange",
+              "lessThan",
+              "lessThanOrEqualTo",
+              "notEquals",
+            ],
+        header: head.toString(),
+        Cell: ({ cell, row }) => (
           <div>
-            {cell.getValue<string>() == undefined ||
-            cell.getValue<string>() == null ? (
-              <div style={{ color: "red" }}>{"No Data"}</div>
+            {is_name ? (
+              <div
+                style={{
+                  // display: "flex",
+                  // alignItems: "left",
+                  color: "black",
+                  // textAlign: "left",
+                  width: "300px",
+                 
+                }}
+              >
+                {row.getCanExpand() ? (
+                  <Button
+                    size="small"
+                    onClick={() => {
+                      row.toggleExpanded();
+                    }}
+                    startIcon={
+                      row.getIsExpanded() ? <ExpandLess /> : <ExpandMore />
+                    }
+                    style={{
+                      textTransform: "none",
+                      textAlign: "left",
+                      color: "black",
+                      fontFamily: "roboto",
+                      fontWeight: row.getIsExpanded() ? "bold" : "normal",
+                      fontSize: NormalFontSize,
+                      whiteSpace:'nowrap',
+                      overflow:'hidden',
+                      textOverflow:'ellipsis',
+                    }}
+                  >
+                    {cell.getValue<string>()}
+                  </Button>
+                ) : (
+                  <span
+                    style={{
+                      alignItems: "left",
+                      textAlign: "left",
+                      marginLeft: "30px",
+                      fontFamily: "roboto",
+                      fontSize: NormalFontSize,
+                      fontWeight: row.getIsExpanded() ? "bold" : "normal",
+                      whiteSpace:'nowrap',
+                      overflow:'hidden',
+                      textOverflow:'ellipsis',
+                    }}
+                  >
+                    {cell.getValue<string>()}
+                  </span>
+                )}
+              </div>
+            ) : is_deviation ? (
+              <div>
+                <Box
+                  component="div"
+                  sx={(theme: any) => ({
+                    width: "32px",
+                    backgroundColor:
+                      cell.getValue<string>() < "0"
+                        ? theme.palette.error.dark
+                        : cell.getValue<string>() >= "-10" &&
+                          cell.getValue<string>() < "10"
+                        ? theme.palette.warning.dark
+                        : theme.palette.success.dark,
+                    borderRadius: "10%",
+                    // color: "#fff",
+                    p: "3px",
+                    fontSize: NormalFontSize,
+                    color: "white",
+                    fontFamily: "roboto",
+                    fontWeight: row.getIsExpanded() ? "bold" : "normal",
+                    marginLeft: "70px",
+                  })}
+                >
+                  {cell.getValue<string>()}
+                </Box>
+              </div> // Render empty div if is_deviation is true
             ) : (
-              <div>{cell.getValue<String>()}</div>
+              <div>
+                {cell.getValue<string>() == undefined ||
+                cell.getValue<string>() == null ? (
+                  <div
+                    style={{
+                      color: "black",
+                      fontFamily: "roboto",
+                      fontWeight: row.getIsExpanded() ? "bold" : "normal",
+                      marginLeft: "20px",
+                      fontSize: NormalFontSize,
+                    }}
+                  >
+                    {"No Data"}
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      color: "black",
+                      fontFamily: "roboto",
+                      fontWeight: row.getIsExpanded() ? "bold" : "normal",
+                      marginLeft: "20px",
+                      fontSize: NormalFontSize,
+                    }}
+                  >
+                    {cell.getValue<string>()}
+                  </div>
+                )}
+              </div>
             )}
           </div>
         ),
-      },
-      {
-        muiTableHeadCellProps: {
-          align: "center",
-          sx: {
-            backgroundColor: PrimaryColor,
-            color: "white",
-            border: "none",
-            fontSize: "medium",
-            fontFamily: "roboto",
-            padding: "10px",
-            fontWeight: "500",
-            alignContent: "center",
-            "& .Mui-TableHeadCell-Content-Labels": {
-              padding: "0px",
-            },
-          },
-        },
-        accessorKey: "performance",
-        header: "Deviation %",
-        filterFn: "greaterThanOrEqualTo",
-
-        muiTableBodyCellProps: {
-          // align:"center",
-          // margin:"auto",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        },
-        Cell: ({ cell }) => (
-          <div
-            style={{
-              textAlign: "center",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {cell.getValue<number>() == undefined ||
-            cell.getValue<number>() == null ? (
-              <Box
-                component="div"
-                sx={(theme: any) => ({
-                  //textAlign: "center",
-                  width: "20px",
-                  backgroundColor:
-                    cell.getValue<string>() < "0"
-                      ? theme.palette.error.dark
-                      : cell.getValue<string>() >= "-10" &&
-                        cell.getValue<string>() < "10"
-                      ? theme.palette.warning.dark
-                      : theme.palette.success.dark,
-                  borderRadius: "10%",
-                  color: "#fff",
-                  //height: "15px", // Add this line to set the height
-                  p: "3px",
-                  fontSize: "small",
-                  //align:"center"
-                })}
-              >
-                {"No Data"}
-              </Box>
-            ) : (
-              <Box
-                component="div"
-                sx={(theme: any) => ({
-                  //textAlign: "center",
-                  width: "20px",
-                  backgroundColor:
-                    cell.getValue<string>() < "0"
-                      ? theme.palette.error.dark
-                      : cell.getValue<string>() >= "-10" &&
-                        cell.getValue<string>() < "10"
-                      ? theme.palette.warning.dark
-                      : theme.palette.success.dark,
-                  borderRadius: "10%",
-                  color: "#fff",
-                  //height: "15px", // Add this line to set the height
-                  p: "3px",
-                  fontSize: "small",
-                  //align:"center"
-                })}
-              >
-                {cell.getValue<string>()}
-              </Box>
-            )}
-          </div>
-        ),
-      },
-    ],
-    []
-    //end
+      })),
+    [TableLabels]
   );
+
   const handleExportRows = (rows: any[]) => {
     const csvData = rows.map((row) => ({
       "Chain ID/Task ID": row.id,
@@ -452,190 +463,417 @@ const GridTable: React.FC<ExampleProps> = ({
   };
 
   const table = useMaterialReactTable({
-    columns,
+    columns: columns1,
     data,
+    enableDensityToggle: false,
     muiTableBodyCellProps: {
-      style: {
+      sx: {
         borderBottom: "1px solid light-grey",
-        borderRight: "none",
-        borderLeft: "none",
-        fontSize: "small",
+        // borderRight: "none",
+        // borderLeft: "none",
+        fontSize: "13px",
         fontFamily: "roboto",
-        padding: "5px",
-      },
-    },
-    enableExpandAll: true,
-    enableColumnFilterModes: true,
-    enableExpanding: true,
-    filterFromLeafRows: false,
-    enableColumnOrdering: true,
-    enableColumnPinning: true,
-
-    defaultDisplayColumn: {
-      enableResizing: true,
-    },
-    muiTableHeadCellProps: {
-      style: {
-        backgroundColor: PrimaryColor,
-        color: "white",
-        fontFamily: "roboto",
-        border: "none",
         padding: "0px",
       },
     },
-    muiTablePaperProps: {
-      elevation: 10,
+
+    muiCircularProgressProps: {
+      color: "primary",
+      thickness: 5,
+      size: 55,
     },
-    muiColumnActionsButtonProps: {
-      style: {
-        color: "white",
+    muiTableBodyProps: {
+      sx: {
+        "& tr:nth-of-type(odd) > td": {
+          backgroundColor: "#f5f5f5",
+        },
       },
     },
+    muiTablePaperProps: {
+      elevation: 0,
+    },
 
+    // enableExpandAll: true,
+    enableColumnFilterModes: true,
+    // enableExpanding: true,
+    filterFromLeafRows: false,
+    enableColumnOrdering: true,
+    enableColumnPinning: true,
+    enableFullScreenToggle: false,
+    defaultDisplayColumn: {
+      enableResizing: true,
+    },
+
+    muiTableHeadCellProps: ({ column }) => ({
+      //conditionally style pinned columns
+      sx: {
+        backgroundColor: PrimaryColor,
+        color: "black",
+        fontFamily: "roboto",
+        border: "none",
+        fontWeight: "normal",
+      },
+    }),
+
+    muiColumnActionsButtonProps: {
+      style: {
+        color: "black",
+      },
+    },
+    defaultColumn: {
+      minSize: 60,
+      maxSize: 600,
+    },
+    muiTableProps: {
+      style: {
+        width: "80%",
+        margin: "auto",
+      },
+    },
+    muiDetailPanelProps: { style: { color: "black" } },
     maxLeafRowFilterDepth: 0,
+    muiFilterTextFieldProps: {
+      sx: {
+        ".css-929hxt-MuiInputBase-input-MuiInput-input": {
+          fontSize: NormalFontSize,
+        },
+      },
+    },
     enableStickyHeader: true,
+    state: { isLoading: loading, pagination, density: "compact" },
     getSubRows: (row) => row.tasks || [],
-    // initialState: { expanded: true },
     columnFilterDisplayMode: "popover",
+    // initialState:{density:'comfortable'},
     paginateExpandedRows: false,
+    enableToolbarInternalActions: false,
+    // renderToolbarInternalActions: ({ table }) => (
+    //   <Box sx={{ width:'0px' }}>
+
+    //   </Box>
+    // ),
+    renderBottomToolbar: ({ table }) => (
+      <Box sx={{ paddingBottom: "0px" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            ".css-uqq6zz-MuiFormLabel-root-MuiInputLabel-root ": {
+              fontSize: "13px",
+              fontWeight: "normal",
+              fontFamily: "roboto",
+            },
+            ".css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.MuiSelect-select":
+              {
+                fontSize: "13px",
+                fontWeight: "normal",
+                fontFamily: "roboto",
+                marginTop: "2px",
+              },
+            ".css-1f2oslk-MuiTypography-root": {
+              fontSize: "13px",
+              fontWeight: "normal",
+              fontFamily: "roboto",
+            },
+          }}
+        >
+          <MRT_TablePagination table={table} sx={{ fontSize: "13px" }} />
+        </Box>
+        <Box sx={{ display: "grid", width: "100%" }}>
+          <MRT_ToolbarAlertBanner stackAlertBanner table={table} />
+        </Box>
+      </Box>
+    ),
+    onPaginationChange: setPagination, //hoist pagination state to your state when it changes internally
+
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
-          display: "flex",
-          gap: "16px",
-          padding: "8px",
-          flexDirection: "row",
+          display: "block",
+          marginLeft: "20px",
+          marginTop: "0px",
+          padding: "0px",
+          width: "100%",
         }}
       >
         <div
           style={{
-            color: FilterColor,
-            boxShadow: "0 0 5px gray",
-            borderRadius: "100%",
-            width: "40px",
-            height: "36px",
-            textAlign: "center",
+            display: "flex",
+            marginRight: "0%",
+            width: "100%",
+            paddingTop: "0px",
           }}
         >
-          <CSVLink
-            data={data}
-            filename={"data.csv"}
-            onClick={() => handleExportRows(data)}
+          <h2
+            style={{
+              color: SecondaryColor,
+              fontFamily: "roboto",
+              fontSize: "17px",
+              // marginTop: "15px",
+              marginRight: "30%",
+              // fontStyle: "italic",
+              maxWidth: "200px",
+              flex: 1,
+            }}
           >
-            <FileDownloadIcon
-              style={{ color: FilterColor, paddingTop: "6px" }}
-            />
-          </CSVLink>
+            Chain - Task Status Table
+          </h2>
+          <div
+            style={{
+              fontSize: "13px",
+              marginRight: "13px",
+              marginLeft: "5%",
+              marginTop: "18px",
+              fontFamily: "roboto",
+              color: SecondaryColor,
+              fontWeight: 500,
+            }}
+          >
+            System:
+          </div>
+          <FormControl
+            variant="standard"
+            sx={{
+              width: "100px",
+              marginTop: "13px",
+
+              ".css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input":
+                {
+                  fontSize: "13px",
+                  paddingBottom: "0px",
+                  marginTop: "0px",
+                  color: SecondaryColor,
+                },
+            }}
+          >
+            <Select
+              labelId="demo-simple-select-standard-label"
+              id="demo-simple-select-standard"
+              value={pge}
+              label="System"
+              onChange={handleChange}
+              sx={{
+                fontSize: NormalFontSize,
+              }}
+            >
+              <MenuItem value={"false"} sx={{ fontSize: NormalFontSize }}>
+                SecMaster
+              </MenuItem>
+              <MenuItem value={"true"} sx={{ fontSize: NormalFontSize }}>
+                PriceMaster
+              </MenuItem>
+            </Select>
+          </FormControl>
+          <StyledDatepickerContainer
+            style={{ marginLeft: "2%", marginBottom: 0, marginRight: "0%" }}
+          >
+            <div
+              style={{
+                fontSize: "13px",
+                marginRight: "5px",
+                marginTop: "19px",
+                fontFamily: "roboto",
+                color: SecondaryColor,
+                fontWeight: 500,
+                width: "100px",
+              }}
+            >
+              Start Date:
+            </div>
+            <div
+              style={{
+                marginRight: "2%",
+                marginBottom: "0px",
+                marginTop: "11px",
+              }}
+            >
+              <Datepicker
+                name="Task Start Date"
+                selectedDate={startDate}
+                onDateChange={handleStartDateChange}
+                flag={isEndDateValid}
+              />
+            </div>
+            <div
+              style={{
+                fontSize: "13px",
+                marginRight: "2%",
+                marginTop: "19px",
+                fontFamily: "roboto",
+                color: SecondaryColor,
+                fontWeight: 500,
+                width: "80px",
+                marginLeft: "5%",
+              }}
+            >
+              End Date:
+            </div>
+            <div style={{ marginBottom: "0px", marginTop: "11px" }}>
+              <Datepicker
+                name="Task End Date"
+                selectedDate={EndDate}
+                onDateChange={handleEndDateChange}
+                flag={isEndDateValid}
+              />
+            </div>
+          </StyledDatepickerContainer>
+          <div style={{ marginTop: "10px", paddingLeft: "5%" }}>
+            <CSVLink
+              data={data}
+              filename={"data.csv"}
+              onClick={() => handleExportRows(data)}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <FileDownloadIcon
+                sx={{
+                  color: SecondaryColor,
+                  fontSize: "24px",
+                  marginRight: "8px",
+                  verticalAlign: "middle",
+                  transition: "transform 0.3s ease-in-out",
+                  "&:hover": {
+                    transform: "scale(1.2)",
+                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+                  },
+                }}
+              />
+            </CSVLink>
+          </div>
         </div>
-        <div>
-          <GridFilter
-            onChainSelected={handleChainSelected}
-            onStartDateSelected={handleStartDateChange}
-            onEndDateSelected={handleEndDateChange}
-            onBenchStartDateSelected={handleBenchStartDateChange}
-            onBenchEndDateSelected={handleBenchendDateChange}
-            onCheck={handleAgeChange}
-            onDeviationChange={handleDeviationChange}
-            onBenchmarkComputeChange={handleBenchmarkCompute}
-            onPmChange={handlePMChange}
-          ></GridFilter>
-        </div>
+        <Card sx={{padding:'3px',backgroundColor:PrimaryColor}}>
+          <div
+            style={{
+              display: "flex",
+              fontSize: "13px",
+              fontVariant: "jis78",
+              // fontWeight: "normal",
+              fontFamily: "roboto",
+              marginTop: "0px",
+              color: "#404040",
+            }}
+          >
+            <div style={{ marginTop: "0px" }}>
+              {pge == "false" ? (
+                <GridFilter
+                  onChainSelected={handleChainSelected}
+                  onStartDateSelected={handleStartDateChange}
+                  onEndDateSelected={handleEndDateChange}
+                  onBenchStartDateSelected={handleBenchStartDateChange}
+                  onBenchEndDateSelected={handleBenchendDateChange}
+                  onCheck={handleAgeChange}
+                  onDeviationChange={handleDeviationChange}
+                  onBenchmarkComputeChange={handleBenchmarkCompute}
+                  pm={"false"}
+                ></GridFilter>
+              ) : (
+                <GridFilter
+                  onChainSelected={handleChainSelected}
+                  onStartDateSelected={handleStartDateChange}
+                  onEndDateSelected={handleEndDateChange}
+                  onBenchStartDateSelected={handleBenchStartDateChange}
+                  onBenchEndDateSelected={handleBenchendDateChange}
+                  onCheck={handleAgeChange}
+                  onDeviationChange={handleDeviationChange}
+                  onBenchmarkComputeChange={handleBenchmarkCompute}
+                  pm={"true"}
+                ></GridFilter>
+              )}
+            </div>
+
+            {age == "10" ? (
+              <div
+                style={{ display: "flex", marginTop: "1px", marginLeft: "5px" }}
+              >
+                <strong>&nbsp;Chain Name: &nbsp;</strong>
+                <span>
+                  {selectedChainValue?.key
+                    ? selectedChainValue?.key
+                    : "All Chains"}
+                  &nbsp;
+                </span>
+                <span>|</span>
+              </div>
+            ) : (
+              <div
+                style={{ display: "flex", marginTop: "1px", marginLeft: "5px" }}
+              >
+                <strong>&nbsp;Chain Name: &nbsp;</strong>
+                <span>All Chains&nbsp;</span>
+                <span>|</span>
+              </div>
+            )}
+            {age == "20" ? (
+              <div style={{ display: "flex", marginTop: "1px" }}>
+                <strong>&nbsp;Task Name: &nbsp;</strong>
+                <span>{selectedChainValue?.key}&nbsp;</span>
+                <span>|</span>
+              </div>
+            ) : (
+              <div style={{ display: "flex", marginTop: "1px" }}>
+                <strong>&nbsp;Task Name: &nbsp;</strong>
+                <span> All Tasks&nbsp;</span>
+                <span>|</span>
+              </div>
+            )}
+            <div style={{ marginTop: "1px" }}>
+              <strong>&nbsp;Data Duration: </strong>
+              <span>
+                &nbsp;
+                {DateConversioninddMMMMyyyy(startDate)} to{" "}
+                {DateConversioninddMMMMyyyy(EndDate)} &nbsp;
+              </span>
+              <span>|</span>
+              <strong> &nbsp;Benchmark Data Duration: </strong>
+              <span>
+                &nbsp;
+                {DateConversioninddMMMMyyyy(BenchstartDate)} to{" "}
+                {DateConversioninddMMMMyyyy(BenchendDate)}
+              </span>
+            </div>
+          </div>
+        </Card>
         <div
           style={{
             display: "flex",
-            fontSize: "small",
-            fontWeight: "lighter",
+            fontSize: "11px",
+            marginBottom: "0px",
+            marginTop: "5px",
             fontFamily: "roboto",
-            marginTop: "10px",
-            color:'gray'
+            color: "gray",
           }}
         >
-          {age == "10" ? (
-            <div>
-              <span>Chain Name: </span>
-              <span>
-                {selectedChainValue?.key
-                  ? selectedChainValue?.key
-                  : "All Chains"}
-              </span>
-              <span>&nbsp; | &nbsp;</span>
-            </div>
-          ) : (
-            <div>
-              <span>Chain Name: </span>
-              <span>All Chains</span>
-              <span>&nbsp; | &nbsp;</span>
-            </div>
-          )}
-          {age == "20" ? (
-            <div>
-              <span>Task Name: </span>
-              <span>{selectedChainValue?.key}</span>
-              <span> | &nbsp;</span>
-            </div>
-          ) : (
-            <div>
-              <span>Task Name: </span>
-              <span>All Tasks</span>
-              <span>&nbsp; | &nbsp;</span>
-            </div>
-          )}
-          <span>Data Duration: </span>
-          <span>
-            {DateConversioninddMMMMyyyy(startDate)} to{" "}
-            {DateConversioninddMMMMyyyy(EndDate)}{" "}
-          </span>
-          <span>&nbsp; | &nbsp;</span>
-          <span> Benchmark Data Duration: </span>
-          <span>
-            {" "}
-            {DateConversioninddMMMMyyyy(BenchstartDate)} to{" "}
-            {DateConversioninddMMMMyyyy(BenchendDate)}
-          </span>
-          <span>&nbsp;{" | "}&nbsp;</span>
-          {isPm == "true" ? (
-            <span>System: PriceMaster</span>
-          ) : (
-            <span>System: SecMaster</span>
-          )}
+          *Click on Chain Names for Task Details
         </div>
       </Box>
     ),
   });
 
   return (
-    <div
-      style={{
-        height: "auto",
-        position: "relative",
-        paddingLeft: "50px",
-        paddingRight: "50px",
-      }}
-    >
-      <h2
+    <div>
+      <div
         style={{
-          color: PrimaryColor,
-          fontFamily: "roboto",
-          fontSize: "large",
+          height: "auto",
+          position: "relative",
+          paddingLeft: "10px",
+          paddingRight: "10px",
         }}
       >
-        Chain/ Task Status Table
-      </h2>
-      {loading && (
-        <div
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          <CircularProgress />
-        </div>
-      )}
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <MaterialReactTable table={table} />
-      </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <MaterialReactTable table={table} />
+        </LocalizationProvider>
+        {/* {loading && (
+          <div
+            style={{
+              position: "absolute",
+              top: "70%",
+              left: "50%",
+
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <CircularProgress />
+          </div>
+        )} */}
+      </div>
     </div>
   );
 };

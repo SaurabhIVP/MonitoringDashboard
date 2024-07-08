@@ -11,7 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import { DateConversion } from "../../utils/DateConversion";
-import { PrimaryColor, SecondaryColor } from "../../utils/Colors";
+import { NormalFontSize, PrimaryColor, SecondaryColor } from "../../utils/Colors";
 import { random } from "lodash";
 
 ChartJS.register(
@@ -65,19 +65,21 @@ const ChainChart: React.FC<BasicLineChartProps> = ({
         label: `${title}`,
         data: data.map((item) => item.total_times),
         fill: false,
-        borderColor: PrimaryColor,
-        backgroundColor:PrimaryColor,
+        borderColor: SecondaryColor,
+        backgroundColor:SecondaryColor,
         tension: 0.1,
-        pointRadius: 2
+        pointRadius: 2,
+        borderWidth:1.4
       },
       {
         label: "Benchmark Time",
         data: data.map((item) => item.avg_total_time),
         fill: false,
-        borderColor: "#b4b4b8",
-        backgroundColor:"#b4b4b8",
+        borderColor: "#404040",
+        backgroundColor:"#404040",
         tension: 0.1,
-        pointRadius: 0
+        pointRadius: 0,
+        borderWidth:1
         
       },
     ],
@@ -93,8 +95,14 @@ const ChainChart: React.FC<BasicLineChartProps> = ({
         options={{
           plugins:{
             legend:{
+             
               labels:{
-                boxWidth:20
+                boxWidth:20,
+                font:{
+                  size:10,
+                  family:'roboto'
+                },
+                color:SecondaryColor
               }
             }
           },
@@ -104,6 +112,13 @@ const ChainChart: React.FC<BasicLineChartProps> = ({
             
             x: {
               type:'time',
+              ticks:{
+                color:SecondaryColor,
+                font:{
+                  family:'roboto',
+                  size:10
+                }
+              },
               time: {
                 unit: 'day', // Display one day per tick
                 displayFormats: {
@@ -113,13 +128,30 @@ const ChainChart: React.FC<BasicLineChartProps> = ({
               title: {
                 display: true,
                 text: axisname,
+                font:{
+                  size:10,
+                  family:'roboto'
+                },
+                color:SecondaryColor
               },
             },
             y: {
               beginAtZero: true,
+              ticks:{
+                color:SecondaryColor,
+                font:{
+                  family:'roboto',
+                  size:10
+                }
+              },
               title: {
                 display: true,
                 text: "Time (seconds)",
+                font:{
+                  size:10,
+                  family:'roboto'
+                },
+                color:SecondaryColor
               },
             },
           },

@@ -1,5 +1,6 @@
 import * as React from "react";
 import Popover from "@mui/material/Popover";
+import TuneIcon from "@mui/icons-material/Tune";
 import Datepicker from "../generics/datepicker/Datepicker";
 import CloseIcon from "@mui/icons-material/Close";
 import {
@@ -38,26 +39,26 @@ const DateFilters: React.FC<ChartFilterProps> = ({
   const id = open ? "simple-popover" : undefined;
 
   const [startDate, setStartDate] = React.useState<Date | null>(
-    new Date(2024, 0, 17)
+    new Date(2024, 1, 1)
   );
   const [EndDate, setEndDate] = React.useState<Date | null>(
-    new Date(2024, 0, 30)
+    new Date(2024, 1, 7)
   );
   const [BenchstartDate, setBenchStartDate] = React.useState<Date | null>(
-    new Date(2024, 0, 17)
+    new Date(2024, 1, 1)
   );
   const [BenchendDate, setBenchEndDate] = React.useState<Date | null>(
-    new Date(2024, 0, 30)
+    new Date(2024, 1, 7)
   );
 
   const handleEndDateChange = (newDate: Date | null) => {
     setEndDate(newDate);
   };
   const resetButtonHandler = () => {
-    setStartDate(new Date(2024, 0, 17));
-    setEndDate(new Date(2024, 0, 30));
-    setBenchStartDate(new Date(2024, 0, 17));
-    setBenchEndDate(new Date(2024, 0, 30));
+    setStartDate(new Date(2024, 1, 1));
+    setEndDate(new Date(2024, 1, 7));
+    setBenchStartDate(new Date(2024, 1, 1));
+    setBenchEndDate(new Date(2024, 1, 7));
   };
   const handleStartDateChange = (newDate: Date | null) => {
     setStartDate(newDate);
@@ -88,8 +89,10 @@ const DateFilters: React.FC<ChartFilterProps> = ({
       BenchendDate !== null &&
       BenchendDate >= BenchstartDate);
   return (
-    <div style={{ position: "absolute", right: 60,top:35 }}>
-      <FilterButton ariaLabel="" onClick={handleClick}></FilterButton>
+    <div>
+      <IconButton onClick={handleClick} sx={{padding:'0px'}}>
+        <TuneIcon></TuneIcon>
+      </IconButton>
       <Popover
         id={id}
         open={open}

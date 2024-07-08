@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Stack, TextField, Autocomplete, Checkbox } from "@mui/material";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import { NormalFontSize, SecondaryColor } from "../../utils/Colors";
 
 interface SearchBarProps {
   fetchDataFunction: () => Promise<any>;
@@ -16,7 +17,7 @@ const MultiSelect: React.FC<SearchBarProps> = ({
   NameParam,
   Label,
   onSearch,
-  keyProp
+  keyProp,
 }) => {
   const [data, setData] = useState<any[]>([]);
   const [selectedValue, setSelectedValue] = useState<string[]>([]);
@@ -38,7 +39,7 @@ const MultiSelect: React.FC<SearchBarProps> = ({
     // Pass the selected value back to the parent component
     onSearch(value);
   };
-  
+
   useEffect(() => {
     setKey(keyProp); // Update key state when keyProp changes
   }, [keyProp]);
@@ -46,15 +47,20 @@ const MultiSelect: React.FC<SearchBarProps> = ({
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
   return (
-    <Stack spacing={2} width={"550px"}>
+    <Stack spacing={2} width={"400px"} sx={{marginLeft:'10px'}}>
       {data && (
         <Autocomplete
           multiple
+          sx={{ fontSize: NormalFontSize,"& .MuiAutocomplete-tag": {
+            fontSize:'10px',
+            color:SecondaryColor,
+            fontFamily:'roboto' // Change this to your desired color
+          }, }}
           options={data.map((item) => item[NameParam])}
           disableCloseOnSelect
           key={key}
           renderOption={(props, option, { selected }) => (
-            <li {...props}>
+            <li {...props} style={{ fontSize: NormalFontSize }}>
               <Checkbox
                 icon={icon}
                 checkedIcon={checkedIcon}
@@ -63,7 +69,15 @@ const MultiSelect: React.FC<SearchBarProps> = ({
               {option}
             </li>
           )}
-          renderInput={(params) => <TextField {...params} label={Label} />}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="standard"
+              inputProps={{
+                ...params.inputProps,
+              }}
+            />
+          )}
           // value={selectedValue}
           onChange={handleOnChange}
         />

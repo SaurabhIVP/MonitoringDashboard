@@ -5,15 +5,17 @@ import ChartTask from "../../api/ChartTask";
 import ChartFilter from "../../components/filters/ChartFilter";
 import TaskChartFilter from "../../components/filters/TaskChartFilter";
 import {
-  Chip,
+  Button,
+  Card,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  ListItem,
+  FormControl,
+  MenuItem,
   Paper,
-  Typography,
-  SelectChangeEvent
+  Select,
+  SelectChangeEvent,
 } from "@mui/material";
 import Tasknames from "../../api/Tasknames";
 import DateFilters from "../../components/filters/DateFilters";
@@ -21,16 +23,36 @@ import {
   StyledButton,
   StyledDatepickerContainer,
 } from "../../utils/StyledComponents";
-import { PrimaryColor } from "../../utils/Colors";
+import {
+  AppTitleFontSize,
+  NormalFontSize,
+  PageTitleFontSize,
+  PrimaryColor,
+  SecondaryColor,
+} from "../../utils/Colors";
 import { PaperComponent } from "../../components/generics/paper component/PaperComponent";
 import "./Charts.css";
 import { DateConversioninddMMMMyyyy } from "../../utils/DateConversion";
+import CloseButton from "../../components/generics/CloseButton";
+import { Height } from "@mui/icons-material";
 
 const Charts: React.FC = () => {
   const [selectedChainValue, setSelectedChainValue] = useState<{
     id: number;
     key: string;
   } | null>(null);
+  const [pge, setpge] = useState("false");
+
+  const handleChange = (event: SelectChangeEvent) => {
+    // setAge("30");
+    setpge(event.target.value);
+  };
+  const [taskpge, settaskpge] = useState("false");
+
+  const handletaskChange = (event: SelectChangeEvent) => {
+    // setAge("30");
+    settaskpge(event.target.value);
+  };
   const [selectedTaskValue, setSelectedTaskValue] = useState<{
     id: number;
     key: string;
@@ -43,40 +65,40 @@ const Charts: React.FC = () => {
   };
 
   const [chainStartDate, setChainStartDate] = useState<Date | null>(
-    new Date(2024, 0, 1)
+    new Date(2024, 1, 1)
   );
   const [chainEndDate, setChainEndDate] = useState<Date | null>(
-    new Date(2024, 0, 31)
+    new Date(2024, 1, 7)
   );
   const [childTaskStartDate, setChildTaskStartDate] = useState<Date | null>(
-    new Date(2024, 0, 1)
+    new Date(2024, 1, 1)
   );
   const [childTaskEndDate, setChildTaskEndDate] = useState<Date | null>(
-    new Date(2024, 0, 31)
+    new Date(2024, 1, 7)
   );
   const [taskStartDate, setTaskStartDate] = useState<Date | null>(
-    new Date(2024, 0, 1)
+    new Date(2024, 1, 1)
   );
   const [taskEndDate, setTaskEndDate] = useState<Date | null>(
-    new Date(2024, 0, 31)
+    new Date(2024, 1, 7)
   );
   const [BenchstartDate, setBenchStartDate] = useState<Date | null>(
-    new Date(2024, 0, 1)
+    new Date(2024, 1, 1)
   );
   const [BenchendDate, setBenchEndDate] = useState<Date | null>(
-    new Date(2024, 0, 31)
+    new Date(2024, 1, 7)
   );
   const [BenchTaskstartDate, setBenchTaskStartDate] = useState<Date | null>(
-    new Date(2024, 0, 1)
+    new Date(2024, 1, 1)
   );
   const [BenchTaskendDate, setBenchTaskEndDate] = useState<Date | null>(
-    new Date(2024, 0, 31)
+    new Date(2024, 1, 7)
   );
   const [BenchChildstartDate, setBenchChildStartDate] = useState<Date | null>(
-    new Date(2024, 0, 1)
+    new Date(2024, 1, 1)
   );
   const [BenchChildendDate, setBenchChildEndDate] = useState<Date | null>(
-    new Date(2024, 0, 31)
+    new Date(2024, 1, 7)
   );
 
   const handleChainStartDateChange = (newDate: Date | null) => {
@@ -127,25 +149,19 @@ const Charts: React.FC = () => {
     settaskDeviationPercentage(value);
     console.log(deviationPercentage);
   };
-  const benchmarkComputeOptions = [
-    {
-      text: "Average",
-      value: "Average",
-    },
-  ];
   const [benchmarkCompute, setBenchmarkCompute] = useState("Average");
   const onChange = (value: string) => {
     setBenchmarkCompute(value);
     console.log(benchmarkCompute);
   };
-  const [isPm,setIsPm]=useState<string>("false");
-      const handlePMChange = (event: any) => {
-        setIsPm(event as string);
-      };
-      const [istaskPm,settaskIsPm]=useState<string>("false");
-      const handlePMtaskChange = (event: any) => {
-        settaskIsPm(event as string);
-      };
+  const [isPm, setIsPm] = useState<string>("false");
+  const handlePMChange = (event: any) => {
+    setIsPm(event as string);
+  };
+  const [istaskPm, settaskIsPm] = useState<string>("false");
+  const handlePMtaskChange = (event: any) => {
+    settaskIsPm(event as string);
+  };
   //child task benchmark handlers
   const handleBenchChildStartDateChange = (newDate: Date | null) => {
     setBenchChildStartDate(newDate);
@@ -153,13 +169,13 @@ const Charts: React.FC = () => {
   const handleBenchChildendDateChange = (newDate: Date | null) => {
     setBenchChildEndDate(newDate);
   };
-  const getboolean=(val:string)=>{
-    if(val=="true"){
+  const getboolean = (val: string) => {
+    if (val == "true") {
       return true;
-    }else{
+    } else {
       return false;
     }
-  }
+  };
   //Data for Child charts (Task charts) for selected chain
   const [data, setData] = useState([]);
   const fetchData = async () => {
@@ -167,7 +183,7 @@ const Charts: React.FC = () => {
       setData([]);
       const response = (await Tasknames({
         chain_id: selectedChainValue?.id || 2775,
-        is_pm:getboolean(isPm)
+        is_pm: getboolean(isPm),
       })) as any;
       console.log(response);
       setData(response || []);
@@ -191,173 +207,323 @@ const Charts: React.FC = () => {
 
   return (
     <>
-      <div className="paperWrapper">
-        <Paper elevation={3} className="paperClass">
-          <div className="titleHolder">
-            <h3
-              className="titleStyler"
-              style={{
-                color: PrimaryColor,
-              }}
-            >
-              Chain Level Analysis :{" "}
-              {`${
-                selectedChainValue?.key ||
-                "Analytics Golden Copy - Mastered Analytics"
-              }`}
-            </h3>
-            <StyledDatepickerContainer style={{ paddingTop: "15px" }}>
-              <StyledButton
-                onClick={handleClickOpen}
-                style={{
-                  marginTop: "5px",
-                  // marginBottom: "5px",
-                  marginRight: "15px",
-                  fontFamily: "roboto",
-                }}
-              >
-                Child Tasks
-              </StyledButton>
-              <div style={{ marginTop: "5px" }}>
-                <ChartFilter
-                  onChainSelected={handleChainSelected}
-                  onStartDateSelected={handleChainStartDateChange}
-                  onEndDateSelected={handleChainEndDateChange}
-                  onBenchStartDateSelected={handleBenchStartDateChange}
-                  onBenchEndDateSelected={handleBenchendDateChange}
-                  onBenchmarkComputeChange={onChange}
-                  onDeviationChange={handleDeviationChange}
-                  onPmChange={handlePMChange}
-                />
-              </div>
-            </StyledDatepickerContainer>
-          </div>
-          
+      <h2
+        style={{
+          color: SecondaryColor,
+          fontFamily: "roboto",
+          fontSize: PageTitleFontSize,
+          paddingTop: "60px",
+          marginBottom: "0px",
+          position: "absolute",
+          left: "5%",
+          // fontStyle: "italic",
+        }}
+      >
+        Trend Analysis
+      </h2>
+      <div className="paperWrapper" style={{ paddingTop: "85px" }}>
+        <div className="paperClass">
           <div
             style={{
               display: "flex",
-              fontFamily: "roboto",
-              fontSize: "small",
-              fontWeight: "lighter",
-              marginTop: "0px",
-              marginLeft: "10px",
-              color:'gray'
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
             }}
           >
-            <span>Benchmark Duration: </span>
-            <span>
-              {" "}
-              {DateConversioninddMMMMyyyy(BenchstartDate)} to{" "}
-              {DateConversioninddMMMMyyyy(BenchendDate)}
-            </span>
-            <span>&nbsp;{" | "}&nbsp;</span>
-            <span>Deviation %:</span>
-            <span>{deviationPercentage}</span>
+            <h3
+              
+              style={{
+                color: SecondaryColor,
+                maxWidth: "500px",
+                minWidth: "200px",
+                flex:1,
+                whiteSpace:'nowrap',
+                overflow:'hidden',
+                textOverflow:'ellipsis',
+                fontSize:NormalFontSize,
+                fontWeight:700,
+                textAlign:'left'
+              }}
+            >
+              Chain Level Analysis :{" "}
+              {pge == "false"
+                ? `${
+                    selectedChainValue?.key ||
+                    "Analytics Golden Copy - Mastered Analytics"
+                  }`
+                : `${
+                    selectedChainValue?.key || "Security Position Loading Task"
+                  }`}
+            </h3>
+            <div style={{width:'45%'}}></div>
+            <div
+              style={{ display: "flex",width:'15%',  marginRight: "1%" }}
+            >
+              <div
+                style={{
+                  fontSize: "13px",
+                  marginRight: "13px",
+
+                  marginTop: "9px",
+                  fontFamily: "roboto",
+                  color: SecondaryColor,
+                  fontWeight: 500,
+                }}
+              >
+                System:
+              </div>
+              <FormControl
+                variant="standard"
+                sx={{
+                  width: "100px",
+                  marginTop: "5px",
+                  ".css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input":
+                    {
+                      fontSize: "13px",
+                      paddingBottom: "0px",
+                      // marginTop: "5px",
+                      color: SecondaryColor,
+                    },
+                }}
+              >
+                <Select
+                  labelId="demo-simple-select-standard-label"
+                  id="demo-simple-select-standard"
+                  value={pge}
+                  label="System"
+                  onChange={handleChange}
+                  sx={{ fontSize: NormalFontSize }}
+                >
+                  <MenuItem value={"false"} sx={{ fontSize: NormalFontSize }}>
+                    SecMaster
+                  </MenuItem>
+                  <MenuItem value={"true"} sx={{ fontSize: NormalFontSize }}>
+                    PriceMaster
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+
+            <StyledDatepickerContainer
+              style={{ marginTop: "3px", marginBottom: "0px" }}
+            >
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={handleClickOpen}
+                sx={{
+                  backgroundColor: PrimaryColor,
+                  color: SecondaryColor,
+                  borderColor: SecondaryColor,
+                  fontSize: NormalFontSize,
+                  fontFamily: "roboto",
+                  paddingBottom: "0px",
+                  maxHeight: "30px",
+                  paddingTop: "0px",
+                }}
+              >
+                Child Tasks
+              </Button>
+            </StyledDatepickerContainer>
           </div>
+          <Card sx={{ padding: "1px", backgroundColor: PrimaryColor }}>
+            <div>
+              <div
+                style={{
+                  display: "flex",
+                  fontSize: NormalFontSize,
+                  fontWeight: "lighter",
+                  fontFamily: "roboto",
+                  // marginLeft: "15px",
+                  color: "#404040",
+                }}
+              >
+                <div style={{ marginTop: "0px" }}>
+                  <ChartFilter
+                    onChainSelected={handleChainSelected}
+                    onStartDateSelected={handleChainStartDateChange}
+                    onEndDateSelected={handleChainEndDateChange}
+                    onBenchStartDateSelected={handleBenchStartDateChange}
+                    onBenchEndDateSelected={handleBenchendDateChange}
+                    onBenchmarkComputeChange={onChange}
+                    onDeviationChange={handleDeviationChange}
+                    // onPmChange={handlePMChange}
+                    pm={getboolean(pge)}
+                  />
+                </div>
+                <div style={{ marginTop: "4px", marginLeft: "5px" }}>
+                  <strong>Benchmark Data Duration: </strong>
+                  <span>
+                    {" "}
+                    {DateConversioninddMMMMyyyy(BenchstartDate)} to{" "}
+                    {DateConversioninddMMMMyyyy(BenchendDate)}
+                    &nbsp;{" | "} &nbsp;
+                  </span>
+
+                  <strong>Deviation % : </strong>
+
+                  <span>{deviationPercentage}</span>
+                </div>
+              </div>
+            </div>
+          </Card>
           <div id="1293">
-            <ChainChart
-              fetchDataFunction={() =>
-                ChartChain({
-                  chain_id: selectedChainValue?.id || 2775,
-                  startDate: chainStartDate,
-                  endDate: chainEndDate,
-                  benchStartDate: BenchstartDate,
-                  benchEndDate: BenchendDate,
-                  benchmarkCompute: benchmarkCompute,
-                  deviationPercentage: deviationPercentage,
-                  is_pm:getboolean(isPm)
-                })
-              }
-              title="Chain Time"
-              axisname="Chain Run Date"
-            />
+            {pge == "false" ? (
+              <ChainChart
+                fetchDataFunction={() =>
+                  ChartChain({
+                    chain_id: selectedChainValue?.id || 2775,
+                    startDate: chainStartDate,
+                    endDate: chainEndDate,
+                    benchStartDate: BenchstartDate,
+                    benchEndDate: BenchendDate,
+                    benchmarkCompute: benchmarkCompute,
+                    deviationPercentage: deviationPercentage,
+                    is_pm: getboolean(pge),
+                  })
+                }
+                title="Chain Time"
+                axisname="Chain Run Date"
+              />
+            ) : (
+              <ChainChart
+                fetchDataFunction={() =>
+                  ChartChain({
+                    chain_id: selectedChainValue?.id || 1,
+                    startDate: chainStartDate,
+                    endDate: chainEndDate,
+                    benchStartDate: BenchstartDate,
+                    benchEndDate: BenchendDate,
+                    benchmarkCompute: benchmarkCompute,
+                    deviationPercentage: deviationPercentage,
+                    is_pm: getboolean(pge),
+                  })
+                }
+                title="Chain Time"
+                axisname="Chain Run Date"
+              />
+            )}
           </div>
-        </Paper>
+        </div>
       </div>
 
       <div className="paperWrapper" style={{ paddingTop: "0px" }}>
-        <Paper
-          elevation={3}
-          style={{ padding: 20, marginBottom: 20 }}
+        <div
+          style={{ paddingLeft: 20, paddingRight: 20, marginBottom: 20 }}
           className="paperClass"
         >
-          <div className="titleHolder">
+          <div style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}>
             <h3
-              className="titleStyler"
+              
               style={{
-                color: PrimaryColor,
+                color: SecondaryColor,
+                maxWidth: "500px",
+                minWidth: "200px",
+                flex:1,
+                whiteSpace:'nowrap',
+                overflow:'hidden',
+                textOverflow:'ellipsis',
+                fontSize:NormalFontSize,
+                fontWeight:700,
+                textAlign:'left'
               }}
             >
               Task Level Analysis :{" "}
               {`${selectedTaskValue?.key || "CRD Loans Task"}`}
             </h3>
+            <div
+              style={{ display: "flex",width:'15%',  marginRight: "1%" }}
+            >
+              <div
+                style={{
+                  fontSize: "13px",
+                  marginRight: "13px",
 
-            <TaskChartFilter
-              onTaskSelected={handleTaskSelected}
-              onStartDateSelected={handleTaskStartDateChange}
-              onEndDateSelected={handleTaskEndDateChange}
-              onBenchStartDateSelected={handleTaskBenchStartDateChange}
-              onBenchEndDateSelected={handleTaskBenchendDateChange}
-              onDeviationChange={handletaskDeviationChange}
-              onBenchmarkComputeChange={onChange}
-              onPmChange={handlePMtaskChange}
-            />
+                  marginTop: "9px",
+                  fontFamily: "roboto",
+                  color: SecondaryColor,
+                  fontWeight: 500,
+                }}
+              >
+                System:
+              </div>
+              <FormControl
+                variant="standard"
+                sx={{
+                  width: "100px",
+                  marginTop: "5px",
+                  ".css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input":
+                    {
+                      fontSize: "13px",
+                      paddingBottom: "0px",
+                      // marginTop: "5px",
+                      color: SecondaryColor,
+                    },
+                }}
+              >
+                <Select
+                  labelId="demo-simple-select-standard-label"
+                  id="demo-simple-select-standard"
+                  value={taskpge}
+                  label="System"
+                  onChange={handletaskChange}
+                  sx={{ fontSize: NormalFontSize }}
+                >
+                  <MenuItem value={"false"} sx={{ fontSize: NormalFontSize }}>
+                    SecMaster
+                  </MenuItem>
+                  <MenuItem value={"true"} sx={{ fontSize: NormalFontSize }}>
+                    PriceMaster
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </div>
           </div>
-          {/* <ListItem>
-            <Chip
-              label={
-                <Typography component="span">
-                  <span style={{ fontWeight: "bold" }}>
-                    Benchmark Duration:
-                  </span>{" "}
+          <Card sx={{ padding: "1px", backgroundColor: PrimaryColor }}>
+            <div style={{}}>
+              <div
+                style={{
+                  display: "flex",
+                  fontSize: NormalFontSize,
+                  fontWeight: "lighter",
+                  fontFamily: "roboto",
+                  // marginLeft: "15px",
+                  color: "#404040",
+                }}
+              >
+                <TaskChartFilter
+                  onTaskSelected={handleTaskSelected}
+                  onStartDateSelected={handleTaskStartDateChange}
+                  onEndDateSelected={handleTaskEndDateChange}
+                  onBenchStartDateSelected={handleTaskBenchStartDateChange}
+                  onBenchEndDateSelected={handleTaskBenchendDateChange}
+                  onDeviationChange={handletaskDeviationChange}
+                  onBenchmarkComputeChange={onChange}
+                  // onPmChange={handlePMtaskChange}
+                  pm={taskpge}
+                />
+                <div style={{ marginTop: "4px", marginLeft: "5px" }}>
+                  <strong>Benchmark Data Duration: </strong>
                   <span>
+                    {" "}
                     {DateConversioninddMMMMyyyy(BenchTaskstartDate)} to{" "}
                     {DateConversioninddMMMMyyyy(BenchTaskendDate)}
-                  </span>{" "}
-                </Typography>
-              }
-              style={{ marginRight: "10px", marginLeft: "30px" }}
-            />
-            <Chip
-              label={
-                <Typography component="span">
-                  <span style={{ fontWeight: "bold" }}>Deviation:</span>{" "}
-                  <span>{taskdeviationPercentage} %</span>{" "}
-                </Typography>
-              }
-              style={{ marginRight: "10px" }}
-            />
-            <Chip
-              label={
-                <Typography component="span">
-                  <span style={{ fontWeight: "bold" }}>
-                    Benchmark Compute Type:
-                  </span>{" "}
-                  <span>Average</span>{" "}
-                </Typography>
-              }
-            />
-          </ListItem> */}
-          <div
-            style={{
-              display: "flex",
-              fontFamily: "roboto",
-              fontSize: "small",
-              fontWeight: "lighter",
-              marginTop: "0px",
-              marginLeft: "10px",
-            }}
-          >
-            <span>Benchmark Duration: </span>
-            <span>
-              {" "}
-              {DateConversioninddMMMMyyyy(BenchTaskstartDate)} to{" "}
-              {DateConversioninddMMMMyyyy(BenchTaskendDate)}
-            </span>
-            <span>&nbsp;{" | "}&nbsp;</span>
-            <span>Deviation %:</span>
-            <span>{taskdeviationPercentage}</span>
-          </div>
+                    &nbsp;{" | "} &nbsp;
+                  </span>
+
+                  <strong>Deviation % : </strong>
+
+                  <span>{taskdeviationPercentage}</span>
+                </div>
+              </div>
+            </div>
+          </Card>
           <div id="111">
             <ChainChart
               fetchDataFunction={() =>
@@ -369,14 +535,14 @@ const Charts: React.FC = () => {
                   benchEndDate: BenchTaskendDate,
                   deviationPercentage: taskdeviationPercentage,
                   benchmarkCompute: benchmarkCompute,
-                  is_pm:getboolean(istaskPm)
+                  is_pm: getboolean(taskpge),
                 })
               }
               title="Task Time"
               axisname="Task Run Date"
             />
           </div>
-        </Paper>
+        </div>
       </div>
       <div>
         <Dialog
@@ -384,95 +550,85 @@ const Charts: React.FC = () => {
           onClose={handleClose}
           PaperComponent={PaperComponent}
           aria-labelledby="draggable-dialog-title"
-          // sx={{height:'100px'}}
           fullWidth
           maxWidth="xs"
           sx={{
-            maxHeight: "calc(100vh - 300px)",
-            top: "20%",
+            maxHeight: "calc(100vh - 200px)",
+            top: "10%",
+            maxWidth: "75%",
+            left: "10%",
           }}
         >
-          <div style={{ paddingBottom: "0px", height: "80px" }}>
+          <div style={{ paddingBottom: "0px" }}>
             <DialogTitle
-              style={{
-                color: PrimaryColor,
+              sx={{
+                color: SecondaryColor,
                 fontFamily: "roboto",
-                fontSize: "large",
+                fontSize: PageTitleFontSize,
+                display: "flex",
+                paddingTop: "5px",
+                paddingBottom: "5px !important",
+                maxHeight: "30px",
               }}
               id="draggable-dialog-title"
               className="DialogTitle"
             >
-              <h4>{`${
-                selectedChainValue?.key ||
-                "Analytics Golden Copy - Mastered Analytics"
-              }`}</h4>
+              <h4 style={{ marginTop: "0px", marginBottom: "0px" }}>
+                {" "}
+                {pge == "false"
+                  ? `${
+                      selectedChainValue?.key ||
+                      "Analytics Golden Copy - Mastered Analytics"
+                    }`
+                  : `${
+                      selectedChainValue?.key ||
+                      "Security Position Loading Task"
+                    }`}
+              </h4>
+              <div style={{ position: "absolute", right: 5, top: 10 }}>
+                <CloseButton onClick={handleClose}></CloseButton>
+              </div>
             </DialogTitle>
+          </div>
+          <Card sx={{ padding: "1px", backgroundColor: PrimaryColor }}>
+            <div
+              style={{
+                display: "flex",
+                fontSize: NormalFontSize,
+                fontWeight: "lighter",
+                fontFamily: "roboto",
+                marginLeft: "20px",
+                color: "#404040",
+              }}
+            >
+              <DateFilters
+                onStartDateSelected={handleChildTaskStartDateChange}
+                onEndDateSelected={handleChildTaskEndDateChange}
+                onBenchStartDateSelected={handleBenchChildStartDateChange}
+                onBenchEndDateSelected={handleBenchChildendDateChange}
+              />
+              <div style={{ marginTop: "4px", marginLeft: "5px" }}>
+                <strong>Benchmark Data Duration: </strong>
+                <span>
+                  {" "}
+                  {DateConversioninddMMMMyyyy(BenchChildstartDate)} to{" "}
+                  {DateConversioninddMMMMyyyy(BenchChildendDate)}
+                  &nbsp;{" | "} &nbsp;
+                </span>
 
-            <DateFilters
-              onStartDateSelected={handleChildTaskStartDateChange}
-              onEndDateSelected={handleChildTaskEndDateChange}
-              onBenchStartDateSelected={handleBenchChildStartDateChange}
-              onBenchEndDateSelected={handleBenchChildendDateChange}
-            />
-          </div>
-          {/* <ListItem>
-            <Chip
-              label={
-                <Typography component="span">
-                  <span style={{ fontWeight: "bold" }}>
-                    Benchmark Duration:
-                  </span>{" "}
-                  <span>
-                    {DateConversioninddMMMMyyyy(BenchChildstartDate)} to{" "}
-                    {DateConversioninddMMMMyyyy(BenchChildendDate)}
-                  </span>{" "}
-                </Typography>
-              }
-              style={{ marginRight: "10px", marginLeft: "30px" }}
-            />{" "}
-            <Chip
-              label={
-                <Typography component="span">
-                  <span style={{ fontWeight: "bold" }}>Deviation:</span>{" "}
-                  <span>{deviationPercentage} %</span>{" "}
-                </Typography>
-              }
-              style={{ marginRight: "10px" }}
-            />
-            <Chip
-              label={
-                <Typography component="span">
-                  <span style={{ fontWeight: "bold" }}>
-                    Benchmark Compute Type:
-                  </span>{" "}
-                  <span>Average</span>{" "}
-                </Typography>
-              }
-            />
-          </ListItem> */}
-          <div
-            style={{
-              display: "flex",
-              fontFamily: "roboto",
-              fontSize: "small",
-              fontWeight: "bold",
-              marginTop: "0px",
-              marginLeft: "25px",
-            }}
-          >
-            <span>Benchmark Duration: </span>
-            <span>
-              {" "}
-              {DateConversioninddMMMMyyyy(BenchChildstartDate)} to{" "}
-              {DateConversioninddMMMMyyyy(BenchChildendDate)}
-            </span>
-            <span>{" | "}</span>
-            <span>Deviation %:</span>
-            <span>{taskdeviationPercentage}</span>
-          </div>
+                <strong>Deviation % : </strong>
+
+                <span>{deviationPercentage}</span>
+              </div>
+            </div>
+          </Card>
           <DialogContent
             dividers={true}
-            style={{ overflowY: "auto", maxHeight: "calc(100vh - 500px)" }}
+            style={{
+              overflowY: "auto",
+              maxHeight: "calc(100vh - 300px)",
+              height: "100%",
+            }}
           >
             {data.map((item: any) => (
               <div
@@ -484,10 +640,13 @@ const Charts: React.FC = () => {
                   paddingRight: "15px",
                 }}
               >
-                <Paper elevation={3} className="paperClass">
+                <div className="paperClass">
                   <div className="titleHolder">
                     <h3
-                      style={{ color: PrimaryColor, fontFamily: "sans-serif" }}
+                      style={{
+                        color: SecondaryColor,
+                        fontFamily: "sans-serif",
+                      }}
                     >
                       Task Name: {`${item.task_name}`}
                     </h3>
@@ -503,22 +662,17 @@ const Charts: React.FC = () => {
                           benchEndDate: BenchChildendDate,
                           deviationPercentage: deviationPercentage,
                           benchmarkCompute: onchange,
-                          is_pm:getboolean(isPm)
+                          is_pm: getboolean(pge),
                         })
                       }
                       title="Task Time"
                       axisname="Task Run Date"
                     />
                   </div>
-                </Paper>
+                </div>
               </div>
             ))}
           </DialogContent>
-          <DialogActions style={{ height: "20px" }}>
-            <StyledButton autoFocus onClick={handleClose}>
-              Cancel
-            </StyledButton>
-          </DialogActions>
         </Dialog>
       </div>
     </>

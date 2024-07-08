@@ -2,7 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 // import Chart from "chart.js/auto";
 import { ChartConfiguration } from "chart.js";
 import "./GanttChart.css";
-import { PrimaryColor } from "../../utils/Colors";
+import {
+  NormalFontSize,
+  PageTitleFontSize,
+  PrimaryColor,
+  SecondaryColor,
+} from "../../utils/Colors";
 import { DateConversioninddMMMMyyyy } from "../../utils/DateConversion";
 import { format } from "date-fns-tz";
 import { Chart, registerables } from "chart.js";
@@ -26,7 +31,7 @@ interface ganttProps {
   date: any;
   benchstart: any;
   benchend: any;
-  is_pm:boolean
+  is_pm: boolean;
 }
 
 const GanttChart: React.FC<ganttProps> = ({
@@ -36,12 +41,13 @@ const GanttChart: React.FC<ganttProps> = ({
   date,
   benchstart,
   benchend,
-  is_pm
+  is_pm,
 }) => {
   let myChart: any | null = null;
 
   let myChart1: any | null = null;
   const [newdata, setnewData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [newstart, setnewstart] = useState<any>([]);
   const [filter, setFilter] = useState<boolean>(false);
   const [newend, setnewend] = useState<any>([]);
@@ -50,12 +56,13 @@ const GanttChart: React.FC<ganttProps> = ({
   let cg = null as any;
   let name = "";
   let chainId = null as any;
+  const [width, setWidth] = useState("100px");
   let startTime = null as any;
   const [isClickedDataUpdating, setIsClickedDataUpdating] = useState(false);
   let endTime = null as any;
   const [clickedData, setClickedData] = useState<any>();
   date = format(date, "yyyy-MM-dd");
-  let height=100;
+  let height = 100;
   if (typeof starttime == "object") {
     starttime = "00:00:00";
   }
@@ -75,6 +82,7 @@ const GanttChart: React.FC<ganttProps> = ({
     setIsClickedDataUpdating(true);
     const start = new Date(starttime);
     const end = new Date(endtime);
+    setLoading(false);
     setnewstart(start);
     setnewend(end);
     console.log(newstart + newend);
@@ -122,7 +130,7 @@ const GanttChart: React.FC<ganttProps> = ({
         return "lightgreen";
       } else if (item.performance > 10) {
         return "green";
-      } else if (item.performance < 0 && item.performance >= 10) {
+      } else if (item.performance < 0 && item.performance >= -10) {
         return "coral";
       } else {
         return "red";
@@ -135,9 +143,10 @@ const GanttChart: React.FC<ganttProps> = ({
           data: processedData,
           backgroundColor: backgroundColors,
           borderWidth: 1,
-          barThickness: 30,
-          maxBarThickness: 30,
+          // barThickness: 30,
+          // maxBarThickness: 30,
           barBorderRadius: 3,
+          categoryPercentage: 0.75,
         },
       ],
     };
@@ -178,12 +187,23 @@ const GanttChart: React.FC<ganttProps> = ({
                 second: "HH:mm:ss",
               },
             },
-            ticks:{
-              font:{
-                family:'roboto',
-                weight:'bold',
-                size:'12px'
-              }
+            title: {
+              display: true,
+              text: "Time Frame",
+              color: SecondaryColor,
+              font: {
+                family: "roboto",
+                weight: "100",
+                size: "14px",
+                style: "italic",
+              },
+            },
+            ticks: {
+              color: SecondaryColor,
+              font: {
+                family: "roboto",
+                weight: "500",
+              },
             },
             min: newstart,
             max: newend,
@@ -225,6 +245,7 @@ const GanttChart: React.FC<ganttProps> = ({
         indexAxis: "y",
         scales: {
           x: {
+            width: 20,
             position: "top",
             type: "time",
             time: {
@@ -236,15 +257,17 @@ const GanttChart: React.FC<ganttProps> = ({
             max: newend,
             display: false,
           },
-          y:{
-          ticks:{
-            font:{
-              family:'roboto',
-              weight:'bold',
-             
-            }
-          }
-          }
+          y: {
+            ticks: {
+              color: SecondaryColor,
+              font: {
+                family: "roboto",
+                weight: "500",
+                size: NormalFontSize,
+              },
+              cursor: "pointer",
+            },
+          },
         },
 
         plugins: {
@@ -312,6 +335,7 @@ const GanttChart: React.FC<ganttProps> = ({
       console.log("width is" + y.width);
       //mouse click
       let rect = canvas.getBoundingClientRect();
+      let cursorInRegion = false;
 
       const xcor = click.clientX - rect.left;
       const ycor = click.clientY - rect.top;
@@ -323,10 +347,11 @@ const GanttChart: React.FC<ganttProps> = ({
           ycor >= top + height * i &&
           ycor <= top + height + height * i
         ) {
+          cursorInRegion = true;
           // ctx.fillStyle = "gray";
           // ctx.rect(left, top + height * i, right, height);
           // ctx.fill();
-
+          canvas.style.cursor = "pointer";
           const x = i;
           const ids = Array.from(
             new Set(chartRef.data.datasets[0].data.map((i: any) => i.chain_id))
@@ -346,13 +371,97 @@ const GanttChart: React.FC<ganttProps> = ({
           setFilter(true);
         }
       }
+      // if (cursorInRegion) {
+      //   canvas.style.cursor = "pointer"; // Change cursor style to pointer if mouse is in the region
+      // } else {
+      //   canvas.style.cursor = "default"; // Reset cursor style to default if mouse is not in the region
+      // }
+    }
+    function clickableScales3(chartRef: any, click: any) {
+      if (!chartRef.canvas) {
+        return;
+      }
+      const {
+        ctx,
+        canvas,
+        scales: { x, y },
+      } = chartRef;
+      setWidth(`${y.width}px`);
+    }
+    function clickableScales2(chartRef: any, click: any) {
+      if (!chartRef.canvas) {
+        return;
+      }
+      //object destructuring
+      const {
+        ctx,
+        canvas,
+        scales: { x, y },
+      } = chartRef;
+      const top = y.top;
+      const bottom = y.bottom;
+      const left = y.left;
+      const right = y.right;
+      const height = y.height / y.ticks.length;
+      console.log("width is" + y.width);
+      //mouse click
+      let rect = canvas.getBoundingClientRect();
+      let cursorInRegion = false;
+
+      const xcor = click.clientX - rect.left;
+      const ycor = click.clientY - rect.top;
+
+      for (let i = 0; i < y.ticks.length; i++) {
+        if (
+          xcor >= left &&
+          xcor <= right &&
+          ycor >= top + height * i &&
+          ycor <= top + height + height * i
+        ) {
+          cursorInRegion = true;
+          // ctx.fillStyle = "gray";
+          // ctx.rect(left, top + height * i, right, height);
+          // ctx.fill();
+          canvas.style.cursor = "pointer";
+          // const x = i;
+          // const ids = Array.from(
+          //   new Set(chartRef.data.datasets[0].data.map((i: any) => i.chain_id))
+          // );
+          // console.log(chartRef.data.datasets[0].data[i]);
+          // for (let i = 0; i < chartRef.data.datasets[0].data.length; i++) {
+          //   if (chartRef.data.datasets[0].data[i].chain_id === ids[x]) {
+          //     name = chartRef.data.datasets[0].data[i].y;
+          //     const val = chartRef.data.datasets[0];
+          //     setClickedData(val.data[i]);
+          //     console.log(clickedData);
+
+          //     break; // Exit the loop once the matching element is found
+          //   }
+          // }
+          // console.log(name);
+          // setFilter(true);
+        }
+      }
+      if (cursorInRegion) {
+        canvas.style.cursor = "pointer"; // Change cursor style to pointer if mouse is in the region
+      } else {
+        canvas.style.cursor = "default"; // Reset cursor style to default if mouse is not in the region
+      }
     }
     if (myChart) {
       const clickHandler = (e: MouseEvent) => {
         clickableScales(myChart, e);
       };
+      const clickHandler2 = (e: MouseEvent) => {
+        clickableScales2(myChart, e);
+      };
+      const clickHandler3 = (e: MouseEvent) => {
+        clickableScales2(myChart, e);
+      };
       if (myChart.canvas) {
         myChart.canvas.addEventListener("click", clickHandler);
+        myChart.canvas.addEventListener("mousemove", clickHandler2);
+        myChart.canvas.addEventListener("DOMContentLoaded", clickHandler3);
       }
     }
 
@@ -383,70 +492,54 @@ const GanttChart: React.FC<ganttProps> = ({
   return (
     <div
       style={{
-        marginLeft: 10,
-        marginRight: 10,
-        paddingLeft: 10,
-        paddingRight: 10,
+        marginLeft: "10px",
+        marginRight: "10px",
+        marginTop: "10px",
+        // paddingLeft: 10,
+        // paddingRight: 10,
+        border: "ridge",
       }}
     >
       <div style={{ display: "flex", width: "1600px" }}>
-        <h2 className="title">Daily Gantt</h2>
         <div className="legend-box">
-          <div className="legend" style={{ backgroundColor: "#E31837" }}></div>
-          <h5 className="legend-title">Breached Benchmark</h5>
+          <div className="legend" style={{ backgroundColor: "red" }}></div>
+          <h5 className="legend-title">Performance less than -10%</h5>
+          <div className="legend" style={{ backgroundColor: "coral" }}></div>
+          <h5 className="legend-title">Performance between -10% to 0%</h5>
           <div
             className="legend"
             style={{
-              backgroundColor: "#50c878",
+              backgroundColor: "lightgreen",
             }}
           ></div>
-          <h5 className="legend-title">Within Benchmark</h5>
+          <h5 className="legend-title">Performance between 0% to 10%</h5>
           <div
             className="legend"
             style={{
-              backgroundColor: "gray",
+              backgroundColor: "green",
             }}
           ></div>
-          <h5 className="legend-title">Failed </h5>
+          <h5 className="legend-title">Performance more than 10% </h5>
         </div>
-        <h3
-          style={{
-            color: PrimaryColor,
-            fontFamily: "roboto",
-            fontSize: "large",
-            fontWeight: "bold",
-
-            paddingTop: "0px",
-            paddingLeft: "70px",
-            // marginBottom: "10px",
-          }}
-        >
-          {TitleDate}
-        </h3>
       </div>
-      <div style={{paddingTop:'0px',paddingBottom:'15px'}}>
-      {alert == true ? (
-        <div style={{ float: "right", color: "red",marginTop:'0px' }}>
-          *Selected benchmark duration has no data
-        </div>
-      ) : (
-        <div></div>
-      )}
-      </div>
-      <div className="chart-box">
-        <div className="fixed-axis">
-          <canvas id="myChart1"></canvas>
-        </div>
 
-        <div className="chartCard">
-          <div
-            className="chartBox"
-            style={{
-              height: `${Math.max(length * 40, 200) - 50}px`,
-              width: "100%",
-            }}
-          >
-            <canvas id="myChart"></canvas>
+      <div>
+        <div className="chart-box">
+          <div className="fixed-axis">
+            <canvas id="myChart1"></canvas>
+          </div>
+
+          <div className="chartCard">
+            <div
+              className="chartBox"
+              style={{
+                height: `${Math.max(length * 40, 200) - 50}px`,
+                width: "100%",
+                marginLeft: "10px",
+              }}
+            >
+              <canvas id="myChart"></canvas>
+            </div>
           </div>
         </div>
       </div>
@@ -468,23 +561,23 @@ const GanttChart: React.FC<ganttProps> = ({
           onClose={() => setOpen(false)}
           fullWidth
           maxWidth="md"
-          sx={{ "& .MuiDialog-paper": { width: "1000px" } }}
+          sx={{ "& .MuiDialog-paper": { width: "80%", maxHeight: "75%" } }}
         >
           <DialogTitle
             sx={{
-              color: PrimaryColor,
-              fontSize: "large",
+              color: SecondaryColor,
+              fontSize: PageTitleFontSize,
               fontFamily: "roboto",
-              borderBottom: "1px solid #ccc",
-              paddingBottom: "8px",
-              marginBottom: "16px",
-              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+              // borderBottom: "1px solid #ccc",
+              paddingBottom: "0px",
+              marginBottom: "3px",
+              // boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
               zIndex: 10, // Ensure title is above content
             }}
           >
             {clickedData.y}
           </DialogTitle>
-          <DialogContent sx={{ width: "auto" }}>
+          <DialogContent sx={{ width: "auto", maxHeight: "70%" }}>
             <div>
               <ChildGantt
                 object={clickedData}
@@ -497,9 +590,9 @@ const GanttChart: React.FC<ganttProps> = ({
               ></ChildGantt>
             </div>
           </DialogContent>
-          <DialogActions>
+          {/* <DialogActions>
             <Button onClick={() => setOpen(false)}>Close</Button>
-          </DialogActions>
+          </DialogActions> */}
         </Dialog>
       ) : (
         <></>

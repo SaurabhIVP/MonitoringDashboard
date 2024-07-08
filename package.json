@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "jscharting": "^3.4.0",
+    "jscharting-react": "^1.4.2"
+  }
+}

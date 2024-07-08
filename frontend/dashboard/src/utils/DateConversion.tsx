@@ -16,8 +16,12 @@ export const DateConversioninddMMMMyyyy = (date: any) => {
 
 export const DateConversioninddMMMMyyyyhhmmss = (date: any) => {
   const conversionInDateFormat = new Date(date);
-  const conversionInYYYYMMDD = format(conversionInDateFormat, "dd-MM-yyyy HH:mm:ss", {
-    timeZone: "Asia/Kolkata",
-  });
+  const conversionInYYYYMMDD = format(
+    conversionInDateFormat,
+    "dd-MM-yyyy HH:mm:ss",
+    {
+      timeZone: "Asia/Kolkata",
+    }
+  );
   return conversionInYYYYMMDD;
 };

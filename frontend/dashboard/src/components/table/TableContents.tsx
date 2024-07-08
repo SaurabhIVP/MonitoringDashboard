@@ -42,3 +42,25 @@ export const TaskHeaders = [
   "Deviation Time",
   "Deviation",
 ];
+
+export const TableHeaders=[
+  "Name",
+  "Start Time",
+  "End Time",
+  "Status",
+  "Total Time",
+  "Benchmark Time",
+  "Deviation Time",
+  "Deviation"
+]
+
+export const TableLabels=[
+  ["name","Name",false,true,"left"],
+  ["start_time","Start Time",false,false,"left"],
+  ["end_time","End Time",false,false,"left"],
+  ["status","Status",false,false,"left"],
+  ["total_times","Total Time",false,false,"left"],
+  ["avg_total_time","Benchmark Time",false,false,"left"],
+  ["deviation_in_time","Deviation Time",false,false,"left"],
+  ["performance","Deviation %",true,false,"center"]
+] 

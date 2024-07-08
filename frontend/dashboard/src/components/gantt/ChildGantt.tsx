@@ -7,9 +7,15 @@ import dayjs from "dayjs";
 import TimeFormatter from "../../utils/HHMMSSConverter";
 import React from "react";
 import ChildGanttFilter from "../filters/ChildGanttFilter";
-import { Chip, ListItem, Typography } from "@mui/material";
+import { Card, Chip, ListItem, Typography } from "@mui/material";
 import { DateConversioninddMMMMyyyy } from "../../utils/DateConversion";
 import { invalid } from "moment";
+import {
+  NormalFontSize,
+  PrimaryColor,
+  SecondaryColor,
+} from "../../utils/Colors";
+import CloseButton from "../generics/CloseButton";
 Chart.register(...registerables);
 interface GanttProps {
   // chain_id: any | null;
@@ -19,7 +25,7 @@ interface GanttProps {
   benchCompute: any | null;
   deviation: any | null;
   object: any;
-  is_pm:boolean
+  is_pm: boolean;
 }
 const ChildGantt: React.FC<GanttProps> = ({
   // chain_id = 3,
@@ -29,7 +35,7 @@ const ChildGantt: React.FC<GanttProps> = ({
   benchend = "2024-01-24",
   deviation = "0",
   object = null,
-  is_pm=false
+  is_pm = false,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -115,7 +121,7 @@ const ChildGantt: React.FC<GanttProps> = ({
     setFilter(e);
   };
   console.log(object?.[0]?.chain_id);
-  const [height,setHeight]=useState<any>(1);
+  const [height, setHeight] = useState<any>(1);
   const [data, setData] = useState<any[]>([]);
 
   const fetchData = async () => {
@@ -127,10 +133,9 @@ const ChildGantt: React.FC<GanttProps> = ({
         benchEndDate: benchend,
         benchmarkCompute: benchCompute,
         deviationPercentage: deviation,
-        is_pm:is_pm
+        is_pm: is_pm,
       });
       setData(response as any[]);
-      
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -156,7 +161,7 @@ const ChildGantt: React.FC<GanttProps> = ({
       status: item.status,
       performance: item.performance,
     }));
-    const uniqueNames=new Set(processedData.map((item)=>item.y));
+    const uniqueNames = new Set(processedData.map((item) => item.y));
     setHeight(uniqueNames.size);
     const backgroundColors = processedData.map((item) => {
       if (item.status === "failed") {
@@ -211,21 +216,25 @@ const ChildGantt: React.FC<GanttProps> = ({
             },
             min: startTime,
             max: endTime,
-            ticks:{
-              font:{
-                family:'roboto',
-                weight:'bold'
-              }
-            }
+            ticks: {
+              color: SecondaryColor,
+              font: {
+                family: "roboto",
+                weight: "500",
+                size: NormalFontSize,
+              },
+            },
           },
-          y:{
-            ticks:{
-              font:{
-                family:'roboto',
-                weight:'bold'
-              }
-            }
-          }
+          y: {
+            ticks: {
+              color: SecondaryColor,
+              font: {
+                family: "roboto",
+                weight: "500",
+                size: NormalFontSize,
+              },
+            },
+          },
         },
 
         plugins: {
@@ -276,121 +285,81 @@ const ChildGantt: React.FC<GanttProps> = ({
 
   return (
     <div style={{ width: "auto", height: "400px" }}>
-      <div style={{ display: "flex" }}>
-        <div style={{ paddingTop: "10px" }}>
-          <ChildGanttFilter
-            onFilter={handleFilterChange}
-            onStartDateSelected={handleStartDateChange}
-            onStartTimeSelected={handleStartTimeChange}
-            onEndTimeSelected={handleEndTimeChange}
-            onBenchStartDateSelected={handleBenchStartDateChange}
-            onBenchEndDateSelected={handleBenchendDateChange}
-            onDeviationChange={handleDeviationChange}
-            
-          ></ChildGanttFilter>
-        </div>
-        <div style={{display:'flex',fontFamily:'roboto',fontSize:'small',fontWeight:'lighter',marginTop:'20px',marginLeft:'10px'}}>
-          <span>Benchmark Duration: </span>
-          <span>
-            {" "}
-            {DateConversioninddMMMMyyyy(BenchstartDate)} to{" "}
-            {DateConversioninddMMMMyyyy(BenchendDate)}
-          </span>
-          <span>&nbsp;{" | "}&nbsp;</span>
-          <span>Deviation %:</span>
-          <span>{deviationPercentage}</span>
-        </div>
-        {/* <ListItem sx={{ paddingTop: "13px" }}>
-          <Chip
-            label={
-              <Typography component="span">
-                <span style={{ fontWeight: "bold", fontSize: "small" }}>
-                  Benchmark Duration:
-                </span>{" "}
-                <span style={{ fontSize: "small" }}>
-                  {DateConversioninddMMMMyyyy(BenchstartDate)} to{" "}
-                  {DateConversioninddMMMMyyyy(BenchendDate)}
-                </span>{" "}
-              </Typography>
-            }
-            style={{ marginRight: "10px" }}
-          />
-          <Chip
-            label={
-              <Typography component="span">
-                <span style={{ fontWeight: "bold", fontSize: "small" }}>
-                  Deviation:
-                </span>{" "}
-                <span style={{ fontSize: "small" }}>
-                  {deviationPercentage} %
-                </span>{" "}
-              </Typography>
-            }
-            style={{ marginRight: "10px" }}
-          />
-          <Chip
-            label={
-              <Typography component="span">
-                <span style={{ fontWeight: "bold", fontSize: "small" }}>
-                  Benchmark Compute Type:
-                </span>{" "}
-                <span style={{ fontSize: "small" }}>Average</span>{" "}
-              </Typography>
-            }
-          />
-        </ListItem> */}
+      <div style={{ position: "absolute", top: 10, right: 20 }}>
+        <CloseButton onClick={() => {}}></CloseButton>
       </div>
+      <Card sx={{ padding: "1px", backgroundColor: PrimaryColor }}>
+        <div style={{ display: "flex" }}>
+          <div
+            style={{
+              display: "flex",
+              fontSize: NormalFontSize,
+              fontVariant: "jis78",
+              // fontWeight: "normal",
+              fontFamily: "roboto",
+              marginTop: "0px",
+              color: "#404040",
+              // marginLeft:'40px'
+            }}
+          >
+            <ChildGanttFilter
+              onFilter={handleFilterChange}
+              onStartDateSelected={handleStartDateChange}
+              onStartTimeSelected={handleStartTimeChange}
+              onEndTimeSelected={handleEndTimeChange}
+              onBenchStartDateSelected={handleBenchStartDateChange}
+              onBenchEndDateSelected={handleBenchendDateChange}
+              onDeviationChange={handleDeviationChange}
+            ></ChildGanttFilter>
+            <div style={{ marginTop: "4px" }}>
+              <span>
+                <strong>Benchmark Duration : &nbsp;</strong>
+              </span>
+              <span>
+                {" "}
+                {DateConversioninddMMMMyyyy(BenchstartDate)} to{" "}
+                {DateConversioninddMMMMyyyy(BenchendDate)}
+              </span>
+              <span>&nbsp;{" | "}&nbsp;</span>
+              <span>
+                <strong>Deviation % :&nbsp;</strong>
+              </span>
+              <span>{deviationPercentage}</span>
+            </div>
+          </div>
 
-      <div
-        style={{
-          display: "flex",
-          width: "600px",
-          marginLeft: "100px",
-          marginRight: "40px",
-         
-        }}
-      >
-        <div
-          style={{
-            backgroundColor: "#E31837",
-            width: "20px",
-            height: "10px",
-            marginTop: "26px",
-            borderRadius: "5px",
-            marginRight: "20px",
-          }}
-        ></div>
-        <h5 className="legend-title">Breached Benchmark</h5>
-        <div
-          style={{
-            backgroundColor: "#50c878",
-            width: "20px",
-            height: "10px",
-            marginTop: "26px",
-            borderRadius: "5px",
-            marginRight: "20px",
-            marginLeft: "40px",
-          }}
-        ></div>
-        <h5 className="legend-title">Within Benchmark</h5>
-        <div
-          style={{
-            backgroundColor: "gray",
-            width: "20px",
-            height: "10px",
-            marginTop: "26px",
-            borderRadius: "5px",
-            marginRight: "20px",
-            marginLeft: "40px",
-          }}
-        ></div>
-        <h5 className="legend-title">Failed </h5>
+        
+        </div>
+      </Card>
+      <div style={{border:'ridge',marginTop:'5px'}}>
+      <div style={{ display: "flex", width: "800px", marginLeft: "30px" }}>
+        <div className="legend-box">
+          <div className="legend" style={{ backgroundColor: "red" }}></div>
+          <h5 className="legend-title">Performance less than -10%</h5>
+          <div className="legend" style={{ backgroundColor: "coral" }}></div>
+          <h5 className="legend-title">Performance between -10% to 0%</h5>
+          <div
+            className="legend"
+            style={{
+              backgroundColor: "lightgreen",
+            }}
+          ></div>
+          <h5 className="legend-title">Performance between 0% to 10%</h5>
+          <div
+            className="legend"
+            style={{
+              backgroundColor: "green",
+            }}
+          ></div>
+          <h5 className="legend-title">Performance more than 10% </h5>
+        </div>
       </div>
-          <div style={{height:`${Math.max(height*50,200)}px`}}>
-      <canvas id="myChart3"></canvas>
+      <div style={{ height: `${Math.max(height * 50, 200)}px` }}>
+        <canvas id="myChart3"></canvas>
       </div>
+      </div>
+      
     </div>
-   
   );
 };
 
