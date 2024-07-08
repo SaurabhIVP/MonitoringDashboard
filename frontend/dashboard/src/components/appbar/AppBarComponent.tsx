@@ -24,19 +24,25 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
   selectedTab,
   handleTabChange,
 }) => {
+  const [tabFonts, setTabFonts] = useState<number[]>([400, 400, 400]);
   const [tabColors, setTabColors] = useState<string[]>([
-    "white",
-    "white",
-    "white",
+    "#003168",
+    "#003168",
+    "#003168",
   ]);
   const handleTabClick = (index: number) => {
-    const newTabColors = [...tabColors].fill("white");
-    newTabColors[index] = "#F2CE72"; // Change to desired color
-    setTabColors(newTabColors);
+    const newTabFonts = [400, 400, 400];
+    newTabFonts[index] = 700;
+
+    setTabFonts(newTabFonts);
   };
 
   return (
-    <AppBar position="fixed" style={{ backgroundColor: PrimaryColor,height:'55px' }}>
+    <AppBar
+      position="fixed"
+      elevation={0}
+      style={{ backgroundColor: PrimaryColor, height: "50px" }}
+    >
       <Toolbar variant="dense" sx={{ justifyContent: "space-between" }}>
         <Link
           to="/"
@@ -47,33 +53,22 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
             textDecoration: "none",
           }}
           onClick={() => {
-            const newTabColors = [...tabColors].fill("white");
-            setTabColors(newTabColors);
+            const newTabFonts = [400, 400, 400];
+            newTabFonts[0] = 700;
+
+            setTabFonts(newTabFonts);
           }}
         >
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-          >
-            <AnalyticsIcon sx={{ fontSize: "3rem" }} />
-          </IconButton>
           <Typography
             variant="h6"
-            color="white"
+            color="#003168"
             sx={{
-              fontSize: "1.2rem",
-              fontWeight: "bold",
-              fontFamily:"roboto",
-              textTransform: "uppercase",
-              letterSpacing: "0.1em",
-              margin: "0.5rem",
-              textAlign: "left",
-              transition: "color 0.3s ease",
-              "&:hover": {
-                color: "#F2CE72",
-              },
+              fontFamily: "roboto",
+              fontSize: "24px",
+              fontWeight: 500,
+              fontVariant: "small-caps",
+              marginTop: "0px",
+              marginLeft: "10px",
             }}
           >
             Performance Tracker
@@ -88,7 +83,10 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
             style={{
               color: tabColors[0],
               fontFamily: "roboto",
-              fontWeight: "bold",
+              fontWeight: tabFonts[0],
+              fontVariant: "small-caps",
+              fontSize: "13px",
+              marginTop: "4px",
             }}
             onClick={() => handleTabClick(0)}
           />
@@ -100,7 +98,10 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
             style={{
               color: tabColors[1],
               fontFamily: "roboto",
-              fontWeight: "bold",
+              fontWeight: tabFonts[1],
+              fontVariant: "small-caps",
+              fontSize: "13px",
+              marginTop: "4px",
             }}
             onClick={() => handleTabClick(1)}
           />
@@ -111,23 +112,15 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({
             to="/charts"
             style={{
               color: tabColors[2],
+              marginTop: "4px",
               fontFamily: "roboto",
-              fontWeight: "bold",
+              fontSize: "13px",
+              fontWeight: tabFonts[2],
+              fontVariant: "small-caps",
+              marginRight: "10px",
             }}
             onClick={() => handleTabClick(2)}
           />
-          {/* <div style={{ paddingTop: "5px", display: "flex" }}>
-            <div
-              style={{
-                paddingTop: "10px",
-                fontFamily: "sans-serif",
-                fontWeight: "bold",
-              }}
-            >
-              PM
-            </div>
-            <Switch></Switch>
-          </div> */}
         </Tabs>
       </Toolbar>
     </AppBar>

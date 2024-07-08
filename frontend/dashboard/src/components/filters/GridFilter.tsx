@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/system";
+import TuneIcon from "@mui/icons-material/Tune";
 import Popover from "@mui/material/Popover";
 import SearchBar from "../generics/SearchBar";
 import AllData from "../../api/GetAllChainNames";
@@ -25,12 +26,19 @@ import {
   StyledHeading,
 } from "../../utils/StyledComponents";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import { FilterColor, SecondaryColor } from "../../utils/Colors";
+import {
+  FilterColor,
+  NormalFontSize,
+  SecondaryColor,
+} from "../../utils/Colors";
 import NumberField from "../generics/NumberField";
 import { useState } from "react";
 import Dropdown from "../generics/Dropdown";
 import { FilterButton } from "../generics/FilterButton";
 import Alert from "@mui/material/Alert";
+import CloseButton from "../generics/CloseButton";
+import ResetButton from "../generics/ResetButton";
+import SubmitButton from "../generics/SubmitButton";
 type ChartFilterProps = {
   onChainSelected: (chainData: {
     id: number | null;
@@ -43,7 +51,7 @@ type ChartFilterProps = {
   onDeviationChange: (val: any | null) => void;
   onBenchmarkComputeChange: (val: any | null) => void;
   onCheck: (flag: any | null) => void;
-  onPmChange:(val:string)=>void;
+  pm: any;
 };
 
 const GridFilter: React.FC<ChartFilterProps> = ({
@@ -55,7 +63,7 @@ const GridFilter: React.FC<ChartFilterProps> = ({
   onDeviationChange,
   onCheck,
   onBenchmarkComputeChange,
-  onPmChange
+  pm,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [deviationPercentage, setDeviationPercentage] = useState<string | null>(
@@ -86,21 +94,21 @@ const GridFilter: React.FC<ChartFilterProps> = ({
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [isPm,setIsPm]=useState<string>("false");
+  // const [isPm,setIsPm]=useState<string>("false");
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
   const [startDate, setStartDate] = React.useState<Date | null>(
-    new Date(2024, 0, 10)
+    new Date(2024, 1, 7)
   );
   const [EndDate, setEndDate] = React.useState<Date | null>(
-    new Date(2024, 0, 10)
+    new Date(2024, 1, 7)
   );
   const [BenchstartDate, setBenchStartDate] = React.useState<Date | null>(
-    new Date(2024, 0, 1)
+    new Date(2024, 1, 1)
   );
   const [BenchendDate, setBenchEndDate] = React.useState<Date | null>(
-    new Date(2024, 0, 30)
+    new Date(2024, 1, 7)
   );
 
   const handleEndDateChange = (newDate: Date | null) => {
@@ -144,14 +152,17 @@ const GridFilter: React.FC<ChartFilterProps> = ({
     (BenchstartDate !== null &&
       BenchendDate !== null &&
       BenchendDate >= BenchstartDate);
-      const handlePMChange = (event: SelectChangeEvent) => {
-        setIsPm(event.target.value as string);
-      };
+  //   const handlePMChange = (event: SelectChangeEvent) => {
+  //     setIsPm(event.target.value as string);
+  //     selectedChainValueRef.current = null;
+  // selectedTaskValueRef.current = null;
+  // setKey(key === "1" ? "2" : "1");
+  //   };
   const resetButtonHandler = () => {
     setStartDate(new Date(2024, 0, 10));
     setEndDate(new Date(2024, 0, 10));
-    setBenchStartDate(new Date(2024, 0, 1));
-    setBenchEndDate(new Date(2024, 0, 30));
+    setBenchStartDate(new Date(2024, 1, 1));
+    setBenchEndDate(new Date(2024, 1, 7));
     setKey(key === "1" ? "2" : "1");
     setAge("30");
     setBenchmarkCompute("Average");
@@ -159,13 +170,13 @@ const GridFilter: React.FC<ChartFilterProps> = ({
     selectedChainValueRef.current = null;
     selectedTaskValueRef.current = null;
   };
-  const getboolean=(val:string)=>{
-    if(val=="true"){
+  const getboolean = (val: string) => {
+    if (val == "true") {
       return true;
-    }else{
+    } else {
       return false;
     }
-  }
+  };
   const buttonHandler = () => {
     const id = selectedChainValueRef.current?.id;
     const key = selectedChainValueRef.current?.key;
@@ -187,14 +198,16 @@ const GridFilter: React.FC<ChartFilterProps> = ({
     onCheck(age);
     onDeviationChange(deviationPercentage);
     onBenchmarkComputeChange(benchmarkCompute);
-    onPmChange(isPm)
-    console.log(isPm);
+
+    // console.log(isPm);
     handleClose();
   };
 
   return (
-    <div>
-      <FilterButton ariaLabel="" onClick={handleClick}></FilterButton>
+    <div style={{padding:'0px'}}>
+      <IconButton onClick={handleClick} sx={{padding:'0px'}}>
+        <TuneIcon fontSize={'small'} sx={{padding:'0px',color:SecondaryColor,margin:'0px'}}></TuneIcon>
+      </IconButton>
       <Popover
         keepMounted={true}
         id={id}
@@ -211,21 +224,23 @@ const GridFilter: React.FC<ChartFilterProps> = ({
         }}
       >
         <StyledBox
-          style={{ height: "auto", paddingTop: "40px", marginBottom: "0px" }}
+          style={{ height: "auto", paddingTop: "0px", marginBottom: "0px" }}
         >
-          <Box sx={{ width: 300 }}>
-            <IconButton
-              onClick={handleClose}
+          <Box sx={{ width: "auto" }}>
+            <div
               style={{
+                display: "flex",
                 position: "absolute",
-                top: "5px",
-                right: "5px",
-                color: "red",
+                top: "0px",
+                right: "10px",
               }}
             >
-              <CloseIcon />
-            </IconButton>
-            <div >
+            <ResetButton onClick={resetButtonHandler}></ResetButton>
+              
+              <CloseButton onClick={handleClose}></CloseButton>
+            </div>
+
+            {/* <div >
               <FormControl  sx={{width:'550px',paddingBottom:'15px' }}>
                 <InputLabel id="demo-simple-select-label">System</InputLabel>
                 <Select
@@ -240,30 +255,94 @@ const GridFilter: React.FC<ChartFilterProps> = ({
                   
                 </Select>
               </FormControl>
-            </div>
-            <FormControl style={{ width: "550px" }}>
-              <InputLabel id="demo-simple-select-label">
-                Select Filter Criteria
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={age}
-                label="Select Filter Criteria"
-                onChange={handleChange}
+            </div> */}
+            <div style={{ display: "flex", marginTop: "10px" }}>
+              <div
+                style={{
+                  fontSize: NormalFontSize,
+                  // marginRight: "5px",
+                  // marginLeft: "10px",
+                  marginTop: "9px",
+                  fontFamily: "roboto",
+                  color: SecondaryColor,
+                  fontWeight: 500,
+                  width: "150px",
+                }}
               >
-                <MenuItem value={10}>Filter By Chain</MenuItem>
-                <MenuItem value={20}>Filter By Task</MenuItem>
-                <MenuItem value={30}>All Chains & Tasks</MenuItem>
-              </Select>
-            </FormControl>
+                Select Criteria:{" "}
+              </div>
+              <FormControl
+                style={{ width: "150px", marginRight: "10px" }}
+                variant="standard"
+                sx={{
+                  ".css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input":
+                    {
+                      fontSize: NormalFontSize,
+                    },
+                }}
+              >
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select-standard"
+                  value={age}
+                  label="Select Filter Criteria"
+                  onChange={handleChange}
+                >
+                  <MenuItem value={10} sx={{ fontSize: NormalFontSize }}>
+                    Filter By Chain
+                  </MenuItem>
+                  <MenuItem value={20} sx={{ fontSize: NormalFontSize }}>
+                    Filter By Task
+                  </MenuItem>
+                  <MenuItem value={30} sx={{ fontSize: NormalFontSize }}>
+                    All Chains & Tasks
+                  </MenuItem>
+                </Select>
+              </FormControl>
+              <div
+                style={{
+                  fontSize: NormalFontSize,
+                  marginRight: "5px",
+                  width: "150px",
+                  marginTop: "9px",
+                  fontFamily: "roboto",
+                  color: SecondaryColor,
+                  fontWeight: 500,marginLeft:'10px'
+                }}
+              >
+                Benchmark Compute Type:{" "}
+              </div>
+              <div style={{ marginRight: "55px" }}>
+                <Dropdown
+                  name="Benchmark Compute Type"
+                  benchmarkComputeOptions={benchmarkComputeOptions}
+                  onChange={onChange}
+                ></Dropdown>
+              </div>
+            </div>
           </Box>
 
           <div>
             {age == "20" ? (
-              <div style={{ paddingTop: "10px" }}>
+              <div style={{ paddingTop: "10px", display: "flex",paddingBottom: "10px", }}>
+                <div
+                  style={{
+                    fontSize: NormalFontSize,
+                    // marginRight: "5px",
+                    // marginLeft: "10px",
+                    marginTop: "9px",
+                    fontFamily: "roboto",
+                    color: SecondaryColor,
+                    fontWeight: 500,
+                    width: "120px",
+                  }}
+                >
+                  Select Task:{" "}
+                </div>
                 <SearchbarTask
-                  fetchDataFunction={() => Tasknames({ chain_id: 0 ,is_pm:getboolean(isPm)})}
+                  fetchDataFunction={() =>
+                    Tasknames({ chain_id: 0, is_pm: getboolean(pm) })
+                  }
                   nameParam="task_name"
                   label="Search Task Name"
                   onSearch={TaskhandleSearch}
@@ -271,9 +350,29 @@ const GridFilter: React.FC<ChartFilterProps> = ({
                 />
               </div>
             ) : age == "10" ? (
-              <div style={{ paddingTop: "10px" }}>
+              <div
+                style={{
+                  paddingTop: "10px",
+                  display: "flex",
+                  paddingBottom: "10px",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: NormalFontSize,
+                    // marginRight: "5px",
+                    // marginLeft: "10px",
+                    marginTop: "9px",
+                    fontFamily: "roboto",
+                    color: SecondaryColor,
+                    fontWeight: 500,
+                    width: "120px",
+                  }}
+                >
+                  Select Chain:{" "}
+                </div>
                 <SearchBar
-                  fetchDataFunction={()=>AllData({is_pm:getboolean(isPm)})}
+                  fetchDataFunction={() => AllData({ is_pm: getboolean(pm) })}
                   nameParam="chain_name"
                   label="Search Chain Name"
                   onSearch={ChainhandleSearch}
@@ -286,7 +385,7 @@ const GridFilter: React.FC<ChartFilterProps> = ({
             )}
           </div>
 
-          <StyledDatepickerContainer style={{ paddingTop: 10 }}>
+          {/* <StyledDatepickerContainer style={{ paddingTop: 10 }}>
             <Datepicker
               name="Task Start Date"
               selectedDate={startDate}
@@ -299,23 +398,55 @@ const GridFilter: React.FC<ChartFilterProps> = ({
               onDateChange={handleEndDateChange}
               flag={isEndDateValid}
             />
-          </StyledDatepickerContainer>
+          </StyledDatepickerContainer> */}
 
-          <StyledDatepickerContainer style={{ paddingBottom: "0px" }}>
-            <Datepicker
-              name="Benchmark Start Date"
-              selectedDate={BenchstartDate}
-              onDateChange={handleBenchStartDateChange}
-              flag={isBenchEndDateValid}
-            />
-            <Datepicker
-              name="Benchmark End Date"
-              selectedDate={BenchendDate}
-              onDateChange={handleBenchendDateChange}
-              flag={isBenchEndDateValid}
-            />
+          <StyledDatepickerContainer style={{ paddingBottom: "25px" }}>
+            <div
+              style={{
+                fontSize: NormalFontSize,
+                marginRight: "5px",
+                // marginLeft: "10px",
+                marginTop: "9px",
+                fontFamily: "roboto",
+                color: SecondaryColor,
+                fontWeight: 500,
+                width: "114px",
+              }}
+            >
+              Benchmark Start Date:{" "}
+            </div>
+            <div style={{ marginRight: "10px" }}>
+              <Datepicker
+                name="Benchmark Start Date"
+                selectedDate={BenchstartDate}
+                onDateChange={handleBenchStartDateChange}
+                flag={isBenchEndDateValid}
+              />
+            </div>
+            <div
+              style={{
+                fontSize: NormalFontSize,
+                marginRight: "5px",
+                marginLeft: "5px",
+                marginTop: "9px",
+                fontFamily: "roboto",
+                color: SecondaryColor,
+                fontWeight: 500,
+                width: "121px",
+              }}
+            >
+              Benchmark End Date:{" "}
+            </div>
+            <div style={{ marginRight: "13px" }}>
+              <Datepicker
+                name="Benchmark End Date"
+                selectedDate={BenchendDate}
+                onDateChange={handleBenchendDateChange}
+                flag={isBenchEndDateValid}
+              />
+            </div>
           </StyledDatepickerContainer>
-          <StyledDatepickerContainer style={{marginBottom:'0px'}}>
+          <StyledDatepickerContainer style={{ marginBottom: "0px" }}>
             {/* <div style={{  marginBottom: 56 }}>
               <NumberField
                 name="Deviation % Threshold"
@@ -323,37 +454,18 @@ const GridFilter: React.FC<ChartFilterProps> = ({
                 onChange={handleDeviationChange}
               ></NumberField>
             </div> */}
-            <div >
-              <Dropdown
-                name="Benchmark Compute Type"
-                benchmarkComputeOptions={benchmarkComputeOptions}
-                onChange={onChange}
-              ></Dropdown>
-            </div>
-            
           </StyledDatepickerContainer>
           <div
             style={{
               position: "absolute",
               bottom: "10px",
-              paddingTop:'0px',
-              right: "45px",
+              paddingTop: "0px",
+              right: "10px",
               zIndex: 999,
               marginTop: "0px",
-              
             }}
           >
-            <StyledButton onClick={buttonHandler} style={{ marginRight: 16 }}>
-              SUBMIT
-            </StyledButton>
-
-            <StyledButton
-              autoFocus
-              onClick={resetButtonHandler}
-              style={{ backgroundColor: "gray" }}
-            >
-              Reset
-            </StyledButton>
+            <SubmitButton onClick={buttonHandler}></SubmitButton>
           </div>
         </StyledBox>
       </Popover>

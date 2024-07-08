@@ -3,11 +3,13 @@
     height: 10px;
     margin-right:5px;
     margin-left: 10%;
-    border-radius:5px
+    border-radius:1px
 }
 .legend-title{
     margin-right: 0%;
     font-family: roboto;
+    font-size: 11px;
+    color: #003168;
     
     
 }
@@ -23,14 +25,16 @@
     display: flex;
           flex-direction:row;
           align-items:center;
-          margin-left: 18%;
-          width: 50%;
+           margin-left: 10%; 
+          width: 78%;
           
 }
 .chart-box{
-    border-style: ridge;
+    /* border-style: ridge; */
     padding-bottom: 30px;
-    margin-top: 5px;
+    /* margin-top: 5px; */
+    margin-left: -30px;
+    margin-right: 30px;
 }
 .fixed-axis{
     padding-left: 100px;

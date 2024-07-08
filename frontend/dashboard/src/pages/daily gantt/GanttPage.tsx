@@ -4,12 +4,10 @@ import "./GanttPage.css";
 function GanttPage() {
   return (
     <>
-      <div style={{paddingTop:'50px'}}>
-        <Paper elevation={8} className="paperClass">
+      <div style={{paddingTop:'60px'}}>
           <div className="chartHandler">
             <GanttChartHandle></GanttChartHandle>
           </div>
-        </Paper>
       </div>
     </>
   );

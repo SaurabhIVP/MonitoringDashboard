@@ -1,5 +1,6 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
+import TuneIcon from "@mui/icons-material/Tune";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   FormControl,
@@ -28,6 +29,7 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { FilterButton } from "../generics/FilterButton";
 import NumberField from "../generics/NumberField";
 import Dropdown from "../generics/Dropdown";
+import "./Filters.css"
 type ChartFilterProps = {
   onTaskSelected: (id: number, key: string) => void;
   onStartDateSelected: (startdate: Date | null) => void;
@@ -36,7 +38,8 @@ type ChartFilterProps = {
   onBenchEndDateSelected: (edate: Date | null) => void;
   onDeviationChange: (val: any | null) => void;
   onBenchmarkComputeChange: (val: any | null) => void;
-  onPmChange:(val:string)=>void;
+  // onPmChange:(val:string)=>void;
+  pm: any;
 };
 
 const TaskChartFilter: React.FC<ChartFilterProps> = ({
@@ -47,7 +50,8 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
   onBenchEndDateSelected,
   onBenchmarkComputeChange,
   onDeviationChange,
-  onPmChange
+  pm
+  // onPmChange
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -63,6 +67,8 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
   const [isPm, setIsPm] = useState<string>("false");
   const handlePMChange = (event: SelectChangeEvent) => {
     setIsPm(event.target.value as string);
+    setKey(key === "1" ? "2" : "1");
+    setSelectedTaskValue(null);
   };
   const getboolean = (val: string) => {
     if (val == "true") {
@@ -91,16 +97,16 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
   const id = open ? "simple-popover" : undefined;
 
   const [startDate, setStartDate] = React.useState<Date | null>(
-    new Date(2024, 0, 17)
+    new Date(2024, 1, 1)
   );
   const [EndDate, setEndDate] = React.useState<Date | null>(
-    new Date(2024, 0, 24)
+    new Date(2024, 1, 7)
   );
   const [BenchstartDate, setBenchStartDate] = React.useState<Date | null>(
-    new Date(2024, 0, 17)
+    new Date(2024, 1, 1)
   );
   const [BenchendDate, setBenchEndDate] = React.useState<Date | null>(
-    new Date(2024, 0, 24)
+    new Date(2024, 1, 7)
   );
   const handleEndDateChange = (newDate: Date | null) => {
     setEndDate(newDate);
@@ -141,10 +147,10 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
     (startDate !== null && EndDate !== null && EndDate >= startDate);
   const [key, setKey] = useState("1");
   const resetButtonHandler = () => {
-    setStartDate(new Date(2024, 0, 17));
-    setEndDate(new Date(2024, 0, 24));
-    setBenchStartDate(new Date(2024, 0, 17));
-    setBenchEndDate(new Date(2024, 0, 24));
+    setStartDate(new Date(2024, 1, 1));
+    setEndDate(new Date(2024, 1, 7));
+    setBenchStartDate(new Date(2024, 1, 1));
+    setBenchEndDate(new Date(2024, 1, 7));
     setSelectedChainValue(null);
     setKey(key === "1" ? "2" : "1");
     setSelectedTaskValue(null);
@@ -168,7 +174,7 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
     onBenchEndDateSelected(BenchendDate);
     onDeviationChange(deviationPercentage);
     onBenchmarkComputeChange(benchmarkCompute)
-    onPmChange(isPm)
+    // onPmChange(isPm)
     handleClose();
   };
   
@@ -176,6 +182,9 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
     "0"
   );
   const handleDeviationChange = (value: string | null) => {
+    if(value==""){
+      value="0";
+    }
     setDeviationPercentage(value);
     console.log(deviationPercentage);
   };
@@ -188,7 +197,9 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
   const [benchmarkCompute, setBenchmarkCompute] = useState("Average");
   return (
     <div style={{}}>
-      <FilterButton ariaLabel="" onClick={handleClick}></FilterButton>
+      <IconButton onClick={handleClick} sx={{padding:'0px'}}>
+        <TuneIcon></TuneIcon>
+      </IconButton>
       <Popover
         id={id}
         keepMounted={true}
@@ -207,16 +218,11 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
         <StyledBox height={"auto"}>
           <IconButton
             onClick={handleClose}
-            style={{
-              position: "absolute",
-              top: "5px",
-              right: "5px",
-              color: "red",
-            }}
+            className="cancelButton"
           >
             <CloseIcon />
           </IconButton>
-          <FormControl  sx={{width:'550px',marginTop:'25px' }}>
+          {/* <FormControl  sx={{width:'550px',marginTop:'25px' }}>
                 <InputLabel id="demo-simple-select-label">System</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
@@ -229,10 +235,10 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
                   <MenuItem value={"true"}>PriceMaster</MenuItem>
                   
                 </Select>
-              </FormControl>
+              </FormControl> */}
           <div style={{ marginBottom: 15,paddingTop:'15px' }}>
             <SearchBar
-              fetchDataFunction={() => Tasknames({ chain_id: 0,is_pm:getboolean(isPm) })}
+              fetchDataFunction={() => Tasknames({ chain_id: 0,is_pm:pm })}
               nameParam="task_name"
               label="Search Task Name"
               onSearch={ChainhandleSearch}
@@ -243,7 +249,7 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
 
           <SearchBar
             fetchDataFunction={() =>
-              ChainNames({ taskname: selectedChainValue?.key,is_pm:getboolean(isPm) })
+              ChainNames({ taskname: selectedChainValue?.key,is_pm:pm })
             }
             nameParam="chain_name"
             label="Search Chain Name"
@@ -316,17 +322,6 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
               ></Dropdown>
             </div>
           </StyledDatepickerContainer>
-          {/* <Button
-            onClick={buttonHandler}
-            style={{
-              fontWeight: "bold",
-              backgroundColor: "#778899",
-              color: "white",
-              marginTop: "20px",
-            }}
-          >
-            SUBMIT
-          </Button> */}
           <div
             style={{
               position: "absolute",

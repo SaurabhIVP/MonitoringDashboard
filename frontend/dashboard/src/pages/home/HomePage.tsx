@@ -5,6 +5,7 @@ import TaskDetails from "../../api/TaskDetails";
 import GridTable from "../../components/table/GridTable";
 import { useState } from "react";
 
+
 const HomePage = () => {
     const [selectedTab, setSelectedTab] = useState("left"); // Default to "left" (PM)
 
@@ -12,13 +13,13 @@ const HomePage = () => {
     setSelectedTab(newValue);
   };
   return (
-    <div style={{ paddingTop: "60px", paddingBottom: "0px" }}>
-      <Paper elevation={30} sx={{borderRadius:'60px'}}>
+    <div style={{ paddingTop: "40px", paddingBottom: "0px" }}>
+     
       <GridTable
         chainDetailsApi={ChainDetailsNew}
         taskDetailsApi={TaskDetails}
         chainDetailsbyTaskApi={ChainDetailsByTaskname}
-      ></GridTable></Paper>
+      ></GridTable>
     </div>
   );
 };

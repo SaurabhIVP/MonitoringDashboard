@@ -10,6 +10,7 @@ export function PaperComponent(props: PaperProps) {
       <Paper
         {...props}
         className="paper"
+        // sx={{maxHeight:'80%'}}
       />
     </Draggable>
   );

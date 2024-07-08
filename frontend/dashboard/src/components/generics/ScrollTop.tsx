@@ -46,22 +46,6 @@ const ScrollTop: React.FC<ScrollTopProps> = ({ targetClass }) => {
   return (
     <>
       {isVisible && (
-        // <div
-        //   onClick={scrollToTop}
-        // style={{
-        //   position: "fixed",
-        //   bottom: "20px",
-        //   right: "20px",
-        //   cursor: "pointer",
-        //   backgroundColor: "#778899",
-        //   color: "white",
-        //   borderRadius: "10px",
-        //   padding: "10px",
-        //   zIndex: 1000,
-        // }}
-        // >
-        //   Scroll Top
-        // </div>
         <IconButton
           onClick={scrollToTop}
           aria-label="filter"

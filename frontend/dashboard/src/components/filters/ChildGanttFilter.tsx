@@ -1,6 +1,7 @@
 import * as React from "react";
 import Popover from "@mui/material/Popover";
 import AllData from "../../api/GetAllChainNames";
+import TuneIcon from "@mui/icons-material/Tune";
 import Datepicker from "../generics/datepicker/Datepicker";
 import CloseIcon from "@mui/icons-material/Close";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
@@ -22,12 +23,19 @@ import {
 } from "../../utils/StyledComponents";
 import TimeFormatter from "../../utils/HHMMSSConverter";
 import { IconButton } from "@mui/material";
-import { FilterColor, SecondaryColor } from "../../utils/Colors";
+import {
+  FilterColor,
+  NormalFontSize,
+  SecondaryColor,
+} from "../../utils/Colors";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { FilterButton } from "../generics/FilterButton";
 import Dropdown from "../generics/Dropdown";
 import NumberField from "../generics/NumberField";
+import CloseButton from "../generics/CloseButton";
+import SubmitButton from "../generics/SubmitButton";
+import ResetButton from "../generics/ResetButton";
 
 type ChartFilterProps = {
   onFilter: (val: boolean) => void;
@@ -37,7 +45,6 @@ type ChartFilterProps = {
   onBenchStartDateSelected: (c: Date | null) => void;
   onBenchEndDateSelected: (c: Date | null) => void;
   onDeviationChange: (val: any | null) => void;
-
 };
 
 const ChildGanttFilter: React.FC<ChartFilterProps> = ({
@@ -48,7 +55,6 @@ const ChildGanttFilter: React.FC<ChartFilterProps> = ({
   onBenchStartDateSelected,
   onEndTimeSelected,
   onDeviationChange,
-
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -60,17 +66,17 @@ const ChildGanttFilter: React.FC<ChartFilterProps> = ({
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
   const [startDate, setStartDate] = React.useState<Date | null>(
-    new Date(2024, 0, 24)
+    new Date(2024, 1, 7)
   );
   const minTime = dayjs(startDate).startOf("day");
   const maxTime = dayjs(startDate).endOf("day");
   const [startTime, setStartTime] = React.useState<any | null>(minTime);
   const [endTime, setEndTime] = React.useState<any | null>(maxTime);
   const [BenchstartDate, setBenchStartDate] = React.useState<Date | null>(
-    new Date(2024, 0, 1)
+    new Date(2024, 1, 1)
   );
   const [BenchendDate, setBenchEndDate] = React.useState<Date | null>(
-    new Date(2024, 0, 24)
+    new Date(2024, 1, 7)
   );
   let start = false;
   let end = false;
@@ -94,8 +100,8 @@ const ChildGanttFilter: React.FC<ChartFilterProps> = ({
     setKey(key === "1" ? "2" : "1");
     setStartTime(dayjs(startDate).startOf("day"));
     setEndTime(dayjs(startDate).endOf("day"));
-    setBenchStartDate(new Date(2024, 0, 1));
-    setBenchEndDate(new Date(2024, 0, 31));
+    setBenchStartDate(new Date(2024, 1, 1));
+    setBenchEndDate(new Date(2024, 1, 7));
   };
   const handleStartDateChange = (newDate: Date | null) => {
     setStartDate(newDate);
@@ -107,12 +113,9 @@ const ChildGanttFilter: React.FC<ChartFilterProps> = ({
       BenchendDate !== null &&
       BenchendDate >= BenchstartDate);
   const buttonHandler = () => {
-   
-      onStartTimeSelected(startTime);
-   
-   
-      onEndTimeSelected(endTime);
-   
+    onStartTimeSelected(startTime);
+
+    onEndTimeSelected(endTime);
 
     onStartDateSelected(startDate);
     onBenchEndDateSelected(BenchendDate);
@@ -133,8 +136,10 @@ const ChildGanttFilter: React.FC<ChartFilterProps> = ({
     console.log(deviationPercentage);
   };
   return (
-    <div style={{}}>
-      <FilterButton ariaLabel="" onClick={handleClick}></FilterButton>
+    <div style={{padding:'0px'}}>
+      <IconButton onClick={handleClick} sx={{padding:'0px',marginRight:'5px'}}>
+        <TuneIcon></TuneIcon>
+      </IconButton>
       <Popover
         keepMounted={true}
         id={id}
@@ -150,26 +155,35 @@ const ChildGanttFilter: React.FC<ChartFilterProps> = ({
           horizontal: "right",
         }}
       >
-        <StyledBox style={{ height: "auto" }}>
-          <IconButton
-            onClick={handleClose}
-            style={{
-              position: "absolute",
-              top: "5px",
-              right: "5px",
-              color: "red",
-            }}
+        <StyledBox style={{ height: "auto", width: "auto" }}>
+          <div style={{ right: 0, position: "absolute", display: "flex" }}>
+            <ResetButton onClick={resetButtonHandler}></ResetButton>
+            <CloseButton onClick={handleClose}></CloseButton>
+          </div>
+
+          {/* <FormControl
+          sx={{ width: "550px", paddingBottom: "10px", marginTop: "28px" }}
+        >
+          <InputLabel id="demo-simple-select-label">System</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={isPm}
+            label="System"
+            onChange={handlePMChange}
           >
-            <CloseIcon />
-          </IconButton>
-          <StyledDatepickerContainer style={{ paddingLeft: "130px" }}>
-            <Datepicker
-              name="Chain Run Date"
-              selectedDate={startDate}
-              onDateChange={handleStartDateChange}
-              flag={true}
-            />
-          </StyledDatepickerContainer>
+            <MenuItem value={"false"}>SecMaster</MenuItem>
+            <MenuItem value={"true"}>PriceMaster</MenuItem>
+          </Select>
+        </FormControl> */}
+          {/* <StyledDatepickerContainer style={{ paddingLeft: "130px" }}>
+          <Datepicker
+            name="Chain Run Date"
+            selectedDate={startDate}
+            onDateChange={handleStartDateChange}
+            flag={true}
+          />
+        </StyledDatepickerContainer> */}
 
           <StyledDatepickerContainer
             style={{
@@ -177,72 +191,143 @@ const ChildGanttFilter: React.FC<ChartFilterProps> = ({
             }}
           >
             <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <div
+                style={{
+                  fontSize: NormalFontSize,
+                  fontFamily: "roboto",
+                  color: SecondaryColor,
+                  fontWeight: 500,
+                  width: "70px",
+                  marginTop: "15px",
+                  marginRight: "30px",
+                }}
+              >
+                Start Time:{" "}
+              </div>
               <DemoContainer
                 components={["TimePicker"]}
-                sx={{ width: "200px" }}
+                sx={{
+                  paddingTop: "0px",
+                  minWidth: "10px",
+                  ".css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root": {
+                    width: "130px",
+                  },
+                }}
               >
                 <TimePicker
-                  label="Chain Start Time"
                   value={startTime}
                   // format="HH:mm:ss"
                   onChange={handleStartTimeChange}
+                  sx={{
+                    ".css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
+                      fontSize: NormalFontSize,
+                      color: SecondaryColor,
+                      width: "60px",
+                      minWidth: "10px",
+                    },
+                    ".MuiFormControl-root MuiTextField-root css-1tvwvn0-MuiFormControl-root-MuiTextField-root":
+                      {
+                        minWidth: "10px",
+                      },
+                  }}
                 />
               </DemoContainer>
+              <div
+                style={{
+                  fontSize: NormalFontSize,
+                  fontFamily: "roboto",
+                  color: SecondaryColor,
+                  fontWeight: 500,
+                  width: "70px",
+                  marginTop: "18px",
+                }}
+              >
+                End Time:{" "}
+              </div>
               <DemoContainer
                 components={["TimePicker"]}
-                sx={{ width: "200px" }}
+                sx={{
+                  paddingTop: "0px",
+                  marginTop: "2px",
+                  ".css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root": {
+                    width: "130px",
+                  },
+                }}
               >
                 <TimePicker
-                  label="Chain End Time"
                   // format="HH:mm:ss"
                   value={endTime}
                   onChange={handleEndTimeChange}
+                  sx={{
+                    ".css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
+                      fontSize: NormalFontSize,
+                      color: SecondaryColor,
+                    },
+                    ".css-1e3wlyl-MuiButtonBase-root-MuiMenuItem-root-MuiMultiSectionDigitalClockSection-item":
+                      { color: SecondaryColor },
+                  }}
                 />
               </DemoContainer>
             </LocalizationProvider>
           </StyledDatepickerContainer>
 
-          <StyledDatepickerContainer>
-            <Datepicker
-              name="Benchmark Start Date"
-              selectedDate={BenchstartDate}
-              onDateChange={handleBenchStartDateChange}
-              flag={isBenchEndDateValid}
-            />
-            <Datepicker
-              name="Benchmark End Date"
-              selectedDate={BenchendDate}
-              onDateChange={handleBenchendDateChange}
-              flag={isBenchEndDateValid}
-            />
-          </StyledDatepickerContainer>
-          <StyledDatepickerContainer>
-            <div style={{ marginBottom: 56 }}>
-              <NumberField
-                name="Deviation % Threshold"
-                value={deviationPercentage}
-                onChange={handleDeviationChange}
-              ></NumberField>
+          <StyledDatepickerContainer style={{ paddingBottom: "10px" }}>
+            <div
+              style={{
+                fontSize: NormalFontSize,
+                marginRight: "5px",
+                // marginLeft: "10px",
+                marginTop: "9px",
+                fontFamily: "roboto",
+                color: SecondaryColor,
+                fontWeight: 500,
+                width: "100px",
+              }}
+            >
+              Benchmark Start Date:{" "}
+            </div>
+            <div style={{ marginRight: "20px" }}>
+              <Datepicker
+                name="Benchmark Start Date"
+                selectedDate={BenchstartDate}
+                onDateChange={handleBenchStartDateChange}
+                flag={isBenchEndDateValid}
+              />
+            </div>
+            <div
+              style={{
+                fontSize: NormalFontSize,
+                marginRight: "5px",
+                marginLeft: "25px",
+                marginTop: "9px",
+                fontFamily: "roboto",
+                color: SecondaryColor,
+                fontWeight: 500,
+                width: "100px",
+              }}
+            >
+              Benchmark End Date:{" "}
+            </div>
+            <div style={{ marginRight: "13px" }}>
+              <Datepicker
+                name="Benchmark End Date"
+                selectedDate={BenchendDate}
+                onDateChange={handleBenchendDateChange}
+                flag={isBenchEndDateValid}
+              />
             </div>
           </StyledDatepickerContainer>
+
           <div
             style={{
               position: "absolute",
 
               bottom: "10px",
-              right: "45px",
+              right: "5px",
               zIndex: 999,
             }}
           >
-            <StyledButton onClick={buttonHandler} style={{ marginRight: 15 }}>
-              SUBMIT
-            </StyledButton>
-            <StyledButton
-              onClick={resetButtonHandler}
-              style={{ backgroundColor: "gray" }}
-            >
-              Reset
-            </StyledButton>
+            <SubmitButton onClick={buttonHandler}></SubmitButton>
           </div>
         </StyledBox>
       </Popover>

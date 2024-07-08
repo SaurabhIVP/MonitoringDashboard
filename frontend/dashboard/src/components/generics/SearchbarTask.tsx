@@ -1,5 +1,6 @@
 import React, { useEffect, useImperativeHandle, useState } from "react";
 import { Stack, TextField, Autocomplete } from "@mui/material";
+import { NormalFontSize } from "../../utils/Colors";
 
 type SearchBarProps= {
   fetchDataFunction: () => Promise<any>;
@@ -64,15 +65,21 @@ const SearchbarTask: React.ForwardRefRenderFunction<SearchBarRef,SearchBarProps>
   return (
     <>
     <div onClick={handleClick} onKeyDown={handleClick}>
-    <Stack spacing={2}  width={"550px"}  >
+    <Stack spacing={2}  width={"375px"}  >
         {data && (
            <Autocomplete
+           sx={{fontSize:NormalFontSize}}
            key={key}
            options={data}
            getOptionLabel={(option) => option[nameParam]}
            isOptionEqualToValue={(option, value) => option[nameParam] === value[nameParam]}
-           renderInput={(params) => <TextField {...params} label={label} />}
+           renderInput={(params) => <TextField {...params} variant="standard"inputProps = {{...params.inputProps, style: { fontSize: NormalFontSize }}} />}
            onChange={handleOnChange}
+           renderOption={(props, option) => (
+            <li {...props} style={{ fontSize: NormalFontSize }}>
+              {option[nameParam]}
+            </li>
+          )}
          />
         )}
       </Stack>

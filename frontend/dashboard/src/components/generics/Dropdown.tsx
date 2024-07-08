@@ -6,6 +6,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { useState } from "react";
+import { NormalFontSize } from "../../utils/Colors";
 
 interface benchmarkComputeOption {
   text: string;
@@ -26,8 +27,10 @@ function Dropdown({ name, benchmarkComputeOptions, onChange }: dropprops) {
   };
 
   return (
-    <FormControl sx={{width:'260px' }}>
-      <InputLabel id="demo-simple-select-autowidth-label">{name}</InputLabel>
+    <FormControl sx={{width:'120px','.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input':{
+      fontSize:NormalFontSize
+    } } } variant="standard">
+      {/* <InputLabel id="demo-simple-select-autowidth-label">{name}</InputLabel> */}
       <Select
         labelId="demo-simple-select-autowidth-label"
         id="demo-simple-select-autowidth"
@@ -36,7 +39,7 @@ function Dropdown({ name, benchmarkComputeOptions, onChange }: dropprops) {
         onChange={handleChange}
       >
         {benchmarkComputeOptions.map((item) => {
-          return <MenuItem value={item.value}>{item.text}</MenuItem>;
+          return <MenuItem sx={{fontSize:NormalFontSize}} value={item.value}>{item.text}</MenuItem>;
         })}
       </Select>
     </FormControl>

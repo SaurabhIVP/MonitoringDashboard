@@ -36,10 +36,18 @@ function Datepicker({ name, selectedDate, onDateChange, flag }: DateProps) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={["DatePicker"]}>
+      <DemoContainer components={["DatePicker"]} sx={{
+            width:'120px !important',
+            overflow:'hidden',
+            paddingTop:'2px'
+          }}>
         {/* <DatePicker label="Uncontrolled picker" defaultValue={dayjs('2022-04-17')} /> */}
         <DatePicker
-          label={name}
+          // label={name}
+          sx={{overflow:'hidden','.css-11flz0p-MuiStack-root ':{width:'150px !important'},'.css-1tifq5c-MuiStack-root>.MuiTextField-root':{
+            minWidth:'50px !important'
+          }}}
+          slotProps={{ textField: { variant: 'standard' } }} 
           value={selectedDate ? dayjs(selectedDate) : null}
           onChange={(date) => handleDateChange(date)}
           components={{
@@ -55,7 +63,11 @@ function Datepicker({ name, selectedDate, onDateChange, flag }: DateProps) {
                     ? "Start Date should not be greater than End Date"
                     : ""
                 }
-                style={{ width: "100%" }}
+                sx={{'.css-v4u5dn-MuiInputBase-root-MuiInput-root':{ maxWidth:'120px !important'},'.css-1x51dt5-MuiInputBase-input-MuiInput-input':{
+                  fontSize:'12px',
+                  width: "70px !important",
+                  paddingBottom:'0px'
+                },'.css-i4bv87-MuiSvgIcon-root':{fontSize:'20px'} }}
               />
             ),
           }}
@@ -66,25 +78,3 @@ function Datepicker({ name, selectedDate, onDateChange, flag }: DateProps) {
 }
 
 export default Datepicker;
-
-// <form
-//   noValidate
-//   className="form"
-
-//   onClick={handleClick}
-// >
-//   <TextField
-//     id="date"
-//     label={name}
-//     type="date"
-
-//     value={selectedDate ? dayjs(selectedDate).format("YYYY-MM-DD") : ""}
-//     onChange={handleDateChange}
-//     InputLabelProps={{
-//       shrink: true,
-//     }}
-//     error={error && flag}
-//     helperText={error ? "Date cannot be empty":!flag? "Start Date should not be greater than End Date":""}
-//     style={{ width: "100%" }}
-//   />
-// </form>

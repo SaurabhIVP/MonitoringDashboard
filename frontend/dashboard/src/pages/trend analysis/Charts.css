@@ -1,26 +1,30 @@
 .paperWrapper{
-    padding-top: 50px;
-    padding-left: 100px;
-    padding-right: 100px;
+    padding-top: 10px;
+    padding-left: 50px;
+    padding-right: 50px;
     
 }
 
 .paperClass{
-    padding: 20px;
-    /* margin-bottom: 20px; */
+    padding-left: 20px;
+    padding-right: 20px;
+    border: ridge;
 }
 
 .titleHolder{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    margin-bottom: 0px;
+    height: 40px;
     
 }
 
 .titleStyler{
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    /* padding-left: 10px; */
+    font-family: roboto;
     text-align: left;
+    font-size: 13px;
+
 }
 
 .DialogTitle{
@@ -40,4 +44,14 @@
     &::hover{
       background-color: rgb(53 90 192)
     }
+}
+
+.filterInfo{
+    display: flex;
+    font-family: roboto;
+    font-size: small;
+    font-weight: lighter;
+    margin-top: 0px;
+    margin-left: 10px;
+    color: gray;
 }
