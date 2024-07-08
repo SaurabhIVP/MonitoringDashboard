@@ -28,11 +28,11 @@ async function GanttData1({
     const benstartdate = DateConversion(benchStartDate);
     const benenddate = DateConversion(benchEndDate);
     // let is_pm=false;
-    let url = `/tasks/${is_pm}`;
+    let url = `/defaultGanttData/${is_pm}`;
     let params = {};
 
     if (chains != null && starttime != null && endtime != null) {
-      url = `/tasks1/${selectedDate}/${benstartdate}/${benenddate}/${benchmarkCompute}/${deviationPercentage}/${is_pm}/${chains}`;
+      url = `/ganttData/${selectedDate}/${benstartdate}/${benenddate}/${benchmarkCompute}/${deviationPercentage}/${is_pm}/${chains}`;
     }
 
     console.log("API URL:", url);

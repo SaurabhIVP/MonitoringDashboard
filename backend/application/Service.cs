@@ -20,9 +20,9 @@ public class Service : IService
     {
         return await _dbAccess.GetAllChainDetailsAsync(is_pm);
     }
-    public async Task<IEnumerable<Tasks>> GetAllChainDetailsAsync1(DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null,bool? is_pm=false)
+    public async Task<IEnumerable<Tasks>> GetCurrentDataAsync(DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null,bool? is_pm=false)
     {
-        return await _dbAccess.GetAllChainDetailsAsync1(startDate, endDate, benchStartDate, benchEndDate, benchmarkCompute, deviationPercentage,is_pm);
+        return await _dbAccess.GetCurrentDataAsync(startDate, endDate, benchStartDate, benchEndDate, benchmarkCompute, deviationPercentage,is_pm);
     }
     public async Task<IEnumerable<Tasks>> GetAllChainNamesAsync(bool? is_pm=false)
     {

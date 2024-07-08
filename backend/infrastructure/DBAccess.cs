@@ -35,7 +35,7 @@ public class DBAccess : IDBAccess
         using var connection = new SqlConnection(_connectionString);
         return await connection.QueryAsync<Tasks>("SP_GetGanttDetails", commandType: CommandType.StoredProcedure);
     }
-    public async Task<IEnumerable<Tasks>> GetAllChainDetailsAsync1(DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null,bool? is_pm=false)
+    public async Task<IEnumerable<Tasks>> GetCurrentDataAsync(DateTime? startDate = null, DateTime? endDate = null, DateTime? benchStartDate = null, DateTime? benchEndDate = null, string? benchmarkCompute=null,string? deviationPercentage=null,bool? is_pm=false)
     {
         string _connectionString=GetConnectionString(is_pm);
         using var connection = new SqlConnection(_connectionString);

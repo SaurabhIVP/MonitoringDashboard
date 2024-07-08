@@ -34,7 +34,7 @@ async function ChainDetailsNew({
       deviationPercentage = 0;
     }
     // let is_pm=false;
-    const url = `${API_URL}/chaindetailsnew/${is_pm}`;
+    const url = `${API_URL}/chainDetails/${is_pm}`;
 
     console.log(url);
     const params = {

@@ -9,10 +9,10 @@ async function Tasknames({ chain_id,is_pm }: TaskProps) {
   try {
     
     if (chain_id == null) {
-      const response = await apiService.get(`/tasksss/0/${is_pm}`);
+      const response = await apiService.get(`/tasknames/0/${is_pm}`);
       return response;
     } else {
-      const response = await apiService.get(`/tasksss/${chain_id}/${is_pm}`);
+      const response = await apiService.get(`/tasknames/${chain_id}/${is_pm}`);
       return response;
     }
   } catch (error) {
