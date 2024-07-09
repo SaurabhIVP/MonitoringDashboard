@@ -152,12 +152,6 @@ const GridFilter: React.FC<ChartFilterProps> = ({
     (BenchstartDate !== null &&
       BenchendDate !== null &&
       BenchendDate >= BenchstartDate);
-  //   const handlePMChange = (event: SelectChangeEvent) => {
-  //     setIsPm(event.target.value as string);
-  //     selectedChainValueRef.current = null;
-  // selectedTaskValueRef.current = null;
-  // setKey(key === "1" ? "2" : "1");
-  //   };
   const resetButtonHandler = () => {
     setStartDate(new Date(2024, 0, 10));
     setEndDate(new Date(2024, 0, 10));
@@ -239,29 +233,10 @@ const GridFilter: React.FC<ChartFilterProps> = ({
               
               <CloseButton onClick={handleClose}></CloseButton>
             </div>
-
-            {/* <div >
-              <FormControl  sx={{width:'550px',paddingBottom:'15px' }}>
-                <InputLabel id="demo-simple-select-label">System</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={isPm}
-                  label="System"
-                  onChange={handlePMChange}
-                >
-                  <MenuItem value={"false"}>SecMaster</MenuItem>
-                  <MenuItem value={"true"}>PriceMaster</MenuItem>
-                  
-                </Select>
-              </FormControl>
-            </div> */}
             <div style={{ display: "flex", marginTop: "10px" }}>
               <div
                 style={{
                   fontSize: NormalFontSize,
-                  // marginRight: "5px",
-                  // marginLeft: "10px",
                   marginTop: "9px",
                   fontFamily: "roboto",
                   color: SecondaryColor,
@@ -328,8 +303,6 @@ const GridFilter: React.FC<ChartFilterProps> = ({
                 <div
                   style={{
                     fontSize: NormalFontSize,
-                    // marginRight: "5px",
-                    // marginLeft: "10px",
                     marginTop: "9px",
                     fontFamily: "roboto",
                     color: SecondaryColor,
@@ -360,8 +333,6 @@ const GridFilter: React.FC<ChartFilterProps> = ({
                 <div
                   style={{
                     fontSize: NormalFontSize,
-                    // marginRight: "5px",
-                    // marginLeft: "10px",
                     marginTop: "9px",
                     fontFamily: "roboto",
                     color: SecondaryColor,
@@ -384,21 +355,6 @@ const GridFilter: React.FC<ChartFilterProps> = ({
               <div></div>
             )}
           </div>
-
-          {/* <StyledDatepickerContainer style={{ paddingTop: 10 }}>
-            <Datepicker
-              name="Task Start Date"
-              selectedDate={startDate}
-              onDateChange={handleStartDateChange}
-              flag={isEndDateValid}
-            />
-            <Datepicker
-              name="Task End Date"
-              selectedDate={EndDate}
-              onDateChange={handleEndDateChange}
-              flag={isEndDateValid}
-            />
-          </StyledDatepickerContainer> */}
 
           <StyledDatepickerContainer style={{ paddingBottom: "25px" }}>
             <div
@@ -447,13 +403,6 @@ const GridFilter: React.FC<ChartFilterProps> = ({
             </div>
           </StyledDatepickerContainer>
           <StyledDatepickerContainer style={{ marginBottom: "0px" }}>
-            {/* <div style={{  marginBottom: 56 }}>
-              <NumberField
-                name="Deviation % Threshold"
-                value={deviationPercentage}
-                onChange={handleDeviationChange}
-              ></NumberField>
-            </div> */}
           </StyledDatepickerContainer>
           <div
             style={{

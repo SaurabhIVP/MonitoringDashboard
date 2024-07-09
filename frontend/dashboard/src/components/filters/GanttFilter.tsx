@@ -2,9 +2,7 @@ import * as React from "react";
 import Popover from "@mui/material/Popover";
 import AllData from "../../api/GetAllChainNames";
 import Datepicker from "../generics/datepicker/Datepicker";
-import CloseIcon from "@mui/icons-material/Close";
 import TuneIcon from "@mui/icons-material/Tune";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import MultiSelect from "../generics/MultiSelect";
 import {
   LocalizationProvider,
@@ -13,20 +11,12 @@ import {
 } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { TimePicker as MuiTimePicker } from "@mui/lab";
 import {
-  FormControl,
-  InputBase,
-  InputLabel,
-  MenuItem,
-  Select,
   SelectChangeEvent,
 } from "@mui/material";
 import {
   StyledBox,
-  StyledButton,
   StyledDatepickerContainer,
-  StyledHeading,
 } from "../../utils/StyledComponents";
 import TimeFormatter from "../../utils/HHMMSSConverter";
 import { IconButton } from "@mui/material";
@@ -37,10 +27,8 @@ import {
 } from "../../utils/Colors";
 import dayjs from "dayjs";
 import { useState } from "react";
-import { FilterButton } from "../generics/FilterButton";
 import Dropdown from "../generics/Dropdown";
 import NumberField from "../generics/NumberField";
-import { TextFields } from "@mui/icons-material";
 import CloseButton from "../generics/CloseButton";
 import ResetButton from "../generics/ResetButton";
 import SubmitButton from "../generics/SubmitButton";
@@ -181,7 +169,6 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
             color: SecondaryColor,
             fontSize: "24px",
             paddingTop:'0px',
-            // marginRight: "8px",
             verticalAlign: "middle",
             transition: "transform 0.3s ease-in-out",
             "&:hover": {
@@ -211,36 +198,10 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
             <ResetButton onClick={resetButtonHandler}></ResetButton>
             <CloseButton onClick={handleClose}></CloseButton>
           </div>
-
-          {/* <FormControl
-            sx={{ width: "550px", paddingBottom: "10px", marginTop: "28px" }}
-          >
-            <InputLabel id="demo-simple-select-label">System</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={isPm}
-              label="System"
-              onChange={handlePMChange}
-            >
-              <MenuItem value={"false"}>SecMaster</MenuItem>
-              <MenuItem value={"true"}>PriceMaster</MenuItem>
-            </Select>
-          </FormControl> */}
-          {/* <StyledDatepickerContainer style={{ paddingLeft: "130px" }}>
-            <Datepicker
-              name="Chain Run Date"
-              selectedDate={startDate}
-              onDateChange={handleStartDateChange}
-              flag={true}
-            />
-          </StyledDatepickerContainer> */}
           <div style={{ marginBottom: "10px", display: "flex" }}>
             <div
               style={{
                 fontSize: NormalFontSize,
-                // marginRight: "5px",
-                // marginLeft: "10px",
                 marginTop: "9px",
                 fontFamily: "roboto",
                 color: SecondaryColor,
@@ -290,7 +251,6 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
               >
                 <TimePicker
                   value={startTime}
-                  // format="HH:mm:ss"
                   onChange={handleStartTimeChange}
                   sx={{
                     ".css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
@@ -329,7 +289,6 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
                 }}
               >
                 <TimePicker
-                  // format="HH:mm:ss"
                   value={endTime}
                   onChange={handleEndTimeChange}
                   sx={{
@@ -397,7 +356,6 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
                 style={{
                   fontSize: NormalFontSize,
                   marginRight: "5px",
-                  // marginLeft: "10px",
                   marginTop: "9px",
                   fontFamily: "roboto",
                   color: SecondaryColor,

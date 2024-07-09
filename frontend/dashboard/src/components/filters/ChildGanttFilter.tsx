@@ -124,8 +124,6 @@ const ChildGanttFilter: React.FC<ChartFilterProps> = ({
     console.log(startTime);
 
     onFilter(true);
-    // start=false;
-    // end=false;
     handleClose();
   };
   const [deviationPercentage, setDeviationPercentage] = useState<string | null>(
@@ -136,8 +134,11 @@ const ChildGanttFilter: React.FC<ChartFilterProps> = ({
     console.log(deviationPercentage);
   };
   return (
-    <div style={{padding:'0px'}}>
-      <IconButton onClick={handleClick} sx={{padding:'0px',marginRight:'5px'}}>
+    <div style={{ padding: "0px" }}>
+      <IconButton
+        onClick={handleClick}
+        sx={{ padding: "0px", marginRight: "5px" }}
+      >
         <TuneIcon></TuneIcon>
       </IconButton>
       <Popover
@@ -160,30 +161,6 @@ const ChildGanttFilter: React.FC<ChartFilterProps> = ({
             <ResetButton onClick={resetButtonHandler}></ResetButton>
             <CloseButton onClick={handleClose}></CloseButton>
           </div>
-
-          {/* <FormControl
-          sx={{ width: "550px", paddingBottom: "10px", marginTop: "28px" }}
-        >
-          <InputLabel id="demo-simple-select-label">System</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={isPm}
-            label="System"
-            onChange={handlePMChange}
-          >
-            <MenuItem value={"false"}>SecMaster</MenuItem>
-            <MenuItem value={"true"}>PriceMaster</MenuItem>
-          </Select>
-        </FormControl> */}
-          {/* <StyledDatepickerContainer style={{ paddingLeft: "130px" }}>
-          <Datepicker
-            name="Chain Run Date"
-            selectedDate={startDate}
-            onDateChange={handleStartDateChange}
-            flag={true}
-          />
-        </StyledDatepickerContainer> */}
 
           <StyledDatepickerContainer
             style={{
@@ -216,7 +193,6 @@ const ChildGanttFilter: React.FC<ChartFilterProps> = ({
               >
                 <TimePicker
                   value={startTime}
-                  // format="HH:mm:ss"
                   onChange={handleStartTimeChange}
                   sx={{
                     ".css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {

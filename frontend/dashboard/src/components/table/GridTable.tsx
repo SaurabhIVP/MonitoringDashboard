@@ -251,10 +251,6 @@ const GridTable: React.FC<ExampleProps> = ({
     age,
     pge,
   ]);
-  data.map((item) => {
-    if (item.avg_total_time == null) {
-    }
-  });
   const columns1 = useMemo<MRT_ColumnDef<any>[]>(
     () =>
       TableLabels.map(([acc, head, is_deviation, is_name, al]) => ({
@@ -262,14 +258,12 @@ const GridTable: React.FC<ExampleProps> = ({
           align: "left",
           size: "small",
           sx: {
-            // backgroundColor: PrimaryColor,
             ".css-fv3lde": {
               fontSize: NormalFontSize,
             },
             backgroundColor: PrimaryColor,
             color: SecondaryColor,
             maxHeight: "10px",
-            // border: "none",
             borderSpacing: "1px",
             borderColor: "#5F9EA0",
             fontSize: NormalFontSize,

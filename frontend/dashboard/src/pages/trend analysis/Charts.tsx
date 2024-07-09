@@ -216,7 +216,6 @@ const Charts: React.FC = () => {
           marginBottom: "0px",
           position: "absolute",
           left: "5%",
-          // fontStyle: "italic",
         }}
       >
         Trend Analysis
