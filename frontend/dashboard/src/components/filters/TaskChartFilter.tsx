@@ -38,7 +38,6 @@ type ChartFilterProps = {
   onBenchEndDateSelected: (edate: Date | null) => void;
   onDeviationChange: (val: any | null) => void;
   onBenchmarkComputeChange: (val: any | null) => void;
-  // onPmChange:(val:string)=>void;
   pm: any;
 };
 
@@ -51,7 +50,6 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
   onBenchmarkComputeChange,
   onDeviationChange,
   pm
-  // onPmChange
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -174,7 +172,6 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
     onBenchEndDateSelected(BenchendDate);
     onDeviationChange(deviationPercentage);
     onBenchmarkComputeChange(benchmarkCompute)
-    // onPmChange(isPm)
     handleClose();
   };
   
@@ -222,20 +219,6 @@ const TaskChartFilter: React.FC<ChartFilterProps> = ({
           >
             <CloseIcon />
           </IconButton>
-          {/* <FormControl  sx={{width:'550px',marginTop:'25px' }}>
-                <InputLabel id="demo-simple-select-label">System</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={isPm}
-                  label="System"
-                  onChange={handlePMChange}
-                >
-                  <MenuItem value={"false"}>SecMaster</MenuItem>
-                  <MenuItem value={"true"}>PriceMaster</MenuItem>
-                  
-                </Select>
-              </FormControl> */}
           <div style={{ marginBottom: 15,paddingTop:'15px' }}>
             <SearchBar
               fetchDataFunction={() => Tasknames({ chain_id: 0,is_pm:pm })}

@@ -210,57 +210,12 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
             <CloseButton onClick={handleClose}></CloseButton>
           </div>
           <div style={{ display: "flex" }}>
-            {/* <div
-              style={{
-                fontSize: "13px",
-                marginRight: "13px",
-                marginLeft: "130px",
-                marginTop: "9px",
-                fontFamily: "roboto",
-                color: SecondaryColor,
-                fontWeight: 500,
-              }}
-            >
-              System:
-            </div> */}
-            {/* <FormControl
-              variant="standard"
-              sx={{
-                width: "100px",
-
-                ".css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input":
-                  {
-                    fontSize: "13px",
-                    paddingBottom: "0px",
-                    marginTop: "5px",
-                    color: SecondaryColor,
-                  },
-              }}
-            >
-              <Select
-                labelId="demo-simple-select-standard-label"
-                id="demo-simple-select-standard"
-                value={isPm}
-                label="System"
-                onChange={handlePMChange}
-                sx={{ fontSize: NormalFontSize }}
-              >
-                <MenuItem value={"false"} sx={{ fontSize: NormalFontSize }}>
-                  SecMaster
-                </MenuItem>
-                <MenuItem value={"true"} sx={{ fontSize: NormalFontSize }}>
-                  PriceMaster
-                </MenuItem>
-              </Select>
-            </FormControl> */}
           </div>
 
           <div style={{ paddingTop: "15px", display: "flex" }}>
             <div
               style={{
                 fontSize: NormalFontSize,
-                // marginRight: "5px",
-                // marginLeft: "10px",
                 marginTop: "9px",
                 fontFamily: "roboto",
                 color: SecondaryColor,
@@ -310,7 +265,6 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
                 style={{
                   fontSize: NormalFontSize,
                   marginRight: "5px",
-                  // marginLeft: "10px",
                   marginTop: "9px",
                   fontFamily: "roboto",
                   color: SecondaryColor,
@@ -334,8 +288,6 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
               style={{
                 fontSize: NormalFontSize,
                 marginRight: "5px",
-                // marginLeft: "10px",
-                // marginTop: "9px",
                 fontFamily: "roboto",
                 color: SecondaryColor,
                 fontWeight: 500,
@@ -431,12 +383,6 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
             }}
           >
             <SubmitButton onClick={buttonHandler} />
-            {/* <StyledButton
-              onClick={resetButtonHandler}
-              style={{ backgroundColor: "gray" }}
-            >
-              Reset
-            </StyledButton> */}
           </div>
         </StyledBox>
       </Popover>

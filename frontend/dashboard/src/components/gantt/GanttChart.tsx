@@ -143,8 +143,6 @@ const GanttChart: React.FC<ganttProps> = ({
           data: processedData,
           backgroundColor: backgroundColors,
           borderWidth: 1,
-          // barThickness: 30,
-          // maxBarThickness: 30,
           barBorderRadius: 3,
           categoryPercentage: 0.75,
         },
@@ -371,11 +369,7 @@ const GanttChart: React.FC<ganttProps> = ({
           setFilter(true);
         }
       }
-      // if (cursorInRegion) {
-      //   canvas.style.cursor = "pointer"; // Change cursor style to pointer if mouse is in the region
-      // } else {
-      //   canvas.style.cursor = "default"; // Reset cursor style to default if mouse is not in the region
-      // }
+     
     }
     function clickableScales3(chartRef: any, click: any) {
       if (!chartRef.canvas) {
@@ -419,27 +413,7 @@ const GanttChart: React.FC<ganttProps> = ({
           ycor <= top + height + height * i
         ) {
           cursorInRegion = true;
-          // ctx.fillStyle = "gray";
-          // ctx.rect(left, top + height * i, right, height);
-          // ctx.fill();
           canvas.style.cursor = "pointer";
-          // const x = i;
-          // const ids = Array.from(
-          //   new Set(chartRef.data.datasets[0].data.map((i: any) => i.chain_id))
-          // );
-          // console.log(chartRef.data.datasets[0].data[i]);
-          // for (let i = 0; i < chartRef.data.datasets[0].data.length; i++) {
-          //   if (chartRef.data.datasets[0].data[i].chain_id === ids[x]) {
-          //     name = chartRef.data.datasets[0].data[i].y;
-          //     const val = chartRef.data.datasets[0];
-          //     setClickedData(val.data[i]);
-          //     console.log(clickedData);
-
-          //     break; // Exit the loop once the matching element is found
-          //   }
-          // }
-          // console.log(name);
-          // setFilter(true);
         }
       }
       if (cursorInRegion) {
@@ -479,11 +453,6 @@ const GanttChart: React.FC<ganttProps> = ({
   // State to track the selected chain name
   const [selectedChain, setSelectedChain] = useState<string | null>(null);
 
-  // Click event handler for the chain names
-  const handleChainClick = (chainName: string) => {
-    setSelectedChain(chainName);
-  };
-
   // Close button click handler to close the popup
   const handleClosePopup = () => {
     setSelectedChain(null);
@@ -495,8 +464,6 @@ const GanttChart: React.FC<ganttProps> = ({
         marginLeft: "10px",
         marginRight: "10px",
         marginTop: "10px",
-        // paddingLeft: 10,
-        // paddingRight: 10,
         border: "ridge",
       }}
     >
@@ -568,10 +535,8 @@ const GanttChart: React.FC<ganttProps> = ({
               color: SecondaryColor,
               fontSize: PageTitleFontSize,
               fontFamily: "roboto",
-              // borderBottom: "1px solid #ccc",
               paddingBottom: "0px",
               marginBottom: "3px",
-              // boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
               zIndex: 10, // Ensure title is above content
             }}
           >
@@ -590,9 +555,6 @@ const GanttChart: React.FC<ganttProps> = ({
               ></ChildGantt>
             </div>
           </DialogContent>
-          {/* <DialogActions>
-            <Button onClick={() => setOpen(false)}>Close</Button>
-          </DialogActions> */}
         </Dialog>
       ) : (
         <></>

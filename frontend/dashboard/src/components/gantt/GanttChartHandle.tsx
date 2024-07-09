@@ -129,7 +129,6 @@ const GanttChartHandle = () => {
               fontFamily: "roboto",
               fontSize: "17px",
               marginTop: "7px",
-              // fontStyle: "italic",
             }}
           >
             Daily Gantt
@@ -201,9 +200,6 @@ const GanttChartHandle = () => {
               />
             </div>
           </StyledDatepickerContainer>
-          {/* <div style={{ position: "absolute", right: 90, top: 25 }}>
-            
-          </div> */}
         </div>
         <Card sx={{padding:'1px',backgroundColor:PrimaryColor,marginLeft:'25px',marginRight:'25px'}}>
         <div
@@ -211,9 +207,7 @@ const GanttChartHandle = () => {
             display: "flex",
             fontSize: NormalFontSize,
             fontVariant: "jis78",
-            // fontWeight: "normal",
             fontFamily: "roboto",
-            // marginTop: "20px",
             color: "#404040",
             marginLeft:'10px'
           }}

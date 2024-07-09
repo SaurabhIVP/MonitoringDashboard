@@ -10,9 +10,6 @@ import {
   StyledHeading,
 } from "../../utils/StyledComponents";
 import { IconButton } from "@mui/material";
-import { FilterColor, SecondaryColor } from "../../utils/Colors";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import { FilterButton } from "../generics/FilterButton";
 type ChartFilterProps = {
   onStartDateSelected: (startdate: Date | null) => void;
   onEndDateSelected: (enddate: Date | null) => void;

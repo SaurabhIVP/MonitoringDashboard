@@ -74,13 +74,10 @@ const ChildGantt: React.FC<GanttProps> = ({
     new Date(2024, 0, 24)
   );
   const handleStartTimeChange = (val: any | null) => {
-    // setStartTime(val);
     setStartTime(new Date(`${date}T${val}`));
     console.log(startTime);
   };
   const handleEndTimeChange = (val: any | null) => {
-    // setEndTime(val);
-    // console.log(endTime);
     setEndTime(new Date(`${date}T${val}`));
   };
 
@@ -151,7 +148,6 @@ const ChildGantt: React.FC<GanttProps> = ({
     }
     fetchData();
     console.log(data);
-    // setFilter(false);
   }, [filter]);
   useEffect(() => {
     const processedData = data.map((item) => ({
@@ -179,7 +175,6 @@ const ChildGantt: React.FC<GanttProps> = ({
     const chartData = {
       datasets: [
         {
-          // label: "Within Benchmark",
           data: processedData,
           backgroundColor: backgroundColors,
           borderWidth: 1,
@@ -295,11 +290,9 @@ const ChildGantt: React.FC<GanttProps> = ({
               display: "flex",
               fontSize: NormalFontSize,
               fontVariant: "jis78",
-              // fontWeight: "normal",
               fontFamily: "roboto",
               marginTop: "0px",
               color: "#404040",
-              // marginLeft:'40px'
             }}
           >
             <ChildGanttFilter
@@ -327,38 +320,35 @@ const ChildGantt: React.FC<GanttProps> = ({
               <span>{deviationPercentage}</span>
             </div>
           </div>
-
-        
         </div>
       </Card>
-      <div style={{border:'ridge',marginTop:'5px'}}>
-      <div style={{ display: "flex", width: "800px", marginLeft: "30px" }}>
-        <div className="legend-box">
-          <div className="legend" style={{ backgroundColor: "red" }}></div>
-          <h5 className="legend-title">Performance less than -10%</h5>
-          <div className="legend" style={{ backgroundColor: "coral" }}></div>
-          <h5 className="legend-title">Performance between -10% to 0%</h5>
-          <div
-            className="legend"
-            style={{
-              backgroundColor: "lightgreen",
-            }}
-          ></div>
-          <h5 className="legend-title">Performance between 0% to 10%</h5>
-          <div
-            className="legend"
-            style={{
-              backgroundColor: "green",
-            }}
-          ></div>
-          <h5 className="legend-title">Performance more than 10% </h5>
+      <div style={{ border: "ridge", marginTop: "5px" }}>
+        <div style={{ display: "flex", width: "800px", marginLeft: "30px" }}>
+          <div className="legend-box">
+            <div className="legend" style={{ backgroundColor: "red" }}></div>
+            <h5 className="legend-title">Performance less than -10%</h5>
+            <div className="legend" style={{ backgroundColor: "coral" }}></div>
+            <h5 className="legend-title">Performance between -10% to 0%</h5>
+            <div
+              className="legend"
+              style={{
+                backgroundColor: "lightgreen",
+              }}
+            ></div>
+            <h5 className="legend-title">Performance between 0% to 10%</h5>
+            <div
+              className="legend"
+              style={{
+                backgroundColor: "green",
+              }}
+            ></div>
+            <h5 className="legend-title">Performance more than 10% </h5>
+          </div>
+        </div>
+        <div style={{ height: `${Math.max(height * 50, 200)}px` }}>
+          <canvas id="myChart3"></canvas>
         </div>
       </div>
-      <div style={{ height: `${Math.max(height * 50, 200)}px` }}>
-        <canvas id="myChart3"></canvas>
-      </div>
-      </div>
-      
     </div>
   );
 };
