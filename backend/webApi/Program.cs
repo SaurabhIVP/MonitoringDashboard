@@ -18,12 +18,11 @@ var host = Host.CreateDefaultBuilder(args)
 
         webBuilder.ConfigureServices((context, services) =>
         {
-            var connectionStringSM = context.Configuration.GetConnectionString("SM") ?? "DefaultFallbackConnection";
-            
-            services.AddTransient<IDbConnection>(_ => new SqlConnection(connectionStringSM));
-            services.AddTransient<IDBConnectionFactory, DBConnectionFactory>(_ => new DBConnectionFactory(connectionStringSM));
+            services.AddSingleton<IDBConnectionFactory, DBConnectionFactory>();
+
             services.AddTransient<IDBAccess, DBAccess>();
             services.AddTransient<IService, Service>();
+
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();

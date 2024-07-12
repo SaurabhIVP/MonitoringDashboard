@@ -16,7 +16,11 @@ import {
 } from "@mui/material";
 import { DateConversioninddMMMMyyyy } from "../../utils/DateConversion";
 import GanttData1 from "../../api/GanttData1";
-import { NormalFontSize, PrimaryColor, SecondaryColor } from "../../utils/Colors";
+import {
+  NormalFontSize,
+  PrimaryColor,
+  SecondaryColor,
+} from "../../utils/Colors";
 import { StyledDatepickerContainer } from "../../utils/StyledComponents";
 import Datepicker from "../generics/datepicker/Datepicker";
 
@@ -120,7 +124,7 @@ const GanttChartHandle = () => {
     setfilter(true);
   };
   return (
-    <div style={{width:'100%'}}>
+    <div style={{ width: "100%" }}>
       <div>
         <div style={{ display: "flex", marginLeft: "40px" }}>
           <h2
@@ -150,7 +154,7 @@ const GanttChartHandle = () => {
             variant="standard"
             sx={{
               width: "100px",
-              marginTop:'6px',
+              marginTop: "6px",
               ".css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input":
                 {
                   fontSize: "13px",
@@ -191,7 +195,7 @@ const GanttChartHandle = () => {
             >
               Date:
             </div>
-            <div style={{marginTop:'6px'}} >
+            <div style={{ marginTop: "6px" }}>
               <Datepicker
                 name="Task Start Date"
                 selectedDate={startDate}
@@ -201,18 +205,26 @@ const GanttChartHandle = () => {
             </div>
           </StyledDatepickerContainer>
         </div>
-        <Card sx={{padding:'1px',backgroundColor:PrimaryColor,marginLeft:'25px',marginRight:'25px'}}>
-        <div
-          style={{
-            display: "flex",
-            fontSize: NormalFontSize,
-            fontVariant: "jis78",
-            fontFamily: "roboto",
-            color: "#404040",
-            marginLeft:'10px'
+        <Card
+          sx={{
+            padding: "1px",
+            backgroundColor: PrimaryColor,
+            marginLeft: "25px",
+            marginRight: "25px",
           }}
         >
-          <GanttFilter
+          <div
+            style={{
+              display: "flex",
+              fontSize: NormalFontSize,
+              fontVariant: "jis78",
+              fontFamily: "roboto",
+              color: "#404040",
+              marginLeft: "10px",
+              marginRight: "10px",
+            }}
+          >
+            <GanttFilter
               onFilter={filterHandler}
               onChainSelected={HandleMultichains}
               onStartDateSelected={handleGanttStartTimeChange}
@@ -224,21 +236,20 @@ const GanttChartHandle = () => {
               onDeviationChange={handleDeviationChange}
               onPmChange={handlePMChange}
             ></GanttFilter>
-            <div style={{marginTop:'4px'}}>
-            <strong>Benchmark Data Duration: </strong>
-          <span>
-            {" "}
-            {DateConversioninddMMMMyyyy(BenchstartDate)} to{" "}
-            {DateConversioninddMMMMyyyy(BenchendDate)}
-            &nbsp;{" | "} &nbsp;
-          </span>
+            <div style={{ marginTop: "4px" }}>
+              <strong>Benchmark Data Duration: </strong>
+              <span>
+                {" "}
+                {DateConversioninddMMMMyyyy(BenchstartDate)} to{" "}
+                {DateConversioninddMMMMyyyy(BenchendDate)}
+                &nbsp;{" | "} &nbsp;
+              </span>
 
-          <strong>Deviation % : </strong>
+              <strong>Deviation % : </strong>
 
-          <span>{deviationPercentage}</span>
+              <span>{deviationPercentage}</span>
             </div>
-          
-        </div>
+          </div>
         </Card>
         <div
           style={{
@@ -248,7 +259,7 @@ const GanttChartHandle = () => {
             marginTop: "5px",
             fontFamily: "roboto",
             color: "gray",
-            marginLeft:'2%'
+            marginLeft: "2%",
           }}
         >
           *Click on Chain Names for Task Data

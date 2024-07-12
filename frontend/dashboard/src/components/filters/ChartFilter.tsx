@@ -332,7 +332,7 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
               <div
                 style={{
                   fontSize: NormalFontSize,
-                  marginRight: "5px",
+                  marginRight: "18px",
                   // marginLeft: "10px",
                   marginTop: "9px",
                   fontFamily: "roboto",
@@ -351,13 +351,13 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
               ></NumberField>
             </div>
             <div
-              style={{ paddingTop: "0px", display: "flex", marginLeft: "4px" }}
+              style={{ paddingTop: "0px", display: "flex", marginLeft: "0px" }}
             >
               <div
                 style={{
                   fontSize: NormalFontSize,
-                  marginRight: "5px",
-                  marginLeft: "40px",
+                  marginRight: "26px",
+                  marginLeft: "16px",
                   marginTop: "4px",
                   fontFamily: "roboto",
                   color: SecondaryColor,

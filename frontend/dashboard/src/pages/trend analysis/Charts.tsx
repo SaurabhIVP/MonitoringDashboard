@@ -177,24 +177,46 @@ const Charts: React.FC = () => {
     }
   };
   //Data for Child charts (Task charts) for selected chain
+  const [chainId, setChainId] = useState(selectedChainValue?.id || 2775);
+  const [chainKey, setChainKey] = useState(selectedChainValue?.key || "Analytics Golden Copy - Mastered Analytics");
+  
+  useEffect(() => {
+    setChainId(pge === "false" ?  2775 : 1);
+    setChainKey(pge=="false"?"Analytics Golden Copy - Mastered Analytics":"Security Position Loading Task")
+  }, [pge]);
+  useEffect(() => {
+    setChainId(pge === "false" ? selectedChainValue?.id || 2775 : selectedChainValue?.id || 1);
+    setChainKey(pge === "false" ? selectedChainValue?.key || "Analytics Golden Copy - Mastered Analytics" : selectedChainValue?.key || "Security Position Loading Task");
+  }, [selectedChainValue]);
   const [data, setData] = useState([]);
   const fetchData = async () => {
     try {
       setData([]);
       const response = (await Tasknames({
-        chain_id: selectedChainValue?.id || 2775,
-        is_pm: getboolean(isPm),
+        chain_id: chainId,
+        is_pm: getboolean(pge),
       })) as any;
       console.log(response);
+      console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+      console.log(selectedChainValue?.id );
       setData(response || []);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
+  const [taskId, setTaskId] = useState(selectedTaskValue?.id || 1);
+  const [taskKey, setTaskKey] = useState(selectedTaskValue?.key || "CRD Loans Task");
+  useEffect(() => {
+    setTaskId(1);
+    setTaskKey(taskpge=="false"?"CRD Loans Task":"Security Data Source Task")
+  }, [taskpge]);
+  useEffect(() => {
+    setTaskId(selectedTaskValue?.id || 1 );
+    setTaskKey(taskpge === "false" ? selectedTaskValue?.key ||"CRD Loans Task" : selectedTaskValue?.key || "Security Data Source Task");
+  }, [selectedTaskValue]);
   useEffect(() => {
     fetchData();
-  }, [selectedChainValue]);
+  }, [chainId,pge]);
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -247,12 +269,12 @@ const Charts: React.FC = () => {
             >
               Chain Level Analysis :{" "}
               {pge == "false"
-                ? `${
-                    selectedChainValue?.key ||
-                    "Analytics Golden Copy - Mastered Analytics"
+                ? `${chainKey
+                    // selectedChainValue?.key ||
+                    // "Analytics Golden Copy - Mastered Analytics"
                   }`
-                : `${
-                    selectedChainValue?.key || "Security Position Loading Task"
+                : `${chainKey
+                    // selectedChainValue?.key || "Security Position Loading Task"
                   }`}
             </h3>
             <div style={{width:'45%'}}></div>
@@ -372,7 +394,7 @@ const Charts: React.FC = () => {
               <ChainChart
                 fetchDataFunction={() =>
                   ChartChain({
-                    chain_id: selectedChainValue?.id || 2775,
+                    chain_id: chainId,
                     startDate: chainStartDate,
                     endDate: chainEndDate,
                     benchStartDate: BenchstartDate,
@@ -389,7 +411,7 @@ const Charts: React.FC = () => {
               <ChainChart
                 fetchDataFunction={() =>
                   ChartChain({
-                    chain_id: selectedChainValue?.id || 1,
+                    chain_id: chainId,
                     startDate: chainStartDate,
                     endDate: chainEndDate,
                     benchStartDate: BenchstartDate,
@@ -434,7 +456,7 @@ const Charts: React.FC = () => {
               }}
             >
               Task Level Analysis :{" "}
-              {`${selectedTaskValue?.key || "CRD Loans Task"}`}
+              {`${taskKey}`}
             </h3>
             <div
               style={{ display: "flex",width:'15%',  marginRight: "1%" }}
@@ -527,7 +549,7 @@ const Charts: React.FC = () => {
             <ChainChart
               fetchDataFunction={() =>
                 ChartTask({
-                  flow_id: selectedTaskValue?.id || 1,
+                  flow_id: taskId,
                   startDate: taskStartDate,
                   endDate: taskEndDate,
                   benchStartDate: BenchTaskstartDate,
