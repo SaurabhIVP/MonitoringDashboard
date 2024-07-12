@@ -1,10 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "0WuyiT1f6thI1SprZKOEq3M73B2/O+3pOlTVYSVxUVoHXRdGfcR2vKODOoc1Xm/qKlJmwZYe7jA+9oKbkWKHbg==",
+  "dgSpecHash": "Di5jEnc7vmUdJiXH1WzTGR9RxoJH5PmIaGxoWJoLQPgymmdjTqoV9AQye2m4BETpN0N7c7dZq9F2e8vBSVhVqg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\srborawake\\Desktop\\Test2\\MonitoringDashboard\\backend\\infrastructure\\infrastructure.csproj",
+  "projectFilePath": "C:\\Users\\srborawake\\Desktop\\Test3\\MonitoringDashboard\\backend\\infrastructure\\infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\srborawake\\.nuget\\packages\\dapper\\2.1.21\\dapper.2.1.21.nupkg.sha512",
+    "C:\\Users\\srborawake\\.nuget\\packages\\microsoft.extensions.configuration\\8.0.0\\microsoft.extensions.configuration.8.0.0.nupkg.sha512",
+    "C:\\Users\\srborawake\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\8.0.0\\microsoft.extensions.configuration.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\srborawake\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
     "C:\\Users\\srborawake\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\srborawake\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\srborawake\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.7.0\\runtime.native.system.data.sqlclient.sni.4.7.0.nupkg.sha512",

@@ -66,10 +66,12 @@ const GridTable: React.FC<ExampleProps> = ({
     id: number;
     [key: string]: any;
   } | null>(null);
+  
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15, //customize the default page size
   });
+
   const [startDate, setStartDate] = useState<Date | null>(new Date(2024, 1, 7));
   const [EndDate, setEndDate] = useState<Date | null>(new Date(2024, 1, 7));
   const [BenchstartDate, setBenchStartDate] = useState<Date | null>(
@@ -313,7 +315,7 @@ const GridTable: React.FC<ExampleProps> = ({
         size: 20,
         accessorKey: acc.toString(),
         filterFn: "contains",
-        columnFilterModeOptions: !is_deviation
+        columnFilterModeOptions: is_name
           ? []
           : [
               "between",
@@ -463,8 +465,6 @@ const GridTable: React.FC<ExampleProps> = ({
     muiTableBodyCellProps: {
       sx: {
         borderBottom: "1px solid light-grey",
-        // borderRight: "none",
-        // borderLeft: "none",
         fontSize: "13px",
         fontFamily: "roboto",
         padding: "0px",
@@ -483,13 +483,11 @@ const GridTable: React.FC<ExampleProps> = ({
         },
       },
     },
+    
     muiTablePaperProps: {
       elevation: 0,
     },
-
-    // enableExpandAll: true,
     enableColumnFilterModes: true,
-    // enableExpanding: true,
     filterFromLeafRows: false,
     enableColumnOrdering: true,
     enableColumnPinning: true,
@@ -526,6 +524,7 @@ const GridTable: React.FC<ExampleProps> = ({
     },
     muiDetailPanelProps: { style: { color: "black" } },
     maxLeafRowFilterDepth: 0,
+    onPaginationChange:setPagination,
     muiFilterTextFieldProps: {
       sx: {
         ".css-929hxt-MuiInputBase-input-MuiInput-input": {
@@ -537,14 +536,8 @@ const GridTable: React.FC<ExampleProps> = ({
     state: { isLoading: loading, pagination, density: "compact" },
     getSubRows: (row) => row.tasks || [],
     columnFilterDisplayMode: "popover",
-    // initialState:{density:'comfortable'},
     paginateExpandedRows: false,
     enableToolbarInternalActions: false,
-    // renderToolbarInternalActions: ({ table }) => (
-    //   <Box sx={{ width:'0px' }}>
-
-    //   </Box>
-    // ),
     renderBottomToolbar: ({ table }) => (
       <Box sx={{ paddingBottom: "0px" }}>
         <Box
@@ -577,7 +570,7 @@ const GridTable: React.FC<ExampleProps> = ({
         </Box>
       </Box>
     ),
-    onPaginationChange: setPagination, //hoist pagination state to your state when it changes internally
+    
 
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
@@ -615,7 +608,7 @@ const GridTable: React.FC<ExampleProps> = ({
             style={{
               fontSize: "13px",
               marginRight: "13px",
-              marginLeft: "5%",
+              marginLeft: "10%",
               marginTop: "18px",
               fontFamily: "roboto",
               color: SecondaryColor,
@@ -710,9 +703,17 @@ const GridTable: React.FC<ExampleProps> = ({
               />
             </div>
           </StyledDatepickerContainer>
-          <div style={{ marginTop: "10px", paddingLeft: "5%" }}>
+          <div style={{ marginTop: "10px", paddingLeft: "3%" }}>
             <CSVLink
-              data={data}
+              data={data.map((row) => ({
+                "Chain ID/Task ID": row.id,
+                "Chain Name/Task Name": row.name,
+                "Start Time": row.start_time,
+                "End Time": row.end_time,
+                "Total Time": row.total_times,
+                "Benchmark Time": row.avg_total_time,
+                "Deviation %": row.performance,
+              }))}
               filename={"data.csv"}
               onClick={() => handleExportRows(data)}
               style={{ textDecoration: "none", color: "inherit" }}
@@ -745,7 +746,7 @@ const GridTable: React.FC<ExampleProps> = ({
               color: "#404040",
             }}
           >
-            <div style={{ marginTop: "0px" }}>
+            <div style={{ marginTop: "0px",marginLeft:'5px' }}>
               {pge == "false" ? (
                 <GridFilter
                   onChainSelected={handleChainSelected}
@@ -854,19 +855,6 @@ const GridTable: React.FC<ExampleProps> = ({
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <MaterialReactTable table={table} />
         </LocalizationProvider>
-        {/* {loading && (
-          <div
-            style={{
-              position: "absolute",
-              top: "70%",
-              left: "50%",
-
-              transform: "translate(-50%, -50%)",
-            }}
-          >
-            <CircularProgress />
-          </div>
-        )} */}
       </div>
     </div>
   );

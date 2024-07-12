@@ -10,6 +10,10 @@ import {
   StyledHeading,
 } from "../../utils/StyledComponents";
 import { IconButton } from "@mui/material";
+import { NormalFontSize, SecondaryColor } from "../../utils/Colors";
+import ResetButton from "../generics/ResetButton";
+import CloseButton from "../generics/CloseButton";
+import SubmitButton from "../generics/SubmitButton";
 type ChartFilterProps = {
   onStartDateSelected: (startdate: Date | null) => void;
   onEndDateSelected: (enddate: Date | null) => void;
@@ -87,7 +91,7 @@ const DateFilters: React.FC<ChartFilterProps> = ({
       BenchendDate >= BenchstartDate);
   return (
     <div>
-      <IconButton onClick={handleClick} sx={{padding:'0px'}}>
+      <IconButton onClick={handleClick} sx={{ padding: "0px" }}>
         <TuneIcon></TuneIcon>
       </IconButton>
       <Popover
@@ -105,52 +109,118 @@ const DateFilters: React.FC<ChartFilterProps> = ({
         }}
       >
         <StyledBox height={"auto"}>
-        <IconButton onClick={handleClose} style={{ position: "absolute", top: "5px", right: "5px", color: "red" }}>
-  <CloseIcon />
-</IconButton>
-          <StyledDatepickerContainer style={{paddingTop:'35px'}}>
-            <Datepicker
-              name="Task Start Date"
-              selectedDate={startDate}
-              onDateChange={handleStartDateChange}
-              flag={isEndDateValid}
-            />
-            <Datepicker
-              name="Task End Date"
-              selectedDate={EndDate}
-              onDateChange={handleEndDateChange}
-              flag={isEndDateValid}
-            />
+        <div
+            style={{
+              display: "flex",
+              position: "absolute",
+              top: "0px",
+              right: "10px",
+            }}
+          >
+        <ResetButton onClick={resetButtonHandler}></ResetButton>
+
+            <CloseButton onClick={handleClose}></CloseButton>
+            </div>
+<StyledDatepickerContainer style={{ paddingTop: 10 }}>
+            <div style={{ display: "flex" }}>
+              <div
+                style={{
+                  fontSize: NormalFontSize,
+                  marginRight: "5px",
+                  // marginLeft: "10px",
+                  marginTop: "9px",
+                  fontFamily: "roboto",
+                  color: SecondaryColor,
+                  fontWeight: 500,
+                  width: "115px",
+                }}
+              >
+                Start Date:{" "}
+              </div>
+              <Datepicker
+                name="Chain Start Date"
+                selectedDate={startDate}
+                onDateChange={handleStartDateChange}
+                flag={isEndDateValid}
+              />
+            </div>
+            <div style={{ display: "flex", marginLeft: "15px" }}>
+              <div
+                style={{
+                  fontSize: NormalFontSize,
+                  marginRight: "5px",
+                  marginTop: "9px",
+                  fontFamily: "roboto",
+                  color: SecondaryColor,
+                  fontWeight: 500,
+                  width: "121px",
+                }}
+              >
+                End Date:{" "}
+              </div>
+              <Datepicker
+                name="Chain End Date"
+                selectedDate={EndDate}
+                onDateChange={handleEndDateChange}
+                flag={isEndDateValid}
+              />
+            </div>
           </StyledDatepickerContainer>
 
-          <StyledDatepickerContainer style={{ paddingBottom: 40 }}>
-            <Datepicker
-              name="Benchmark Start Date"
-              selectedDate={BenchstartDate}
-              onDateChange={handleBenchStartDateChange}
-              flag={isBenchEndDateValid}
-            />
-            <Datepicker
-              name="Benchmark End Date"
-              selectedDate={BenchendDate}
-              onDateChange={handleBenchendDateChange}
-              flag={isBenchEndDateValid}
-            />
+          <StyledDatepickerContainer>
+            <div
+              style={{
+                fontSize: NormalFontSize,
+                marginRight: "5px",
+                fontFamily: "roboto",
+                color: SecondaryColor,
+                fontWeight: 500,
+                width: "114px",
+              }}
+            >
+              Benchmark Start Date:{" "}
+            </div>
+            <div style={{ marginRight: "10px" }}>
+              <Datepicker
+                name="Benchmark Start Date"
+                selectedDate={BenchstartDate}
+                onDateChange={handleBenchStartDateChange}
+                flag={isBenchEndDateValid}
+              />
+            </div>
+            <div
+              style={{
+                fontSize: NormalFontSize,
+                marginRight: "5px",
+                marginLeft: "5px",
+                marginTop: "9px",
+                fontFamily: "roboto",
+                color: SecondaryColor,
+                fontWeight: 500,
+                width: "121px",
+              }}
+            >
+              Benchmark End Date:{" "}
+            </div>
+            <div style={{ marginRight: "13px" }}>
+              <Datepicker
+                name="Benchmark End Date"
+                selectedDate={BenchendDate}
+                onDateChange={handleBenchendDateChange}
+                flag={isBenchEndDateValid}
+              />
+            </div>
           </StyledDatepickerContainer>
           <div
             style={{
               position: "absolute",
-              bottom: "5px",
-              right: "45px",
+
+              bottom: "2px",
+              right: "15px",
               zIndex: 999,
             }}
           >
-            <StyledButton onClick={buttonHandler} style={{ marginRight: 10 }}>
-              SUBMIT
-            </StyledButton>
-            <StyledButton onClick={resetButtonHandler} style={{ marginRight: 0,backgroundColor:"gray" }}>
-              Reset
-            </StyledButton>
+            <SubmitButton onClick={buttonHandler}></SubmitButton>
           </div>
         </StyledBox>
       </Popover>

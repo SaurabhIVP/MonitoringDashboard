@@ -247,6 +247,8 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
                   ".css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root": {
                     width: "130px",
                   },
+                 
+                  
                 }}
               >
                 <TimePicker
@@ -263,7 +265,12 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
                       {
                         minWidth: "10px",
                       },
-                  }}
+                      ".MuiFormControl-root MuiTextField-root css-4dmwsg-MuiFormControl-root-MuiTextField-root":{
+                        minWidth:'120px !important' 
+                      }
+                      
+                  }
+                }
                 />
               </DemoContainer>
               <div

@@ -4,5 +4,5 @@ namespace infrastructure;
 
 public interface IDBConnectionFactory
 {
-    IDbConnection CreateConnection();
+    IDbConnection CreateConnection(bool is_pm);
 }

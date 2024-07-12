@@ -500,8 +500,8 @@ const GanttChart: React.FC<ganttProps> = ({
             <div
               className="chartBox"
               style={{
-                height: `${Math.max(length * 40, 200) - 50}px`,
-                width: "100%",
+                height: `${Math.max(length * 38, 200) - 50}px`,
+                width: "99%",
                 marginLeft: "10px",
               }}
             >
