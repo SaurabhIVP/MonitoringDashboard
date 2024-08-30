@@ -29,7 +29,7 @@ import {
   SecondaryColor,
 } from "../../utils/Colors";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FilterButton } from "../generics/FilterButton";
 import Dropdown from "../generics/Dropdown";
 import NumberField from "../generics/NumberField";
@@ -65,18 +65,21 @@ const ChildGanttFilter: React.FC<ChartFilterProps> = ({
   };
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
+  const currentDate = new Date();
+  const pastDate = new Date(currentDate);
+  pastDate.setDate(currentDate.getDate() - 7);
   const [startDate, setStartDate] = React.useState<Date | null>(
-    new Date(2024, 1, 7)
+    currentDate
   );
   const minTime = dayjs(startDate).startOf("day");
   const maxTime = dayjs(startDate).endOf("day");
   const [startTime, setStartTime] = React.useState<any | null>(minTime);
   const [endTime, setEndTime] = React.useState<any | null>(maxTime);
   const [BenchstartDate, setBenchStartDate] = React.useState<Date | null>(
-    new Date(2024, 1, 1)
+    pastDate
   );
   const [BenchendDate, setBenchEndDate] = React.useState<Date | null>(
-    new Date(2024, 1, 7)
+    currentDate
   );
   let start = false;
   let end = false;
@@ -133,6 +136,21 @@ const ChildGanttFilter: React.FC<ChartFilterProps> = ({
     setDeviationPercentage(value);
     console.log(deviationPercentage);
   };
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        buttonHandler();
+        
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [buttonHandler]);
   return (
     <div style={{ padding: "0px" }}>
       <IconButton
@@ -174,7 +192,7 @@ const ChildGanttFilter: React.FC<ChartFilterProps> = ({
                   fontFamily: "roboto",
                   color: SecondaryColor,
                   fontWeight: 500,
-                  width: "70px",
+                  width: "80px",
                   marginTop: "15px",
                   marginRight: "30px",
                 }}
@@ -185,26 +203,26 @@ const ChildGanttFilter: React.FC<ChartFilterProps> = ({
                 components={["TimePicker"]}
                 sx={{
                   paddingTop: "0px",
-                  minWidth: "10px",
-                  ".css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root": {
-                    width: "130px",
-                  },
+                  marginTop: "2px",
+                  // Apply styles to the container or other elements if needed
                 }}
               >
                 <TimePicker
                   value={startTime}
                   onChange={handleStartTimeChange}
                   sx={{
-                    ".css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
+                    // Target the input field of the TimePicker
+                    "& .MuiOutlinedInput-root": {
+                      width: "130px",
+                    },
+                    "& .MuiInputBase-input": {
                       fontSize: NormalFontSize,
                       color: SecondaryColor,
-                      width: "60px",
-                      minWidth: "10px",
                     },
-                    ".MuiFormControl-root MuiTextField-root css-1tvwvn0-MuiFormControl-root-MuiTextField-root":
-                      {
-                        minWidth: "10px",
-                      },
+                    // Target menu items if necessary
+                    "& .MuiMenuItem-root": {
+                      color: SecondaryColor,
+                    },
                   }}
                 />
               </DemoContainer>
@@ -214,7 +232,7 @@ const ChildGanttFilter: React.FC<ChartFilterProps> = ({
                   fontFamily: "roboto",
                   color: SecondaryColor,
                   fontWeight: 500,
-                  width: "70px",
+                  width: "80px",
                   marginTop: "18px",
                 }}
               >
@@ -225,22 +243,25 @@ const ChildGanttFilter: React.FC<ChartFilterProps> = ({
                 sx={{
                   paddingTop: "0px",
                   marginTop: "2px",
-                  ".css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root": {
-                    width: "130px",
-                  },
+                  // Apply styles to the container or other elements if needed
                 }}
               >
                 <TimePicker
-                  // format="HH:mm:ss"
                   value={endTime}
                   onChange={handleEndTimeChange}
                   sx={{
-                    ".css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
+                    // Target the input field of the TimePicker
+                    "& .MuiOutlinedInput-root": {
+                      width: "130px",
+                    },
+                    "& .MuiInputBase-input": {
                       fontSize: NormalFontSize,
                       color: SecondaryColor,
                     },
-                    ".css-1e3wlyl-MuiButtonBase-root-MuiMenuItem-root-MuiMultiSectionDigitalClockSection-item":
-                      { color: SecondaryColor },
+                    // Target menu items if necessary
+                    "& .MuiMenuItem-root": {
+                      color: SecondaryColor,
+                    },
                   }}
                 />
               </DemoContainer>

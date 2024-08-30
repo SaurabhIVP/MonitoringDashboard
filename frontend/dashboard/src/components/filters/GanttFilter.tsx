@@ -11,9 +11,7 @@ import {
 } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import {
-  SelectChangeEvent,
-} from "@mui/material";
+import { SelectChangeEvent } from "@mui/material";
 import {
   StyledBox,
   StyledDatepickerContainer,
@@ -26,7 +24,7 @@ import {
   SecondaryColor,
 } from "../../utils/Colors";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Dropdown from "../generics/Dropdown";
 import NumberField from "../generics/NumberField";
 import CloseButton from "../generics/CloseButton";
@@ -68,8 +66,11 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
   };
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
+  const currentDate = new Date();
+  const pastDate = new Date(currentDate);
+  pastDate.setDate(currentDate.getDate() - 7);
   const [startDate, setStartDate] = React.useState<Date | null>(
-    new Date(2024, 1, 7)
+    currentDate
   );
   const minTime = dayjs(startDate).startOf("day");
   const maxTime = dayjs(startDate).endOf("day");
@@ -77,10 +78,10 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
   const [startTime, setStartTime] = React.useState<any | null>(minTime);
   const [endTime, setEndTime] = React.useState<any | null>(maxTime);
   const [BenchstartDate, setBenchStartDate] = React.useState<Date | null>(
-    new Date(2024, 1, 1)
+    pastDate
   );
   const [BenchendDate, setBenchEndDate] = React.useState<Date | null>(
-    new Date(2024, 1, 7)
+    currentDate
   );
   const handleStartTimeChange = (val: any | null) => {
     setStartTime(TimeFormatter(val));
@@ -99,15 +100,15 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
   };
   const [key, setKey] = useState("1");
   const resetButtonHandler = () => {
-    setStartDate(new Date(2024, 1, 7));
+    setStartDate(currentDate);
     setBenchmarkCompute("Average");
     setDeviationPercentage("0");
     setMultichains([]);
     setKey(key === "1" ? "2" : "1");
     setStartTime(dayjs(startDate).startOf("day"));
     setEndTime(dayjs(startDate).endOf("day"));
-    setBenchStartDate(new Date(2024, 1, 1));
-    setBenchEndDate(new Date(2024, 1, 7));
+    setBenchStartDate(pastDate);
+    setBenchEndDate(currentDate);
   };
   const isBenchEndDateValid =
     BenchstartDate === null ||
@@ -161,14 +162,32 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
     setBenchmarkCompute(value);
     console.log(benchmarkCompute);
   };
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        buttonHandler();
+        
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [buttonHandler]);
   return (
-    <div style={{paddingTop:'0px' }}>
-      <IconButton onClick={handleClick} sx={{padding:'0px',marginTop:'0px',marginRight:'5px'}}>
+    <div style={{ paddingTop: "0px" }}>
+      <IconButton
+        onClick={handleClick}
+        sx={{ padding: "0px", marginTop: "0px", marginRight: "5px" }}
+      >
         <TuneIcon
           sx={{
             color: SecondaryColor,
             fontSize: "24px",
-            paddingTop:'0px',
+            paddingTop: "0px",
             verticalAlign: "middle",
             transition: "transform 0.3s ease-in-out",
             "&:hover": {
@@ -211,13 +230,15 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
             >
               Chains :{" "}
             </div>
-            <MultiSelect
-              keyProp={key}
-              fetchDataFunction={() => AllData({ is_pm: getboolean(isPm) })}
-              NameParam="chain_name"
-              Label="Search chains"
-              onSearch={HandleMultichains}
-            ></MultiSelect>
+            <div style={{ paddingLeft: "7px" }}>
+              <MultiSelect
+                keyProp={key}
+                fetchDataFunction={() => AllData({ is_pm: getboolean(isPm) })}
+                NameParam="chain_name"
+                Label="Search chains"
+                onSearch={HandleMultichains}
+              ></MultiSelect>
+            </div>
           </div>
 
           <StyledDatepickerContainer
@@ -243,34 +264,27 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
                 components={["TimePicker"]}
                 sx={{
                   paddingTop: "0px",
-                  minWidth: "10px",
-                  ".css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root": {
-                    width: "130px",
-                  },
-                 
-                  
+                  marginTop: "2px",
+                  // Apply styles to the container or other elements if needed
                 }}
               >
                 <TimePicker
                   value={startTime}
                   onChange={handleStartTimeChange}
                   sx={{
-                    ".css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
+                    // Target the input field of the TimePicker
+                    "& .MuiOutlinedInput-root": {
+                      width: "130px",
+                    },
+                    "& .MuiInputBase-input": {
                       fontSize: NormalFontSize,
                       color: SecondaryColor,
-                      width: "60px",
-                      minWidth: "10px",
                     },
-                    ".MuiFormControl-root MuiTextField-root css-1tvwvn0-MuiFormControl-root-MuiTextField-root":
-                      {
-                        minWidth: "10px",
-                      },
-                      ".MuiFormControl-root MuiTextField-root css-4dmwsg-MuiFormControl-root-MuiTextField-root":{
-                        minWidth:'120px !important' 
-                      }
-                      
-                  }
-                }
+                    // Target menu items if necessary
+                    "& .MuiMenuItem-root": {
+                      color: SecondaryColor,
+                    },
+                  }}
                 />
               </DemoContainer>
               <div
@@ -279,7 +293,7 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
                   fontFamily: "roboto",
                   color: SecondaryColor,
                   fontWeight: 500,
-                  width: "70px",
+                  width: "90px",
                   marginTop: "18px",
                 }}
               >
@@ -290,21 +304,25 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
                 sx={{
                   paddingTop: "0px",
                   marginTop: "2px",
-                  ".css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root": {
-                    width: "130px",
-                  },
+                  // Apply styles to the container or other elements if needed
                 }}
               >
                 <TimePicker
                   value={endTime}
                   onChange={handleEndTimeChange}
                   sx={{
-                    ".css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
+                    // Target the input field of the TimePicker
+                    "& .MuiOutlinedInput-root": {
+                      width: "130px",
+                    },
+                    "& .MuiInputBase-input": {
                       fontSize: NormalFontSize,
                       color: SecondaryColor,
                     },
-                    ".css-1e3wlyl-MuiButtonBase-root-MuiMenuItem-root-MuiMultiSectionDigitalClockSection-item":
-                      { color: SecondaryColor },
+                    // Target menu items if necessary
+                    "& .MuiMenuItem-root": {
+                      color: SecondaryColor,
+                    },
                   }}
                 />
               </DemoContainer>
@@ -391,7 +409,7 @@ const GanttFilter: React.FC<ChartFilterProps> = ({
                   fontFamily: "roboto",
                   color: SecondaryColor,
                   fontWeight: 500,
-                  width: "100px",
+                  width: "105px",
                 }}
               >
                 Benchmark Compute Type:{" "}

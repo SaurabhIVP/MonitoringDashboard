@@ -14,6 +14,7 @@ import { NormalFontSize, SecondaryColor } from "../../utils/Colors";
 import ResetButton from "../generics/ResetButton";
 import CloseButton from "../generics/CloseButton";
 import SubmitButton from "../generics/SubmitButton";
+import { useEffect } from "react";
 type ChartFilterProps = {
   onStartDateSelected: (startdate: Date | null) => void;
   onEndDateSelected: (enddate: Date | null) => void;
@@ -38,28 +39,30 @@ const DateFilters: React.FC<ChartFilterProps> = ({
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
-
+  const currentDate = new Date();
+  const pastDate = new Date(currentDate);
+  pastDate.setDate(currentDate.getDate() - 7);
   const [startDate, setStartDate] = React.useState<Date | null>(
-    new Date(2024, 1, 1)
+    pastDate
   );
   const [EndDate, setEndDate] = React.useState<Date | null>(
-    new Date(2024, 1, 7)
+    currentDate
   );
   const [BenchstartDate, setBenchStartDate] = React.useState<Date | null>(
-    new Date(2024, 1, 1)
+    pastDate
   );
   const [BenchendDate, setBenchEndDate] = React.useState<Date | null>(
-    new Date(2024, 1, 7)
+    currentDate
   );
 
   const handleEndDateChange = (newDate: Date | null) => {
     setEndDate(newDate);
   };
   const resetButtonHandler = () => {
-    setStartDate(new Date(2024, 1, 1));
-    setEndDate(new Date(2024, 1, 7));
-    setBenchStartDate(new Date(2024, 1, 1));
-    setBenchEndDate(new Date(2024, 1, 7));
+    setStartDate(pastDate);
+    setEndDate(currentDate);
+    setBenchStartDate(pastDate);
+    setBenchEndDate(currentDate);
   };
   const handleStartDateChange = (newDate: Date | null) => {
     setStartDate(newDate);
@@ -89,6 +92,20 @@ const DateFilters: React.FC<ChartFilterProps> = ({
     (BenchstartDate !== null &&
       BenchendDate !== null &&
       BenchendDate >= BenchstartDate);
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        buttonHandler();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [buttonHandler]);
   return (
     <div>
       <IconButton onClick={handleClick} sx={{ padding: "0px" }}>
@@ -109,7 +126,7 @@ const DateFilters: React.FC<ChartFilterProps> = ({
         }}
       >
         <StyledBox height={"auto"}>
-        <div
+          <div
             style={{
               display: "flex",
               position: "absolute",
@@ -117,11 +134,11 @@ const DateFilters: React.FC<ChartFilterProps> = ({
               right: "10px",
             }}
           >
-        <ResetButton onClick={resetButtonHandler}></ResetButton>
+            <ResetButton onClick={resetButtonHandler}></ResetButton>
 
             <CloseButton onClick={handleClose}></CloseButton>
-            </div>
-<StyledDatepickerContainer style={{ paddingTop: 10 }}>
+          </div>
+          <StyledDatepickerContainer style={{ paddingTop: 10 }}>
             <div style={{ display: "flex" }}>
               <div
                 style={{

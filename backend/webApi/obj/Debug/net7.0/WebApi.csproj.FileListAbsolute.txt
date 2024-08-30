@@ -185,3 +185,16 @@ C:\Users\srborawake\Desktop\Test3\MonitoringDashboard\backend\webApi\obj\Debug\n
 C:\Users\srborawake\Desktop\Test3\MonitoringDashboard\backend\webApi\bin\Debug\net7.0\Microsoft.Extensions.Configuration.dll
 C:\Users\srborawake\Desktop\Test3\MonitoringDashboard\backend\webApi\bin\Debug\net7.0\Microsoft.Extensions.Configuration.Abstractions.dll
 C:\Users\srborawake\Desktop\Test3\MonitoringDashboard\backend\webApi\bin\Debug\net7.0\Microsoft.Extensions.Primitives.dll
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\webApi\bin\Debug\net7.0\Microsoft.Extensions.Configuration.dll
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\webApi\bin\Debug\net7.0\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\webApi\bin\Debug\net7.0\Microsoft.Extensions.Primitives.dll
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\webApi\bin\Debug\net7.0\publish_output\web.config
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\webApi\bin\Debug\net7.0\publish_output\appsettings.Development.json
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\webApi\bin\Debug\net7.0\publish_output\appsettings.json
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\webApi\bin\Debug\net7.0\publish_output\WebApi.deps.json
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\webApi\bin\Debug\net7.0\publish_output\WebApi.runtimeconfig.json
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\webApi\bin\Debug\net7.0\publish_output\publish_output\web.config
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\webApi\bin\Debug\net7.0\publish_output\publish_output\appsettings.Development.json
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\webApi\bin\Debug\net7.0\publish_output\publish_output\appsettings.json
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\webApi\bin\Debug\net7.0\publish_output\publish_output\WebApi.deps.json
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\webApi\bin\Debug\net7.0\publish_output\publish_output\WebApi.runtimeconfig.json

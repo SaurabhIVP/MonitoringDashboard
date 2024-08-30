@@ -25,18 +25,17 @@ import { StyledDatepickerContainer } from "../../utils/StyledComponents";
 import Datepicker from "../generics/datepicker/Datepicker";
 
 const GanttChartHandle = () => {
+  const currentDate = new Date();
+  const pastDate = new Date(currentDate);
+  pastDate.setDate(currentDate.getDate() - 7);
   const [multichains, setMultichains] = useState<string[]>([]);
   const [ganttstartTime, setGanttStartTime] = useState<Date | null>(
-    new Date(2024, 1, 7)
+    currentDate
   );
   const [startTime, setStartTime] = useState<any | null>("00:00:00");
   const [endTime, setEndTime] = useState<any | null>("23:59:59");
-  const [BenchstartDate, setBenchStartDate] = useState<Date | any>(
-    new Date(2024, 1, 1)
-  );
-  const [BenchendDate, setBenchEndDate] = useState<Date | any>(
-    new Date(2024, 1, 7)
-  );
+  const [BenchstartDate, setBenchStartDate] = useState<Date | any>(pastDate);
+  const [BenchendDate, setBenchEndDate] = useState<Date | any>(currentDate);
   const [filteredData, setFilteredData] = useState<any[]>([]);
   const [filter, setfilter] = useState(false);
   const handleStartTimeChange = (val: any | null) => {
@@ -69,7 +68,7 @@ const GanttChartHandle = () => {
       return false;
     }
   };
-  const [startDate, setStartDate] = useState<Date | null>(new Date(2024, 1, 7));
+  const [startDate, setStartDate] = useState<Date | null>(currentDate);
   const handleStartDateChange = (newDate: Date | null) => {
     setStartDate(newDate);
   };

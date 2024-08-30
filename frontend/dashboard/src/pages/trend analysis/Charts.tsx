@@ -63,42 +63,44 @@ const Charts: React.FC = () => {
   const handleTaskSelected = (id: number, key: string) => {
     setSelectedTaskValue({ id, key });
   };
-
+  const currentDate = new Date();
+  const pastDate = new Date(currentDate);
+  pastDate.setDate(currentDate.getDate() - 7);
   const [chainStartDate, setChainStartDate] = useState<Date | null>(
-    new Date(2024, 1, 1)
+    pastDate
   );
   const [chainEndDate, setChainEndDate] = useState<Date | null>(
-    new Date(2024, 1, 7)
+    currentDate
   );
   const [childTaskStartDate, setChildTaskStartDate] = useState<Date | null>(
-    new Date(2024, 1, 1)
+    pastDate
   );
   const [childTaskEndDate, setChildTaskEndDate] = useState<Date | null>(
-    new Date(2024, 1, 7)
+    currentDate
   );
   const [taskStartDate, setTaskStartDate] = useState<Date | null>(
-    new Date(2024, 1, 1)
+    pastDate
   );
   const [taskEndDate, setTaskEndDate] = useState<Date | null>(
-    new Date(2024, 1, 7)
+    currentDate
   );
   const [BenchstartDate, setBenchStartDate] = useState<Date | null>(
-    new Date(2024, 1, 1)
+    pastDate
   );
   const [BenchendDate, setBenchEndDate] = useState<Date | null>(
-    new Date(2024, 1, 7)
+    currentDate
   );
   const [BenchTaskstartDate, setBenchTaskStartDate] = useState<Date | null>(
-    new Date(2024, 1, 1)
+    pastDate
   );
   const [BenchTaskendDate, setBenchTaskEndDate] = useState<Date | null>(
-    new Date(2024, 1, 7)
+    currentDate
   );
   const [BenchChildstartDate, setBenchChildStartDate] = useState<Date | null>(
-    new Date(2024, 1, 1)
+    pastDate
   );
   const [BenchChildendDate, setBenchChildEndDate] = useState<Date | null>(
-    new Date(2024, 1, 7)
+    currentDate
   );
 
   const handleChainStartDateChange = (newDate: Date | null) => {

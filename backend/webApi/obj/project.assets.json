@@ -1169,11 +1169,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\srborawake\\Desktop\\Test3\\MonitoringDashboard\\backend\\WebApi\\WebApi.csproj",
+      "projectUniqueName": "C:\\Users\\srborawake\\Desktop\\Test2\\MonitoringDashboard\\backend\\WebApi\\WebApi.csproj",
       "projectName": "WebApi",
-      "projectPath": "C:\\Users\\srborawake\\Desktop\\Test3\\MonitoringDashboard\\backend\\WebApi\\WebApi.csproj",
+      "projectPath": "C:\\Users\\srborawake\\Desktop\\Test2\\MonitoringDashboard\\backend\\WebApi\\WebApi.csproj",
       "packagesPath": "C:\\Users\\srborawake\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\srborawake\\Desktop\\Test3\\MonitoringDashboard\\backend\\WebApi\\obj\\",
+      "outputPath": "C:\\Users\\srborawake\\Desktop\\Test2\\MonitoringDashboard\\backend\\WebApi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\srborawake\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -1188,14 +1188,14 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\srborawake\\Desktop\\Test3\\MonitoringDashboard\\backend\\application\\application.csproj": {
-              "projectPath": "C:\\Users\\srborawake\\Desktop\\Test3\\MonitoringDashboard\\backend\\application\\application.csproj"
+            "C:\\Users\\srborawake\\Desktop\\Test2\\MonitoringDashboard\\backend\\application\\application.csproj": {
+              "projectPath": "C:\\Users\\srborawake\\Desktop\\Test2\\MonitoringDashboard\\backend\\application\\application.csproj"
             },
-            "C:\\Users\\srborawake\\Desktop\\Test3\\MonitoringDashboard\\backend\\domain\\domain.csproj": {
-              "projectPath": "C:\\Users\\srborawake\\Desktop\\Test3\\MonitoringDashboard\\backend\\domain\\domain.csproj"
+            "C:\\Users\\srborawake\\Desktop\\Test2\\MonitoringDashboard\\backend\\domain\\domain.csproj": {
+              "projectPath": "C:\\Users\\srborawake\\Desktop\\Test2\\MonitoringDashboard\\backend\\domain\\domain.csproj"
             },
-            "C:\\Users\\srborawake\\Desktop\\Test3\\MonitoringDashboard\\backend\\infrastructure\\infrastructure.csproj": {
-              "projectPath": "C:\\Users\\srborawake\\Desktop\\Test3\\MonitoringDashboard\\backend\\infrastructure\\infrastructure.csproj"
+            "C:\\Users\\srborawake\\Desktop\\Test2\\MonitoringDashboard\\backend\\infrastructure\\infrastructure.csproj": {
+              "projectPath": "C:\\Users\\srborawake\\Desktop\\Test2\\MonitoringDashboard\\backend\\infrastructure\\infrastructure.csproj"
             }
           }
         }

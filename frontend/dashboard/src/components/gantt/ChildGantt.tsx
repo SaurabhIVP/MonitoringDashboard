@@ -67,11 +67,14 @@ const ChildGantt: React.FC<GanttProps> = ({
   const [endTime, setEndTime] = React.useState<any | null>(
     `${date}T${TimeFormatter(maxTime)}`
   );
+  const currentDate = new Date();
+  const pastDate = new Date(currentDate);
+  pastDate.setDate(currentDate.getDate() - 7);
   const [BenchstartDate, setBenchStartDate] = React.useState<Date | null>(
-    new Date(2024, 0, 1)
+    pastDate
   );
   const [BenchendDate, setBenchEndDate] = React.useState<Date | null>(
-    new Date(2024, 0, 24)
+    currentDate
   );
   const handleStartTimeChange = (val: any | null) => {
     setStartTime(new Date(`${date}T${val}`));

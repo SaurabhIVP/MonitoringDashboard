@@ -13,7 +13,7 @@ function NumberField({ name, value, onChange }: Props) {
     <>
       <form
         noValidate
-        style={{width:'120px',paddingTop:'0px',marginTop:'0px'}}
+        style={{width:'135px',paddingTop:'0px',marginTop:'0px'}}
         className="form"
       >
         <TextField

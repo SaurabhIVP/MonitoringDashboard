@@ -32,7 +32,7 @@ import {
   SecondaryColor,
 } from "../../utils/Colors";
 import NumberField from "../generics/NumberField";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Dropdown from "../generics/Dropdown";
 import { FilterButton } from "../generics/FilterButton";
 import Alert from "@mui/material/Alert";
@@ -97,18 +97,20 @@ const GridFilter: React.FC<ChartFilterProps> = ({
   // const [isPm,setIsPm]=useState<string>("false");
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
-
+  const currentDate = new Date();
+  const pastDate = new Date(currentDate);
+  pastDate.setDate(currentDate.getDate() - 7);
   const [startDate, setStartDate] = React.useState<Date | null>(
-    new Date(2024, 1, 7)
+    pastDate
   );
   const [EndDate, setEndDate] = React.useState<Date | null>(
-    new Date(2024, 1, 7)
+    currentDate
   );
   const [BenchstartDate, setBenchStartDate] = React.useState<Date | null>(
-    new Date(2024, 1, 1)
+    pastDate
   );
   const [BenchendDate, setBenchEndDate] = React.useState<Date | null>(
-    new Date(2024, 1, 7)
+    currentDate
   );
 
   const handleEndDateChange = (newDate: Date | null) => {
@@ -153,10 +155,10 @@ const GridFilter: React.FC<ChartFilterProps> = ({
       BenchendDate !== null &&
       BenchendDate >= BenchstartDate);
   const resetButtonHandler = () => {
-    setStartDate(new Date(2024, 0, 10));
-    setEndDate(new Date(2024, 0, 10));
-    setBenchStartDate(new Date(2024, 1, 1));
-    setBenchEndDate(new Date(2024, 1, 7));
+    // setStartDate(pastDate);
+    // setEndDate(currentDate);
+    setBenchStartDate(pastDate);
+    setBenchEndDate(currentDate);
     setKey(key === "1" ? "2" : "1");
     setAge("30");
     setBenchmarkCompute("Average");
@@ -171,6 +173,7 @@ const GridFilter: React.FC<ChartFilterProps> = ({
       return false;
     }
   };
+
   const buttonHandler = () => {
     const id = selectedChainValueRef.current?.id;
     const key = selectedChainValueRef.current?.key;
@@ -185,8 +188,8 @@ const GridFilter: React.FC<ChartFilterProps> = ({
     if (age == "20") {
       onChainSelected({ id: 1, key: taskKey });
     }
-    onStartDateSelected(startDate);
-    onEndDateSelected(EndDate);
+    // onStartDateSelected(startDate);
+    // onEndDateSelected(EndDate);
     onBenchStartDateSelected(BenchstartDate);
     onBenchEndDateSelected(BenchendDate);
     onCheck(age);
@@ -196,11 +199,28 @@ const GridFilter: React.FC<ChartFilterProps> = ({
     // console.log(isPm);
     handleClose();
   };
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        buttonHandler();
+        
+      }
+    };
 
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [buttonHandler]);
   return (
-    <div style={{padding:'0px'}}>
-      <IconButton onClick={handleClick} sx={{padding:'0px'}}>
-        <TuneIcon fontSize={'small'} sx={{padding:'0px',color:SecondaryColor,margin:'0px'}}></TuneIcon>
+    <div style={{ padding: "0px" }}>
+      <IconButton onClick={handleClick} sx={{ padding: "0px" }}>
+        <TuneIcon
+          fontSize={"small"}
+          sx={{ padding: "0px", color: SecondaryColor, margin: "0px" }}
+        ></TuneIcon>
       </IconButton>
       <Popover
         keepMounted={true}
@@ -229,11 +249,11 @@ const GridFilter: React.FC<ChartFilterProps> = ({
                 right: "10px",
               }}
             >
-            <ResetButton onClick={resetButtonHandler}></ResetButton>
-              
+              <ResetButton onClick={resetButtonHandler}></ResetButton>
+
               <CloseButton onClick={handleClose}></CloseButton>
             </div>
-            <div style={{ display: "flex", marginTop: "10px" }}>
+            <div style={{ display: "flex", marginTop: "20px" }}>
               <div
                 style={{
                   fontSize: NormalFontSize,
@@ -247,13 +267,14 @@ const GridFilter: React.FC<ChartFilterProps> = ({
                 Select Criteria:{" "}
               </div>
               <FormControl
-                style={{ width: "150px", marginRight: "10px" }}
                 variant="standard"
                 sx={{
-                  ".css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input":
-                    {
-                      fontSize: NormalFontSize,
-                    },
+                  "& .MuiSelect-select": {
+                    fontSize: NormalFontSize,
+                    color: SecondaryColor,
+                    width: "160px",
+                    paddingLeft: "0px",
+                  },
                 }}
               >
                 <Select
@@ -263,13 +284,22 @@ const GridFilter: React.FC<ChartFilterProps> = ({
                   label="Select Filter Criteria"
                   onChange={handleChange}
                 >
-                  <MenuItem value={10} sx={{ fontSize: NormalFontSize }}>
+                  <MenuItem
+                    value={10}
+                    sx={{ fontSize: NormalFontSize, color: SecondaryColor }}
+                  >
                     Filter By Chain
                   </MenuItem>
-                  <MenuItem value={20} sx={{ fontSize: NormalFontSize }}>
+                  <MenuItem
+                    value={20}
+                    sx={{ fontSize: NormalFontSize, color: SecondaryColor }}
+                  >
                     Filter By Task
                   </MenuItem>
-                  <MenuItem value={30} sx={{ fontSize: NormalFontSize }}>
+                  <MenuItem
+                    value={30}
+                    sx={{ fontSize: NormalFontSize, color: SecondaryColor }}
+                  >
                     All Chains & Tasks
                   </MenuItem>
                 </Select>
@@ -277,17 +307,24 @@ const GridFilter: React.FC<ChartFilterProps> = ({
               <div
                 style={{
                   fontSize: NormalFontSize,
-                  marginRight: "5px",
-                  width: "150px",
-                  marginTop: "9px",
+                  // marginRight: "5px",
+                  width: "135px",
+                  // marginTop: "9px",
                   fontFamily: "roboto",
                   color: SecondaryColor,
-                  fontWeight: 500,marginLeft:'10px'
+                  fontWeight: 500,
+                  paddingLeft: "15px",
                 }}
               >
                 Benchmark Compute Type:{" "}
               </div>
-              <div style={{ marginRight: "55px" }}>
+              <div
+                style={{
+                  marginRight: "35px",
+                  marginLeft: "30px",
+                  marginTop: "6px",
+                }}
+              >
                 <Dropdown
                   name="Benchmark Compute Type"
                   benchmarkComputeOptions={benchmarkComputeOptions}
@@ -299,7 +336,13 @@ const GridFilter: React.FC<ChartFilterProps> = ({
 
           <div>
             {age == "20" ? (
-              <div style={{ paddingTop: "10px", display: "flex",paddingBottom: "10px", }}>
+              <div
+                style={{
+                  paddingTop: "10px",
+                  display: "flex",
+                  paddingBottom: "10px",
+                }}
+              >
                 <div
                   style={{
                     fontSize: NormalFontSize,
@@ -307,7 +350,7 @@ const GridFilter: React.FC<ChartFilterProps> = ({
                     fontFamily: "roboto",
                     color: SecondaryColor,
                     fontWeight: 500,
-                    width: "120px",
+                    width: "110px",
                   }}
                 >
                   Select Task:{" "}
@@ -337,7 +380,7 @@ const GridFilter: React.FC<ChartFilterProps> = ({
                     fontFamily: "roboto",
                     color: SecondaryColor,
                     fontWeight: 500,
-                    width: "120px",
+                    width: "110px",
                   }}
                 >
                   Select Chain:{" "}
@@ -356,7 +399,9 @@ const GridFilter: React.FC<ChartFilterProps> = ({
             )}
           </div>
 
-          <StyledDatepickerContainer style={{ paddingBottom: "25px" }}>
+          <StyledDatepickerContainer
+            style={{ paddingBottom: "25px", paddingTop: "10px" }}
+          >
             <div
               style={{
                 fontSize: NormalFontSize,
@@ -366,7 +411,7 @@ const GridFilter: React.FC<ChartFilterProps> = ({
                 fontFamily: "roboto",
                 color: SecondaryColor,
                 fontWeight: 500,
-                width: "114px",
+                width: "103px",
               }}
             >
               Benchmark Start Date:{" "}
@@ -402,8 +447,9 @@ const GridFilter: React.FC<ChartFilterProps> = ({
               />
             </div>
           </StyledDatepickerContainer>
-          <StyledDatepickerContainer style={{ marginBottom: "0px" }}>
-          </StyledDatepickerContainer>
+          <StyledDatepickerContainer
+            style={{ marginBottom: "0px" }}
+          ></StyledDatepickerContainer>
           <div
             style={{
               position: "absolute",

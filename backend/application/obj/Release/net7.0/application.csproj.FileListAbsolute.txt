@@ -1,0 +1,17 @@
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\application\bin\Release\net7.0\application.deps.json
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\application\bin\Release\net7.0\application.dll
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\application\bin\Release\net7.0\application.pdb
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\application\bin\Release\net7.0\domain.dll
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\application\bin\Release\net7.0\infrastructure.dll
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\application\bin\Release\net7.0\domain.pdb
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\application\bin\Release\net7.0\infrastructure.pdb
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\application\obj\Release\net7.0\application.csproj.AssemblyReference.cache
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\application\obj\Release\net7.0\application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\application\obj\Release\net7.0\application.AssemblyInfoInputs.cache
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\application\obj\Release\net7.0\application.AssemblyInfo.cs
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\application\obj\Release\net7.0\application.csproj.CoreCompileInputs.cache
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\application\obj\Release\net7.0\application.csproj.CopyComplete
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\application\obj\Release\net7.0\application.dll
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\application\obj\Release\net7.0\refint\application.dll
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\application\obj\Release\net7.0\application.pdb
+C:\Users\srborawake\Desktop\Test2\MonitoringDashboard\backend\application\obj\Release\net7.0\ref\application.dll

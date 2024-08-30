@@ -44,7 +44,9 @@ const GanttChart: React.FC<ganttProps> = ({
   is_pm,
 }) => {
   let myChart: any | null = null;
-
+  const currentDate = new Date();
+  const pastDate = new Date(currentDate);
+  pastDate.setDate(currentDate.getDate() - 7);
   let myChart1: any | null = null;
   const [newdata, setnewData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -124,8 +126,8 @@ const GanttChart: React.FC<ganttProps> = ({
       .filter((value, index, self) => self.indexOf(value) === index);
     setlength(templength.length);
     const backgroundColors = processedData.map((item) => {
-      if (item.status === "failed") {
-        return "blue";
+      if (item.status === "FAILED") {
+        return "gray";
       } else if (item.performance >= 0 && item.performance <= 10) {
         return "lightgreen";
       } else if (item.performance > 10) {
@@ -291,6 +293,7 @@ const GanttChart: React.FC<ganttProps> = ({
                 newLine.push(`End Time: ${endTime}`);
                 newLine.push(`Expected End Time: ${expTime}`);
                 newLine.push(`Performance % : ${dataItem.performance}`);
+                newLine.push(`Status  : ${dataItem.status}`);
                 return newLine;
               },
             },
