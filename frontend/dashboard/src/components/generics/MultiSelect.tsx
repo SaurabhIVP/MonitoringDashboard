@@ -47,15 +47,18 @@ const MultiSelect: React.FC<SearchBarProps> = ({
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
   return (
-    <Stack spacing={2} width={"400px"} sx={{marginLeft:'10px'}}>
+    <Stack spacing={2} width={"425px"} sx={{ marginLeft: "10px" }}>
       {data && (
         <Autocomplete
           multiple
-          sx={{ fontSize: NormalFontSize,"& .MuiAutocomplete-tag": {
-            fontSize:'10px',
-            color:SecondaryColor,
-            fontFamily:'roboto' // Change this to your desired color
-          }, }}
+          sx={{
+            fontSize: NormalFontSize,
+            "& .MuiAutocomplete-tag": {
+              fontSize: "10px",
+              color: SecondaryColor,
+              fontFamily: "roboto", // Change this to your desired color
+            },
+          }}
           options={data.map((item) => item[NameParam])}
           disableCloseOnSelect
           key={key}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { throttle } from "lodash";
 import {
   Box,
@@ -15,6 +15,12 @@ import {
   Paper,
   Select,
   SelectChangeEvent,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Typography,
   useMediaQuery,
 } from "@mui/material";
@@ -51,12 +57,21 @@ import { stubString } from "lodash";
 import { TableLabels } from "./TableContents";
 import { StyledDatepickerContainer } from "../../utils/StyledComponents";
 import Datepicker from "../generics/datepicker/Datepicker";
+import GetPageSizeBasedOnScreenHeight from "../../utils/GetPageSizeBasedOnScreenHeight";
+import NestedData from "./NestedData";
+import DetailPanel from "./DetailPanel";
 interface ExampleProps {
   chainDetailsApi: (params: any) => Promise<any[]>;
   taskDetailsApi: (params: any) => Promise<any[]>;
   chainDetailsbyTaskApi: (params: any) => Promise<any[]>;
 }
-
+interface RowData {
+  original: {
+    id: string;
+    start_time: string;
+    end_time: string;
+  };
+}
 const GridTable: React.FC<ExampleProps> = ({
   chainDetailsApi,
   taskDetailsApi,
@@ -66,20 +81,18 @@ const GridTable: React.FC<ExampleProps> = ({
     id: number;
     [key: string]: any;
   } | null>(null);
-  
+
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 15, //customize the default page size
   });
-
-  const [startDate, setStartDate] = useState<Date | null>(new Date(2024, 1, 7));
-  const [EndDate, setEndDate] = useState<Date | null>(new Date(2024, 1, 7));
-  const [BenchstartDate, setBenchStartDate] = useState<Date | null>(
-    new Date(2024, 1, 1)
-  );
-  const [BenchendDate, setBenchEndDate] = useState<Date | null>(
-    new Date(2024, 1, 7)
-  );
+  const currentDate = new Date();
+  const pastDate = new Date(currentDate);
+  pastDate.setDate(currentDate.getDate() - 7);
+  const [startDate, setStartDate] = useState<Date | null>(currentDate);
+  const [EndDate, setEndDate] = useState<Date | null>(currentDate);
+  const [BenchstartDate, setBenchStartDate] = useState<Date | null>(pastDate);
+  const [BenchendDate, setBenchEndDate] = useState<Date | null>(currentDate);
   const isEndDateValid =
     startDate === null ||
     EndDate === null ||
@@ -88,10 +101,52 @@ const GridTable: React.FC<ExampleProps> = ({
   const [deviationPercentage, setDeviationPercentage] = useState<string | null>(
     "0"
   );
+  interface Task {
+    name: string; // Corresponds to "name"
+    start_time: string; // Corresponds to "start_time"
+    end_time: string; // Corresponds to "end_time"
+    status: string; // Corresponds to "status"
+    total_times: string; // Corresponds to "total_times"
+    avg_total_time: string; // Corresponds to "avg_total_time"
+    deviation_in_time: string; // Corresponds to "deviation_in_time"
+    performance: string; // Corresponds to "performance"
+  }
   const handleDeviationChange = (value: string | null) => {
     setDeviationPercentage(value);
   };
   const [alert, setAlert] = useState<boolean>(false);
+  const [expandedRowData, setExpandedRowData] = useState<
+    Record<string, Task[]>
+  >({});
+  const [loadingRowId, setLoadingRowId] = useState<string | null>(null);
+  const [errorRowId, setErrorRowId] = useState<string | null>(null);
+
+  const fetchTasks = async (chainId: string, row: any) => {
+    setLoadingRowId(chainId);
+    setErrorRowId(null);
+    try {
+      const tasksResponse = await taskDetailsApi({
+        chain_id: row.original.id,
+        startTime: row.original.start_time,
+        endTime: row.original.end_time,
+        benchStartDate: BenchstartDate,
+        benchEndDate: BenchendDate,
+        benchmarkCompute: "Average",
+        deviationPercentage: "0",
+        is_pm: getboolean(pge),
+      });
+
+      setExpandedRowData((prev) => ({
+        ...prev,
+        [chainId]: tasksResponse || [],
+      }));
+    } catch (error) {
+      console.error("Error fetching task details:", error);
+      setErrorRowId(chainId);
+    } finally {
+      setLoadingRowId(null);
+    }
+  };
 
   const handleStartDateChange = (newDate: Date | null) => {
     setStartDate(newDate);
@@ -139,6 +194,46 @@ const GridTable: React.FC<ExampleProps> = ({
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   // 1000 milliseconds (1 second) throttle
+  const calculatePageSize = () => {
+    const rowHeight = 40; // Height of each row, adjust as needed
+    const tableHeaderHeight = 64; // Height of table header, adjust as needed
+    const viewportHeight = window.innerHeight;
+    const maxHeight = viewportHeight - tableHeaderHeight; // Available height for table rows
+
+    // Calculate the number of rows that can fit in the available height
+    const calculatedPageSize = Math.floor(maxHeight / rowHeight);
+
+    // Define the set of multiples
+    const multiples = [5, 10, 15, 20, 25, 30, 50, 100];
+
+    // Find the nearest multiple
+    const nearestPageSize = multiples.reduce((prev, curr) =>
+      Math.abs(curr - calculatedPageSize) < Math.abs(prev - calculatedPageSize)
+        ? curr
+        : prev
+    );
+
+    return nearestPageSize;
+  };
+  var check = false;
+
+  // Update page size on window resize
+  const handleResize = useCallback(
+    throttle(() => {
+      setPagination((prev) => ({
+        ...prev,
+        pageSize: calculatePageSize(),
+      }));
+    }, 500), // Throttle resize event
+    []
+  );
+
+  useEffect(() => {
+    handleResize(); // Set initial page size
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, [handleResize]);
 
   const fetchData = async () => {
     try {
@@ -157,17 +252,7 @@ const GridTable: React.FC<ExampleProps> = ({
         });
         const chainsWithData = await Promise.all(
           response.map(async (chain: any) => {
-            const tasksResponse = await taskDetailsApi({
-              chain_id: chain.id,
-              startTime: chain.start_time,
-              endTime: chain.end_time,
-              benchStartDate: BenchstartDate,
-              benchEndDate: BenchendDate,
-              benchmarkCompute: "Average",
-              deviationPercentage: "0",
-              is_pm: getboolean(pge),
-            });
-            chain.tasks = tasksResponse || [];
+            chain.tasks = [];
             return { ...chain, showTasks: false }; // Initialize showTasks property
           })
         );
@@ -186,17 +271,7 @@ const GridTable: React.FC<ExampleProps> = ({
         });
         const chainsWithData = await Promise.all(
           response.map(async (chain: any) => {
-            const tasksResponse = await taskDetailsApi({
-              chain_id: chain.id,
-              startTime: chain.start_time,
-              endTime: chain.end_time,
-              benchStartDate: BenchstartDate,
-              benchEndDate: BenchendDate,
-              benchmarkCompute: "Average",
-              deviationPercentage: "0",
-              is_pm: getboolean(pge),
-            });
-            chain.tasks = tasksResponse || [];
+            chain.tasks = [];
             return { ...chain, showTasks: false }; // Initialize showTasks property
           })
         );
@@ -215,17 +290,7 @@ const GridTable: React.FC<ExampleProps> = ({
         });
         const chainsWithData = await Promise.all(
           response.map(async (chain: any) => {
-            const tasksResponse = await taskDetailsApi({
-              chain_id: chain.id,
-              startTime: chain.start_time,
-              endTime: chain.end_time,
-              benchStartDate: BenchstartDate,
-              benchEndDate: BenchendDate,
-              benchmarkCompute: "Average",
-              deviationPercentage: "0",
-              is_pm: getboolean(pge),
-            });
-            chain.tasks = tasksResponse || [];
+            chain.tasks = [];
             return { ...chain, showTasks: false }; // Initialize showTasks property
           })
         );
@@ -258,8 +323,11 @@ const GridTable: React.FC<ExampleProps> = ({
       TableLabels.map(([acc, head, is_deviation, is_name, al]) => ({
         muiTableHeadCellProps: ({ column }) => ({
           align: "left",
-          size: "small",
+          size: "medium",
           sx: {
+            "& .MuiBox-root ": {
+              color: SecondaryColor,
+            },
             ".css-fv3lde": {
               fontSize: NormalFontSize,
             },
@@ -304,6 +372,12 @@ const GridTable: React.FC<ExampleProps> = ({
 
           style: {
             fontFamily: "roboto",
+
+            maxWidth: "100%", // Ensure the cell does not overflow
+            overflow: "hidden", // Hide overflow content
+            textOverflow: "ellipsis", // Ellipsis for overflow text
+            whiteSpace: "nowrap", // Prevent text wrapping
+
             fontSize: NormalFontSize,
             border: "none",
             marginLeft: "0px",
@@ -312,7 +386,7 @@ const GridTable: React.FC<ExampleProps> = ({
             },
           },
         },
-        size: 20,
+
         accessorKey: acc.toString(),
         filterFn: "contains",
         columnFilterModeOptions: is_name
@@ -334,54 +408,14 @@ const GridTable: React.FC<ExampleProps> = ({
             {is_name ? (
               <div
                 style={{
-                  // display: "flex",
-                  // alignItems: "left",
                   color: "black",
-                  // textAlign: "left",
-                  width: "300px",
-                 
+                  fontFamily: "roboto",
+                  fontWeight: row.getIsExpanded() ? "bold" : "normal",
+                  marginLeft: "20px",
+                  fontSize: NormalFontSize,
                 }}
               >
-                {row.getCanExpand() ? (
-                  <Button
-                    size="small"
-                    onClick={() => {
-                      row.toggleExpanded();
-                    }}
-                    startIcon={
-                      row.getIsExpanded() ? <ExpandLess /> : <ExpandMore />
-                    }
-                    style={{
-                      textTransform: "none",
-                      textAlign: "left",
-                      color: "black",
-                      fontFamily: "roboto",
-                      fontWeight: row.getIsExpanded() ? "bold" : "normal",
-                      fontSize: NormalFontSize,
-                      whiteSpace:'nowrap',
-                      overflow:'hidden',
-                      textOverflow:'ellipsis',
-                    }}
-                  >
-                    {cell.getValue<string>()}
-                  </Button>
-                ) : (
-                  <span
-                    style={{
-                      alignItems: "left",
-                      textAlign: "left",
-                      marginLeft: "30px",
-                      fontFamily: "roboto",
-                      fontSize: NormalFontSize,
-                      fontWeight: row.getIsExpanded() ? "bold" : "normal",
-                      whiteSpace:'nowrap',
-                      overflow:'hidden',
-                      textOverflow:'ellipsis',
-                    }}
-                  >
-                    {cell.getValue<string>()}
-                  </span>
-                )}
+                {cell.getValue<string>()}
               </div>
             ) : is_deviation ? (
               <div>
@@ -392,9 +426,12 @@ const GridTable: React.FC<ExampleProps> = ({
                     backgroundColor:
                       cell.getValue<string>() < "0"
                         ? theme.palette.error.dark
+                        : cell.getValue<string>() >= "0" &&
+                          cell.getValue<string>() <= "10"
+                        ? "lightgreen"
                         : cell.getValue<string>() >= "-10" &&
-                          cell.getValue<string>() < "10"
-                        ? theme.palette.warning.dark
+                          cell.getValue<string>() < "0"
+                        ? "coral"
                         : theme.palette.success.dark,
                     borderRadius: "10%",
                     // color: "#fff",
@@ -483,7 +520,7 @@ const GridTable: React.FC<ExampleProps> = ({
         },
       },
     },
-    
+
     muiTablePaperProps: {
       elevation: 0,
     },
@@ -524,7 +561,6 @@ const GridTable: React.FC<ExampleProps> = ({
     },
     muiDetailPanelProps: { style: { color: "black" } },
     maxLeafRowFilterDepth: 0,
-    onPaginationChange:setPagination,
     muiFilterTextFieldProps: {
       sx: {
         ".css-929hxt-MuiInputBase-input-MuiInput-input": {
@@ -533,30 +569,41 @@ const GridTable: React.FC<ExampleProps> = ({
       },
     },
     enableStickyHeader: true,
+    onPaginationChange: setPagination,
     state: { isLoading: loading, pagination, density: "compact" },
-    getSubRows: (row) => row.tasks || [],
+    getSubRows: (row: any) => row.tasks || [],
     columnFilterDisplayMode: "popover",
     paginateExpandedRows: false,
     enableToolbarInternalActions: false,
+    renderDetailPanel: ({ row }: any) => {
+      return (
+        <DetailPanel
+          row={row}
+          expandedRowData={expandedRowData}
+          setExpandedRowData={setExpandedRowData}
+          fetchTasks={fetchTasks} // Passing the fetchTasks function as a prop
+        />
+      );
+    },
+
     renderBottomToolbar: ({ table }) => (
       <Box sx={{ paddingBottom: "0px" }}>
         <Box
           sx={{
             display: "flex",
             justifyContent: "flex-end",
-            ".css-uqq6zz-MuiFormLabel-root-MuiInputLabel-root ": {
+            "& .MuiFormLabel-root": {
               fontSize: "13px",
               fontWeight: "normal",
               fontFamily: "roboto",
             },
-            ".css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.MuiSelect-select":
-              {
-                fontSize: "13px",
-                fontWeight: "normal",
-                fontFamily: "roboto",
-                marginTop: "2px",
-              },
-            ".css-1f2oslk-MuiTypography-root": {
+            "& .MuiSelect-select": {
+              fontSize: "13px",
+              fontWeight: "normal",
+              fontFamily: "roboto",
+              marginTop: "2px",
+            },
+            "& .MuiTypography-root": {
               fontSize: "13px",
               fontWeight: "normal",
               fontFamily: "roboto",
@@ -570,7 +617,6 @@ const GridTable: React.FC<ExampleProps> = ({
         </Box>
       </Box>
     ),
-    
 
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
@@ -588,153 +634,151 @@ const GridTable: React.FC<ExampleProps> = ({
             marginRight: "0%",
             width: "100%",
             paddingTop: "0px",
+            justifyContent: "space-between",
           }}
         >
-          <h2
-            style={{
-              color: SecondaryColor,
-              fontFamily: "roboto",
-              fontSize: "17px",
-              // marginTop: "15px",
-              marginRight: "30%",
-              // fontStyle: "italic",
-              maxWidth: "200px",
-              flex: 1,
-            }}
-          >
-            Chain - Task Status Table
-          </h2>
-          <div
-            style={{
-              fontSize: "13px",
-              marginRight: "13px",
-              marginLeft: "10%",
-              marginTop: "18px",
-              fontFamily: "roboto",
-              color: SecondaryColor,
-              fontWeight: 500,
-            }}
-          >
-            System:
-          </div>
-          <FormControl
-            variant="standard"
-            sx={{
-              width: "100px",
-              marginTop: "13px",
+          <div>
+            <h2
+              style={{
+                color: SecondaryColor,
+                fontFamily: "roboto",
+                fontSize: "17px",
+                // marginTop: "15px",
 
-              ".css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input":
-                {
-                  fontSize: "13px",
-                  paddingBottom: "0px",
-                  marginTop: "0px",
-                  color: SecondaryColor,
-                },
-            }}
-          >
-            <Select
-              labelId="demo-simple-select-standard-label"
-              id="demo-simple-select-standard"
-              value={pge}
-              label="System"
-              onChange={handleChange}
+                // fontStyle: "italic",
+                maxWidth: "200px",
+                flex: 1,
+              }}
+            >
+              Chain - Task Status Table
+            </h2>
+          </div>
+          <div style={{ display: "flex" }}>
+            <div
+              style={{
+                fontSize: "13px",
+                marginRight: "13px",
+
+                marginTop: "13px",
+                fontFamily: "roboto",
+                color: SecondaryColor,
+                fontWeight: 500,
+              }}
+            >
+              System:
+            </div>
+            <FormControl
+              variant="standard"
               sx={{
-                fontSize: NormalFontSize,
+                width: "140px",
+                marginTop: "8px",
               }}
             >
-              <MenuItem value={"false"} sx={{ fontSize: NormalFontSize }}>
-                SecMaster
-              </MenuItem>
-              <MenuItem value={"true"} sx={{ fontSize: NormalFontSize }}>
-                PriceMaster
-              </MenuItem>
-            </Select>
-          </FormControl>
-          <StyledDatepickerContainer
-            style={{ marginLeft: "2%", marginBottom: 0, marginRight: "0%" }}
-          >
-            <div
-              style={{
-                fontSize: "13px",
-                marginRight: "5px",
-                marginTop: "19px",
-                fontFamily: "roboto",
-                color: SecondaryColor,
-                fontWeight: 500,
-                width: "100px",
-              }}
-            >
-              Start Date:
-            </div>
-            <div
-              style={{
-                marginRight: "2%",
-                marginBottom: "0px",
-                marginTop: "11px",
-              }}
-            >
-              <Datepicker
-                name="Task Start Date"
-                selectedDate={startDate}
-                onDateChange={handleStartDateChange}
-                flag={isEndDateValid}
-              />
-            </div>
-            <div
-              style={{
-                fontSize: "13px",
-                marginRight: "2%",
-                marginTop: "19px",
-                fontFamily: "roboto",
-                color: SecondaryColor,
-                fontWeight: 500,
-                width: "80px",
-                marginLeft: "5%",
-              }}
-            >
-              End Date:
-            </div>
-            <div style={{ marginBottom: "0px", marginTop: "11px" }}>
-              <Datepicker
-                name="Task End Date"
-                selectedDate={EndDate}
-                onDateChange={handleEndDateChange}
-                flag={isEndDateValid}
-              />
-            </div>
-          </StyledDatepickerContainer>
-          <div style={{ marginTop: "10px", paddingLeft: "3%" }}>
-            <CSVLink
-              data={data.map((row) => ({
-                "Chain ID/Task ID": row.id,
-                "Chain Name/Task Name": row.name,
-                "Start Time": row.start_time,
-                "End Time": row.end_time,
-                "Total Time": row.total_times,
-                "Benchmark Time": row.avg_total_time,
-                "Deviation %": row.performance,
-              }))}
-              filename={"data.csv"}
-              onClick={() => handleExportRows(data)}
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <FileDownloadIcon
+              <Select
+                labelId="demo-simple-select-standard-label"
+                id="demo-simple-select-standard"
+                value={pge}
+                label="System"
+                onChange={handleChange}
                 sx={{
+                  fontSize: NormalFontSize,
                   color: SecondaryColor,
-                  fontSize: "24px",
-                  marginRight: "8px",
-                  verticalAlign: "middle",
-                  transition: "transform 0.3s ease-in-out",
-                  "&:hover": {
-                    transform: "scale(1.2)",
-                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-                  },
+                  paddingTop: "1px",
                 }}
-              />
-            </CSVLink>
+              >
+                <MenuItem value={"false"} sx={{ fontSize: NormalFontSize }}>
+                  SecMaster
+                </MenuItem>
+                <MenuItem value={"true"} sx={{ fontSize: NormalFontSize }}>
+                  PriceMaster
+                </MenuItem>
+              </Select>
+            </FormControl>
+            <StyledDatepickerContainer
+              style={{ marginLeft: "2%", marginBottom: 0, marginRight: "0%" }}
+            >
+              <div
+                style={{
+                  fontSize: "13px",
+                  marginRight: "5px",
+                  marginTop: "13px",
+                  fontFamily: "roboto",
+                  color: SecondaryColor,
+                  fontWeight: 500,
+                  width: "100px",
+                }}
+              >
+                Start Date:
+              </div>
+              <div
+                style={{
+                  marginRight: "2%",
+                  marginBottom: "0px",
+                  marginTop: "13px",
+                }}
+              >
+                <Datepicker
+                  name="Task Start Date"
+                  selectedDate={startDate}
+                  onDateChange={handleStartDateChange}
+                  flag={isEndDateValid}
+                />
+              </div>
+              <div
+                style={{
+                  fontSize: "13px",
+                  marginRight: "2%",
+                  marginTop: "13px",
+                  fontFamily: "roboto",
+                  color: SecondaryColor,
+                  fontWeight: 500,
+                  width: "80px",
+                  marginLeft: "5%",
+                }}
+              >
+                End Date:
+              </div>
+              <div style={{ marginBottom: "0px", marginTop: "13px" }}>
+                <Datepicker
+                  name="Task End Date"
+                  selectedDate={EndDate}
+                  onDateChange={handleEndDateChange}
+                  flag={isEndDateValid}
+                />
+              </div>
+            </StyledDatepickerContainer>
+            <div style={{ marginTop: "10px", paddingLeft: "3%" }}>
+              <CSVLink
+                data={data.map((row) => ({
+                  "Chain ID/Task ID": row.id,
+                  "Chain Name/Task Name": row.name,
+                  "Start Time": row.start_time,
+                  "End Time": row.end_time,
+                  "Total Time": row.total_times,
+                  "Benchmark Time": row.avg_total_time,
+                  "Deviation %": row.performance,
+                }))}
+                filename={"data.csv"}
+                onClick={() => handleExportRows(data)}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <FileDownloadIcon
+                  sx={{
+                    color: SecondaryColor,
+                    fontSize: "24px",
+                    verticalAlign: "middle",
+                    transition: "transform 0.3s ease-in-out",
+                    "&:hover": {
+                      transform: "scale(1.2)",
+                      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+                    },
+                  }}
+                />
+              </CSVLink>
+            </div>
           </div>
         </div>
-        <Card sx={{padding:'3px',backgroundColor:PrimaryColor}}>
+        <Card sx={{ padding: "3px", backgroundColor: PrimaryColor }}>
           <div
             style={{
               display: "flex",
@@ -746,7 +790,7 @@ const GridTable: React.FC<ExampleProps> = ({
               color: "#404040",
             }}
           >
-            <div style={{ marginTop: "0px",marginLeft:'5px' }}>
+            <div style={{ marginTop: "0px", marginLeft: "5px" }}>
               {pge == "false" ? (
                 <GridFilter
                   onChainSelected={handleChainSelected}
@@ -846,14 +890,13 @@ const GridTable: React.FC<ExampleProps> = ({
     <div>
       <div
         style={{
-          height: "auto",
-          position: "relative",
-          paddingLeft: "10px",
-          paddingRight: "10px",
+          display: "flex",
+          flexDirection: "column",
+          overflowX: "auto",
         }}
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <MaterialReactTable table={table} />
+          <MaterialReactTable table={table as any} />
         </LocalizationProvider>
       </div>
     </div>

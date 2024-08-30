@@ -28,7 +28,7 @@ var host = Host.CreateDefaultBuilder(args)
             services.AddSwaggerGen();
             services.AddCors(p => p.AddPolicy("corspolicy", build =>
             {
-                build.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
+                build.WithOrigins("http://localhost:88").AllowAnyMethod().AllowAnyHeader();
             }));
         });
 
@@ -42,7 +42,7 @@ var host = Host.CreateDefaultBuilder(args)
 
             app.UseRouting(); // Ensure this is before UseEndpoints
             app.UseCors("corspolicy");
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

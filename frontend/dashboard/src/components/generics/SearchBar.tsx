@@ -63,19 +63,26 @@ const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <>
       <div onClick={handleClick} onKeyDown={handleClick}>
-        <Stack spacing={2} width={"375px"} >
+        <Stack spacing={2} width={"405px"}>
           {data && (
             <Autocomplete
-              sx={{fontSize:NormalFontSize}}
+              sx={{ fontSize: NormalFontSize }}
               key={key} // Use key for re-rendering
               options={data}
-              
               getOptionLabel={(option) => option[nameParam]}
               isOptionEqualToValue={(option, value) =>
                 option[nameParam] === value[nameParam]
               }
-              
-              renderInput={(params) => <TextField {...params}  variant="standard" inputProps = {{...params.inputProps, style: { fontSize: NormalFontSize }}}/>}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="standard"
+                  inputProps={{
+                    ...params.inputProps,
+                    style: { fontSize: NormalFontSize },
+                  }}
+                />
+              )}
               onChange={handleOnChange}
               renderOption={(props, option) => (
                 <li {...props} style={{ fontSize: NormalFontSize }}>

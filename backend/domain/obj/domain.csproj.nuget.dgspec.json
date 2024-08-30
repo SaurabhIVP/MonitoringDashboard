@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\srborawake\\Desktop\\Test3\\MonitoringDashboard\\backend\\domain\\domain.csproj": {}
+    "C:\\Users\\srborawake\\Desktop\\Test2\\MonitoringDashboard\\backend\\domain\\domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\srborawake\\Desktop\\Test3\\MonitoringDashboard\\backend\\domain\\domain.csproj": {
+    "C:\\Users\\srborawake\\Desktop\\Test2\\MonitoringDashboard\\backend\\domain\\domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\srborawake\\Desktop\\Test3\\MonitoringDashboard\\backend\\domain\\domain.csproj",
+        "projectUniqueName": "C:\\Users\\srborawake\\Desktop\\Test2\\MonitoringDashboard\\backend\\domain\\domain.csproj",
         "projectName": "domain",
-        "projectPath": "C:\\Users\\srborawake\\Desktop\\Test3\\MonitoringDashboard\\backend\\domain\\domain.csproj",
+        "projectPath": "C:\\Users\\srborawake\\Desktop\\Test2\\MonitoringDashboard\\backend\\domain\\domain.csproj",
         "packagesPath": "C:\\Users\\srborawake\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\srborawake\\Desktop\\Test3\\MonitoringDashboard\\backend\\domain\\obj\\",
+        "outputPath": "C:\\Users\\srborawake\\Desktop\\Test2\\MonitoringDashboard\\backend\\domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\srborawake\\AppData\\Roaming\\NuGet\\NuGet.Config"

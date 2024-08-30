@@ -30,7 +30,7 @@ import {
 } from "../../utils/Colors";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { FilterButton } from "../generics/FilterButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NumberField from "../generics/NumberField";
 import Dropdown from "../generics/Dropdown";
 import SubmitButton from "../generics/SubmitButton";
@@ -79,18 +79,20 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
-
+  const currentDate = new Date();
+  const pastDate = new Date(currentDate);
+  pastDate.setDate(currentDate.getDate() - 7);
   const [startDate, setStartDate] = React.useState<Date | null>(
-    new Date(2024, 1, 1)
+    pastDate
   );
   const [EndDate, setEndDate] = React.useState<Date | null>(
-    new Date(2024, 1, 7)
+    currentDate
   );
   const [BenchstartDate, setBenchStartDate] = React.useState<Date | null>(
-    new Date(2024, 1, 1)
+    pastDate
   );
   const [BenchendDate, setBenchEndDate] = React.useState<Date | null>(
-    new Date(2024, 1, 7)
+    currentDate
   );
   const [deviationPercentage, setDeviationPercentage] = useState<string | null>(
     "0"
@@ -160,12 +162,12 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
     handleClose();
   };
   const resetButtonHandler = () => {
-    setStartDate(new Date(2024, 1, 1));
+    setStartDate(pastDate);
     setBenchmarkCompute("Average");
     setDeviationPercentage("0");
-    setEndDate(new Date(2024, 1, 7));
-    setBenchStartDate(new Date(2024, 1, 1));
-    setBenchEndDate(new Date(2024, 1, 7));
+    setEndDate(currentDate);
+    setBenchStartDate(pastDate);
+    setBenchEndDate(currentDate);
     setKey(key === "1" ? "2" : "1");
     selectedChainValueRef.current = null;
   };
@@ -176,6 +178,21 @@ const ChartFilter: React.FC<ChartFilterProps> = ({
       return false;
     }
   };
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        buttonHandler();
+        
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [buttonHandler]);
   return (
     <div style={{}}>
       <IconButton onClick={handleClick} sx={{ padding: "0px" }}>
